@@ -5404,6 +5404,58 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aiModelInputHelper => '留空则使用默认模型';
+
+  @override
+  String get syncPreviewTitle => '同步预览';
+
+  @override
+  String get syncPreviewSelectAll => '全选';
+
+  @override
+  String get syncPreviewDeselectAll => '取消全选';
+
+  @override
+  String get syncPreviewAdded => '新增';
+
+  @override
+  String get syncPreviewModified => '修改';
+
+  @override
+  String get syncPreviewDeleted => '删除';
+
+  @override
+  String syncPreviewAddedCount(int count) {
+    return '新增 $count 条';
+  }
+
+  @override
+  String syncPreviewModifiedCount(int count) {
+    return '修改 $count 条';
+  }
+
+  @override
+  String syncPreviewDeletedCount(int count) {
+    return '删除 $count 条';
+  }
+
+  @override
+  String syncPreviewApply(int count) {
+    return '应用 $count 项';
+  }
+
+  @override
+  String get syncPreviewEmpty => '云端数据与本地一致，无需同步';
+
+  @override
+  String get syncPreviewOldFormat => '云端数据格式较旧，将执行全量替换';
+
+  @override
+  String get syncPreviewOldFormatMessage => '云端数据不包含同步标识，无法逐条对比。将清空当前账本数据并从云端重新导入。';
+
+  @override
+  String syncPreviewApplied(int count) {
+    return '已应用 $count 项变更';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -10808,4 +10860,56 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aiModelInputHelper => '留空則使用預設模型';
+
+  @override
+  String get syncPreviewTitle => '同步預覽';
+
+  @override
+  String get syncPreviewSelectAll => '全選';
+
+  @override
+  String get syncPreviewDeselectAll => '取消全選';
+
+  @override
+  String get syncPreviewAdded => '新增';
+
+  @override
+  String get syncPreviewModified => '修改';
+
+  @override
+  String get syncPreviewDeleted => '刪除';
+
+  @override
+  String syncPreviewAddedCount(int count) {
+    return '新增 $count 條';
+  }
+
+  @override
+  String syncPreviewModifiedCount(int count) {
+    return '修改 $count 條';
+  }
+
+  @override
+  String syncPreviewDeletedCount(int count) {
+    return '刪除 $count 條';
+  }
+
+  @override
+  String syncPreviewApply(int count) {
+    return '套用 $count 項';
+  }
+
+  @override
+  String get syncPreviewEmpty => '雲端資料與本機一致，無需同步';
+
+  @override
+  String get syncPreviewOldFormat => '雲端資料格式較舊，將執行全量替換';
+
+  @override
+  String get syncPreviewOldFormatMessage => '雲端資料不包含同步標識，無法逐條對比。將清空當前帳本資料並從雲端重新匯入。';
+
+  @override
+  String syncPreviewApplied(int count) {
+    return '已套用 $count 項變更';
+  }
 }

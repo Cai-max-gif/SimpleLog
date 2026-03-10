@@ -152,6 +152,7 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
       'categoryKind': catInfo?['kind'],
       'happenedAt': t.happenedAt.toUtc().toIso8601String(),
       'note': _sanitizeString(t.note),
+      if (t.syncId != null) 'syncId': t.syncId,
     };
 
     // 添加账户信息
@@ -276,7 +277,7 @@ Future<String> exportTransactionsJson(BeeDatabase db, int ledgerId) async {
   }
 
   final payload = {
-    'version': 5, // 版本升级,新增附件元数据
+    'version': 6, // 版本升级,新增 syncId 用于跨设备同步
     'exportedAt': DateTime.now().toUtc().toIso8601String(),
     'ledgerId': ledgerId,
     'ledgerName': ledger.name,
@@ -385,6 +386,7 @@ ImportData parseJsonToImportData(String jsonStr) {
         toAccountName: type == 'transfer' ? it['toAccountName'] as String? : null,
         tagNames: tagNames,
         attachments: attachments,
+        syncId: it['syncId'] as String?,
       ));
     }
   }

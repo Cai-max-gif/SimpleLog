@@ -218,6 +218,25 @@ class LocalLedgerRepository implements LedgerRepository {
 
   @override
   Future<int> clearLedgerTransactions(int ledgerId) async {
+    // 先查询该账本所有交易ID
+    final txIds = await (db.select(db.transactions)
+          ..where((t) => t.ledgerId.equals(ledgerId)))
+        .map((t) => t.id)
+        .get();
+
+    if (txIds.isNotEmpty) {
+      // 删除关联的 transaction_tags
+      await (db.delete(db.transactionTags)
+            ..where((tt) => tt.transactionId.isIn(txIds)))
+          .go();
+
+      // 删除关联的 transaction_attachments
+      await (db.delete(db.transactionAttachments)
+            ..where((a) => a.transactionId.isIn(txIds)))
+          .go();
+    }
+
+    // 删除 transactions
     final count = await (db.delete(db.transactions)
           ..where((t) => t.ledgerId.equals(ledgerId)))
         .go();

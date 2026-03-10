@@ -172,6 +172,7 @@ class LocalRepository extends BaseRepository {
     int? toAccountId,
     required DateTime happenedAt,
     String? note,
+    String? syncId,
   }) =>
       _transactionRepo.addTransaction(
         ledgerId: ledgerId,
@@ -182,6 +183,7 @@ class LocalRepository extends BaseRepository {
         toAccountId: toAccountId,
         happenedAt: happenedAt,
         note: note,
+        syncId: syncId,
       );
 
   @override
@@ -327,6 +329,36 @@ class LocalRepository extends BaseRepository {
   }) =>
       _transactionRepo.getTransactionDatesByMonth(
           ledgerId: ledgerId, month: month);
+
+  @override
+  Future<Transaction?> getTransactionBySyncId(String syncId) =>
+      _transactionRepo.getTransactionBySyncId(syncId);
+
+  @override
+  Future<void> updateTransactionBySyncId({
+    required String syncId,
+    required String type,
+    required double amount,
+    int? categoryId,
+    int? accountId,
+    int? toAccountId,
+    required DateTime happenedAt,
+    String? note,
+  }) =>
+      _transactionRepo.updateTransactionBySyncId(
+        syncId: syncId,
+        type: type,
+        amount: amount,
+        categoryId: categoryId,
+        accountId: accountId,
+        toAccountId: toAccountId,
+        happenedAt: happenedAt,
+        note: note,
+      );
+
+  @override
+  Future<void> deleteTransactionBySyncId(String syncId) =>
+      _transactionRepo.deleteTransactionBySyncId(syncId);
 
   // ============================================
   // CategoryRepository 接口实现 - 委托给 LocalCategoryRepository

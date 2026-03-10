@@ -5404,4 +5404,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiModelInputHelper => 'Leave empty to use default model';
+
+  @override
+  String get syncPreviewTitle => 'Sync Preview';
+
+  @override
+  String get syncPreviewSelectAll => 'Select All';
+
+  @override
+  String get syncPreviewDeselectAll => 'Deselect All';
+
+  @override
+  String get syncPreviewAdded => 'Added';
+
+  @override
+  String get syncPreviewModified => 'Modified';
+
+  @override
+  String get syncPreviewDeleted => 'Deleted';
+
+  @override
+  String syncPreviewAddedCount(int count) {
+    return '$count added';
+  }
+
+  @override
+  String syncPreviewModifiedCount(int count) {
+    return '$count modified';
+  }
+
+  @override
+  String syncPreviewDeletedCount(int count) {
+    return '$count deleted';
+  }
+
+  @override
+  String syncPreviewApply(int count) {
+    return 'Apply $count items';
+  }
+
+  @override
+  String get syncPreviewEmpty => 'Cloud data matches local, no sync needed';
+
+  @override
+  String get syncPreviewOldFormat => 'Old cloud format, full replace required';
+
+  @override
+  String get syncPreviewOldFormatMessage => 'Cloud data does not contain sync IDs. Local data will be cleared and re-imported from cloud.';
+
+  @override
+  String syncPreviewApplied(int count) {
+    return 'Applied $count changes';
+  }
 }

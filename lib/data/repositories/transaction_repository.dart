@@ -67,6 +67,7 @@ abstract class TransactionRepository {
     int? toAccountId,
     required DateTime happenedAt,
     String? note,
+    String? syncId,
   });
 
   /// 批量新增交易，单事务内插入，返回插入条数
@@ -167,4 +168,22 @@ abstract class TransactionRepository {
     required int ledgerId,
     required DateTime month,
   });
+
+  /// 根据 syncId 获取交易
+  Future<Transaction?> getTransactionBySyncId(String syncId);
+
+  /// 根据 syncId 更新交易的全部字段
+  Future<void> updateTransactionBySyncId({
+    required String syncId,
+    required String type,
+    required double amount,
+    int? categoryId,
+    int? accountId,
+    int? toAccountId,
+    required DateTime happenedAt,
+    String? note,
+  });
+
+  /// 根据 syncId 删除交易
+  Future<void> deleteTransactionBySyncId(String syncId);
 }

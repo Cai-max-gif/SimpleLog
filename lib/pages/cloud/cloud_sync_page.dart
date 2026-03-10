@@ -8,10 +8,11 @@ import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
-import '../../utils/ui_scale_extensions.dart';
 import '../../services/billing/post_processor.dart';
 import '../../cloud/sync_service.dart';
+import '../../cloud/transactions_sync_manager.dart';
 import '../auth/login_page.dart';
+import 'sync_preview_dialog.dart';
 
 /// 云同步与备份二级页面 - 包含所有同步操作
 class CloudSyncPage extends ConsumerStatefulWidget {
@@ -24,6 +25,18 @@ class CloudSyncPage extends ConsumerStatefulWidget {
 class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
   bool uploadBusy = false;
   bool downloadBusy = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // 进入同步页时，清除状态缓存并强制刷新，以感知其他设备的变更
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final sync = ref.read(syncServiceProvider);
+      final ledgerId = ref.read(currentLedgerIdProvider);
+      sync.clearStatusCache(ledgerId: ledgerId);
+      ref.read(syncStatusRefreshProvider.notifier).state++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -394,19 +407,82 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                             onTap: () async {
                               setState(() => downloadBusy = true);
                               try {
-                                final res =
-                                    await sync.downloadAndRestoreToCurrentLedger(
-                                        ledgerId: ledgerId);
-                                if (!context.mounted) return;
-                                final msg = AppLocalizations.of(context)
-                                    .mineDownloadResult(res.inserted);
-                                await AppDialog.info(context,
-                                    title: AppLocalizations.of(context)
-                                        .mineDownloadComplete,
-                                    message: msg);
+                                // 尝试使用 diff 预览模式
+                                final syncManager = sync is TransactionsSyncManager
+                                    ? sync
+                                    : null;
 
-                                // 下载完成后，刷新统计和UI状态（不触发同步上传）
-                                PostProcessor.runAfterDownload(ref);
+                                if (syncManager != null) {
+                                  final previewResult = await syncManager.downloadAndPreview(
+                                    ledgerId: ledgerId,
+                                  );
+
+                                  if (!context.mounted) return;
+
+                                  if (previewResult == null) {
+                                    // 云端无数据
+                                    await AppDialog.info(context,
+                                        title: AppLocalizations.of(context).mineDownloadComplete,
+                                        message: AppLocalizations.of(context).mineDownloadResult(0));
+                                  } else if (previewResult.preview != null) {
+                                    // v6+ 格式，有 diff 预览
+                                    final preview = previewResult.preview!;
+                                    if (preview.isEmpty) {
+                                      await AppDialog.info(context,
+                                          title: AppLocalizations.of(context).mineDownloadComplete,
+                                          message: AppLocalizations.of(context).syncPreviewEmpty);
+                                    } else {
+                                      final primaryColor = ref.read(primaryColorProvider);
+                                      final selected = await showSyncPreviewDialog(
+                                        context,
+                                        preview: preview,
+                                        primaryColor: primaryColor,
+                                      );
+
+                                      if (selected != null && selected.isNotEmpty && context.mounted) {
+                                        final result = await syncManager.applyPreviewChanges(
+                                          ledgerId: ledgerId,
+                                          selectedChanges: selected,
+                                          importData: previewResult.importData,
+                                        );
+
+                                        if (!context.mounted) return;
+                                        await AppDialog.info(context,
+                                            title: AppLocalizations.of(context).mineDownloadComplete,
+                                            message: AppLocalizations.of(context)
+                                                .syncPreviewApplied(result.totalCount));
+
+                                        PostProcessor.runAfterDownload(ref);
+                                      }
+                                    }
+                                  } else {
+                                    // 旧格式（v5 及以下），全量替换
+                                    final confirmed = await AppDialog.confirm<bool>(
+                                      context,
+                                      title: AppLocalizations.of(context).syncPreviewOldFormat,
+                                      message: AppLocalizations.of(context).syncPreviewOldFormatMessage,
+                                    ) ?? false;
+
+                                    if (confirmed && context.mounted) {
+                                      final res = await sync.downloadAndRestoreToCurrentLedger(
+                                          ledgerId: ledgerId);
+                                      if (!context.mounted) return;
+                                      await AppDialog.info(context,
+                                          title: AppLocalizations.of(context).mineDownloadComplete,
+                                          message: AppLocalizations.of(context).mineDownloadResult(res.inserted));
+                                      PostProcessor.runAfterDownload(ref);
+                                    }
+                                  }
+                                } else {
+                                  // 非 TransactionsSyncManager，走原逻辑
+                                  final res = await sync.downloadAndRestoreToCurrentLedger(
+                                      ledgerId: ledgerId);
+                                  if (!context.mounted) return;
+                                  await AppDialog.info(context,
+                                      title: AppLocalizations.of(context).mineDownloadComplete,
+                                      message: AppLocalizations.of(context).mineDownloadResult(res.inserted));
+                                  PostProcessor.runAfterDownload(ref);
+                                }
                               } catch (e) {
                                 if (!context.mounted) return;
                                 await AppDialog.error(context,

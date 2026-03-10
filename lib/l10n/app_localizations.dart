@@ -10313,6 +10313,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Leave empty to use default model'**
   String get aiModelInputHelper;
+
+  /// No description provided for @syncPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync Preview'**
+  String get syncPreviewTitle;
+
+  /// No description provided for @syncPreviewSelectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select All'**
+  String get syncPreviewSelectAll;
+
+  /// No description provided for @syncPreviewDeselectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Deselect All'**
+  String get syncPreviewDeselectAll;
+
+  /// No description provided for @syncPreviewAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added'**
+  String get syncPreviewAdded;
+
+  /// No description provided for @syncPreviewModified.
+  ///
+  /// In en, this message translates to:
+  /// **'Modified'**
+  String get syncPreviewModified;
+
+  /// No description provided for @syncPreviewDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted'**
+  String get syncPreviewDeleted;
+
+  /// No description provided for @syncPreviewAddedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} added'**
+  String syncPreviewAddedCount(int count);
+
+  /// No description provided for @syncPreviewModifiedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} modified'**
+  String syncPreviewModifiedCount(int count);
+
+  /// No description provided for @syncPreviewDeletedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} deleted'**
+  String syncPreviewDeletedCount(int count);
+
+  /// No description provided for @syncPreviewApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply {count} items'**
+  String syncPreviewApply(int count);
+
+  /// No description provided for @syncPreviewEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud data matches local, no sync needed'**
+  String get syncPreviewEmpty;
+
+  /// No description provided for @syncPreviewOldFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Old cloud format, full replace required'**
+  String get syncPreviewOldFormat;
+
+  /// No description provided for @syncPreviewOldFormatMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud data does not contain sync IDs. Local data will be cleared and re-imported from cloud.'**
+  String get syncPreviewOldFormatMessage;
+
+  /// No description provided for @syncPreviewApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied {count} changes'**
+  String syncPreviewApplied(int count);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

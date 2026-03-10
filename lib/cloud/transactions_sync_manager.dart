@@ -7,7 +7,9 @@ import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' as fcs;
 import '../data/db.dart';
 import '../data/repositories/base_repository.dart';
 import '../models/ledger_display_item.dart';
+import '../services/data_import_service.dart';
 import '../services/system/logger_service.dart';
+import 'sync_diff_service.dart';
 import 'sync_service.dart';
 import 'transactions_json.dart';
 
@@ -33,6 +35,15 @@ class TransactionsSyncManager implements SyncService {
     required this.db,
     required this.repo,
   });
+
+  @override
+  void clearStatusCache({int? ledgerId}) {
+    if (ledgerId != null) {
+      _statusCache.remove(ledgerId);
+    } else {
+      _statusCache.clear();
+    }
+  }
 
   /// 确保服务已初始化（延迟初始化）
   Future<void> _ensureInitialized() async {
@@ -218,6 +229,73 @@ class TransactionsSyncManager implements SyncService {
     }
   }
 
+  /// 下载云端数据并计算 diff 预览
+  ///
+  /// 返回 (preview, importData, jsonVersion) 或 null（云端无数据）
+  /// - preview 为 null 表示无法计算 diff（旧格式），应走全量替换
+  /// - preview 不为 null 表示可以预览
+  Future<({SyncPreview? preview, ImportData importData, int version})?> downloadAndPreview({
+    required int ledgerId,
+  }) async {
+    await _ensureInitialized();
+
+    if (_provider == null) {
+      throw fcs.CloudSyncException('云服务不可用，请检查配置或登录状态');
+    }
+
+    logger.info('CloudSync', '开始下载预览: $ledgerId');
+
+    final jsonStr =
+        await _provider!.storage.download(path: _pathForLedger(ledgerId));
+
+    if (jsonStr == null) {
+      logger.warning('CloudSync', '云端备份不存在');
+      return null;
+    }
+
+    // 解析 JSON
+    final jsonData = jsonDecode(jsonStr) as Map<String, dynamic>;
+    final version = (jsonData['version'] as num?)?.toInt() ?? 1;
+    final importData = parseJsonToImportData(jsonStr);
+
+    // 检查是否含 syncId（v6+）
+    if (version >= 6) {
+      final preview = await syncDiffService.computeDiff(
+        repo: repo,
+        ledgerId: ledgerId,
+        cloudTransactions: importData.transactions,
+      );
+
+      if (preview != null) {
+        return (preview: preview, importData: importData, version: version);
+      }
+    }
+
+    // 旧格式或无法计算 diff
+    return (preview: null, importData: importData, version: version);
+  }
+
+  /// 应用预览中选中的变更
+  Future<SyncApplyResult> applyPreviewChanges({
+    required int ledgerId,
+    required List<SyncChange> selectedChanges,
+    required ImportData importData,
+  }) async {
+    final result = await syncDiffService.applySyncChanges(
+      repo: repo,
+      ledgerId: ledgerId,
+      selectedChanges: selectedChanges,
+      importData: importData,
+    );
+
+    // 清除缓存
+    _statusCache.remove(ledgerId);
+    _recentLocalChangeAt.remove(ledgerId);
+    _recentUpload.remove(ledgerId);
+
+    return result;
+  }
+
   @override
   Future<SyncStatus> getStatus({required int ledgerId}) async {
     await _ensureInitialized();
@@ -386,7 +464,7 @@ class TransactionsSyncManager implements SyncService {
     logger.info('CloudSync', '标记本地变更: $ledgerId');
   }
 
-  /// 从 JSON payload 计算内容指纹（与旧实现保持一致）
+  /// 从 JSON payload 计算内容指纹
   String _contentFingerprintFromMap(Map<String, dynamic> payload) {
     final items = (payload['items'] as List).cast<Map<String, dynamic>>();
     final canon = items
@@ -394,7 +472,8 @@ class TransactionsSyncManager implements SyncService {
               // 固定键顺序，填默认值，避免 null/缺键差异
               'happenedAt': it['happenedAt'] as String? ?? '',
               'type': it['type'] as String? ?? '',
-              'amount': (it['amount'] as num?)?.toString() ?? '0',
+              // 统一用 toDouble().toString()，避免 int/double 差异（45 vs 45.0）
+              'amount': (it['amount'] as num?)?.toDouble().toString() ?? '0.0',
               'categoryName': it['categoryName'] as String? ?? '',
               'categoryKind': it['categoryKind'] as String? ?? '',
               'note': it['note'] as String? ?? '',
@@ -890,7 +969,7 @@ class _TransactionSerializer implements fcs.DataSerializer<int> {
     return _contentFingerprintFromMap(json);
   }
 
-  /// 从 payload 计算内容指纹（与原实现保持一致）
+  /// 从 payload 计算内容指纹
   String _contentFingerprintFromMap(Map<String, dynamic> payload) {
     final items = (payload['items'] as List).cast<Map<String, dynamic>>();
     final canon = items
@@ -898,7 +977,8 @@ class _TransactionSerializer implements fcs.DataSerializer<int> {
               // 固定键顺序，填默认值，避免 null/缺键差异
               'happenedAt': it['happenedAt'] as String? ?? '',
               'type': it['type'] as String? ?? '',
-              'amount': (it['amount'] as num?)?.toString() ?? '0',
+              // 统一用 toDouble().toString()，避免 int/double 差异（45 vs 45.0）
+              'amount': (it['amount'] as num?)?.toDouble().toString() ?? '0.0',
               'categoryName': it['categoryName'] as String? ?? '',
               'categoryKind': it['categoryKind'] as String? ?? '',
               'note': it['note'] as String? ?? '',

@@ -2371,5 +2371,25 @@
   "aiProviderTestFailed": "测试失败",
   "aiProviderTestAll": "一键测试全部",
   "aiProviderTestAllRetry": "重新测试",
-  "aiModelInputHelper": "留空则使用默认模型"
+  "aiModelInputHelper": "留空则使用默认模型",
+
+  "syncPreviewTitle": "同步预览",
+  "syncPreviewSelectAll": "全选",
+  "syncPreviewDeselectAll": "取消全选",
+  "syncPreviewAdded": "新增",
+  "syncPreviewModified": "修改",
+  "syncPreviewDeleted": "删除",
+  "syncPreviewAddedCount": "新增 {count} 条",
+  "@syncPreviewAddedCount": {"placeholders": {"count": {"type": "int"}}},
+  "syncPreviewModifiedCount": "修改 {count} 条",
+  "@syncPreviewModifiedCount": {"placeholders": {"count": {"type": "int"}}},
+  "syncPreviewDeletedCount": "删除 {count} 条",
+  "@syncPreviewDeletedCount": {"placeholders": {"count": {"type": "int"}}},
+  "syncPreviewApply": "应用 {count} 项",
+  "@syncPreviewApply": {"placeholders": {"count": {"type": "int"}}},
+  "syncPreviewEmpty": "云端数据与本地一致，无需同步",
+  "syncPreviewOldFormat": "云端数据格式较旧，将执行全量替换",
+  "syncPreviewOldFormatMessage": "云端数据不包含同步标识，无法逐条对比。将清空当前账本数据并从云端重新导入。",
+  "syncPreviewApplied": "已应用 {count} 项变更",
+  "@syncPreviewApplied": {"placeholders": {"count": {"type": "int"}}}
 }

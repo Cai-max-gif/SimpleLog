@@ -24,6 +24,9 @@ abstract class SyncService {
 
   /// 删除云端备份（若存在）。应忽略 404。
   Future<void> deleteRemoteBackup({required int ledgerId});
+
+  /// 清除指定账本的状态缓存，下次 getStatus 会重新从云端获取
+  void clearStatusCache({int? ledgerId});
 }
 
 // ---- 本地存储实现（无云同步） ----
@@ -63,6 +66,9 @@ class LocalOnlySyncService implements SyncService {
   Future<void> deleteRemoteBackup({required int ledgerId}) async {
     throw UnsupportedError('Cloud sync not configured');
   }
+
+  @override
+  void clearStatusCache({int? ledgerId}) {}
 }
 
 // ---- 状态模型 ----

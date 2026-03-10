@@ -217,6 +217,7 @@ class CloudRepository extends BaseRepository {
     int? toAccountId,
     required DateTime happenedAt,
     String? note,
+    String? syncId,
   }) =>
       _transaction.addTransaction(
         ledgerId: ledgerId,
@@ -227,6 +228,7 @@ class CloudRepository extends BaseRepository {
         toAccountId: toAccountId,
         happenedAt: happenedAt,
         note: note,
+        syncId: syncId,
       );
 
   @override
@@ -1027,6 +1029,36 @@ class CloudRepository extends BaseRepository {
     required DateTime month,
   }) =>
       _transaction.getTransactionDatesByMonth(ledgerId: ledgerId, month: month);
+
+  @override
+  Future<Transaction?> getTransactionBySyncId(String syncId) =>
+      _transaction.getTransactionBySyncId(syncId);
+
+  @override
+  Future<void> updateTransactionBySyncId({
+    required String syncId,
+    required String type,
+    required double amount,
+    int? categoryId,
+    int? accountId,
+    int? toAccountId,
+    required DateTime happenedAt,
+    String? note,
+  }) =>
+      _transaction.updateTransactionBySyncId(
+        syncId: syncId,
+        type: type,
+        amount: amount,
+        categoryId: categoryId,
+        accountId: accountId,
+        toAccountId: toAccountId,
+        happenedAt: happenedAt,
+        note: note,
+      );
+
+  @override
+  Future<void> deleteTransactionBySyncId(String syncId) =>
+      _transaction.deleteTransactionBySyncId(syncId);
 
   // ============================================
   // TagRepository 接口实现（云端模式暂不支持标签功能）

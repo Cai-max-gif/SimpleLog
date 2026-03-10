@@ -2138,5 +2138,25 @@
   "aiModelInputHelper": "留空則使用預設模型",
   "aiModelRecommended": "推薦模型",
   "transferIconSettings": "轉帳圖示設定",
-  "transferIconSettingsDesc": "自訂轉帳記錄的顯示圖示"
+  "transferIconSettingsDesc": "自訂轉帳記錄的顯示圖示",
+
+  "syncPreviewTitle": "同步預覽",
+  "syncPreviewSelectAll": "全選",
+  "syncPreviewDeselectAll": "取消全選",
+  "syncPreviewAdded": "新增",
+  "syncPreviewModified": "修改",
+  "syncPreviewDeleted": "刪除",
+  "syncPreviewAddedCount": "新增 {count} 條",
+  "@syncPreviewAddedCount": {"placeholders": {"count": {"type": "int"}}},
+  "syncPreviewModifiedCount": "修改 {count} 條",
+  "@syncPreviewModifiedCount": {"placeholders": {"count": {"type": "int"}}},
+  "syncPreviewDeletedCount": "刪除 {count} 條",
+  "@syncPreviewDeletedCount": {"placeholders": {"count": {"type": "int"}}},
+  "syncPreviewApply": "套用 {count} 項",
+  "@syncPreviewApply": {"placeholders": {"count": {"type": "int"}}},
+  "syncPreviewEmpty": "雲端資料與本機一致，無需同步",
+  "syncPreviewOldFormat": "雲端資料格式較舊，將執行全量替換",
+  "syncPreviewOldFormatMessage": "雲端資料不包含同步標識，無法逐條對比。將清空當前帳本資料並從雲端重新匯入。",
+  "syncPreviewApplied": "已套用 {count} 項變更",
+  "@syncPreviewApplied": {"placeholders": {"count": {"type": "int"}}}
 }

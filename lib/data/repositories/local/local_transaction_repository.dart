@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:drift/drift.dart' as d;
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'package:uuid/uuid.dart';
 
 import '../../db.dart';
 import '../transaction_repository.dart';
@@ -164,6 +165,8 @@ class LocalTransactionRepository implements TransactionRepository {
         .toList());
   }
 
+  static const _uuid = Uuid();
+
   @override
   Future<int> addTransaction({
     required int ledgerId,
@@ -174,6 +177,7 @@ class LocalTransactionRepository implements TransactionRepository {
     int? toAccountId,
     required DateTime happenedAt,
     String? note,
+    String? syncId,
   }) async {
     return db.into(db.transactions).insert(TransactionsCompanion.insert(
           ledgerId: ledgerId,
@@ -184,15 +188,23 @@ class LocalTransactionRepository implements TransactionRepository {
           toAccountId: d.Value(toAccountId),
           happenedAt: d.Value(happenedAt),
           note: d.Value(note),
+          syncId: d.Value(syncId ?? _uuid.v4()),
         ));
   }
 
   @override
   Future<int> insertTransactionsBatch(List<TransactionsCompanion> items) async {
     if (items.isEmpty) return 0;
+    // 自动补上 syncId
+    final effectiveItems = items.map((item) {
+      if (item.syncId == const d.Value.absent() || item.syncId.value == null) {
+        return item.copyWith(syncId: d.Value(_uuid.v4()));
+      }
+      return item;
+    }).toList();
     return db.transaction(() async {
-      await db.batch((b) => b.insertAll(db.transactions, items));
-      return items.length;
+      await db.batch((b) => b.insertAll(db.transactions, effectiveItems));
+      return effectiveItems.length;
     });
   }
 
@@ -291,7 +303,11 @@ class LocalTransactionRepository implements TransactionRepository {
 
   @override
   Future<int> insertTransactionCompanion(TransactionsCompanion item) async {
-    return await db.into(db.transactions).insert(item);
+    // 自动补上 syncId（如果未提供）
+    final effective = item.syncId == const d.Value.absent() || item.syncId.value == null
+        ? item.copyWith(syncId: d.Value(_uuid.v4()))
+        : item;
+    return await db.into(db.transactions).insert(effective);
   }
 
   @override
@@ -733,5 +749,46 @@ class LocalTransactionRepository implements TransactionRepository {
         .where((date) => date != null)
         .cast<String>()
         .toList();
+  }
+
+  // ==================== syncId 相关 ====================
+
+  @override
+  Future<Transaction?> getTransactionBySyncId(String syncId) async {
+    return await (db.select(db.transactions)
+          ..where((t) => t.syncId.equals(syncId)))
+        .getSingleOrNull();
+  }
+
+  @override
+  Future<void> updateTransactionBySyncId({
+    required String syncId,
+    required String type,
+    required double amount,
+    int? categoryId,
+    int? accountId,
+    int? toAccountId,
+    required DateTime happenedAt,
+    String? note,
+  }) async {
+    await (db.update(db.transactions)..where((t) => t.syncId.equals(syncId)))
+        .write(TransactionsCompanion(
+      type: d.Value(type),
+      amount: d.Value(amount),
+      categoryId: d.Value(categoryId),
+      accountId: d.Value(accountId),
+      toAccountId: d.Value(toAccountId),
+      happenedAt: d.Value(happenedAt),
+      note: d.Value(note),
+    ));
+  }
+
+  @override
+  Future<void> deleteTransactionBySyncId(String syncId) async {
+    // 先查找交易ID，以便删除关联数据
+    final tx = await getTransactionBySyncId(syncId);
+    if (tx != null) {
+      await deleteTransaction(tx.id);
+    }
   }
 }

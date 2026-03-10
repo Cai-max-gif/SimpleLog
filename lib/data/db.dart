@@ -62,6 +62,7 @@ class Transactions extends Table {
   DateTimeColumn get happenedAt => dateTime().withDefault(currentDateAndTime)();
   TextColumn get note => text().nullable()();
   IntColumn get recurringId => integer().nullable()(); // 关联到重复交易模板
+  TextColumn get syncId => text().nullable()(); // 跨设备同步唯一标识 (UUID)
 }
 
 class RecurringTransactions extends Table {
@@ -195,7 +196,7 @@ class BeeDatabase extends _$BeeDatabase {
   BeeDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 14; // v14: 迁移转账记录到虚拟转账分类
+  int get schemaVersion => 15; // v15: 交易添加 syncId 用于云同步
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -466,6 +467,37 @@ class BeeDatabase extends _$BeeDatabase {
             await SeedService.migrateTransferTransactions(this);
             logger.info('DB', 'v14 迁移完成: 转账记录已关联到虚拟转账分类');
             print('[DB Migration] v14 迁移完成');
+          }
+          if (from < 15) {
+            // v15: 交易添加 syncId 用于云同步
+            print('[DB Migration] 开始迁移到 v15: 添加 syncId 字段');
+
+            // 1. 添加 sync_id 列
+            await customStatement(
+                'ALTER TABLE transactions ADD COLUMN sync_id TEXT;');
+            logger.info('DB', 'v15: sync_id 字段已添加');
+
+            // 2. 为所有已有交易生成 UUID v4
+            // 使用 SQLite 内置函数生成简易唯一ID（hex + random）
+            // 格式: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+            await customStatement('''
+              UPDATE transactions SET sync_id =
+                lower(hex(randomblob(4))) || '-' ||
+                lower(hex(randomblob(2))) || '-4' ||
+                substr(lower(hex(randomblob(2))),2) || '-' ||
+                substr('89ab', abs(random()) % 4 + 1, 1) ||
+                substr(lower(hex(randomblob(2))),2) || '-' ||
+                lower(hex(randomblob(6)))
+              WHERE sync_id IS NULL;
+            ''');
+            logger.info('DB', 'v15: 已为现有交易回填 syncId');
+
+            // 3. 创建索引
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_transactions_sync_id ON transactions(sync_id);');
+            logger.info('DB', 'v15: syncId 索引已创建');
+
+            print('[DB Migration] v15 迁移完成');
           }
         },
       );

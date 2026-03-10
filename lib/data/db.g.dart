@@ -1283,6 +1283,11 @@ class $TransactionsTable extends Transactions
   late final GeneratedColumn<int> recurringId = GeneratedColumn<int>(
       'recurring_id', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _syncIdMeta = const VerificationMeta('syncId');
+  @override
+  late final GeneratedColumn<String> syncId = GeneratedColumn<String>(
+      'sync_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1294,7 +1299,8 @@ class $TransactionsTable extends Transactions
         toAccountId,
         happenedAt,
         note,
-        recurringId
+        recurringId,
+        syncId
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1359,6 +1365,10 @@ class $TransactionsTable extends Transactions
           recurringId.isAcceptableOrUnknown(
               data['recurring_id']!, _recurringIdMeta));
     }
+    if (data.containsKey('sync_id')) {
+      context.handle(_syncIdMeta,
+          syncId.isAcceptableOrUnknown(data['sync_id']!, _syncIdMeta));
+    }
     return context;
   }
 
@@ -1388,6 +1398,8 @@ class $TransactionsTable extends Transactions
           .read(DriftSqlType.string, data['${effectivePrefix}note']),
       recurringId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}recurring_id']),
+      syncId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}sync_id']),
     );
   }
 
@@ -1408,6 +1420,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final DateTime happenedAt;
   final String? note;
   final int? recurringId;
+  final String? syncId;
   const Transaction(
       {required this.id,
       required this.ledgerId,
@@ -1418,7 +1431,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       this.toAccountId,
       required this.happenedAt,
       this.note,
-      this.recurringId});
+      this.recurringId,
+      this.syncId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1441,6 +1455,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     }
     if (!nullToAbsent || recurringId != null) {
       map['recurring_id'] = Variable<int>(recurringId);
+    }
+    if (!nullToAbsent || syncId != null) {
+      map['sync_id'] = Variable<String>(syncId);
     }
     return map;
   }
@@ -1465,6 +1482,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       recurringId: recurringId == null && nullToAbsent
           ? const Value.absent()
           : Value(recurringId),
+      syncId:
+          syncId == null && nullToAbsent ? const Value.absent() : Value(syncId),
     );
   }
 
@@ -1482,6 +1501,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       happenedAt: serializer.fromJson<DateTime>(json['happenedAt']),
       note: serializer.fromJson<String?>(json['note']),
       recurringId: serializer.fromJson<int?>(json['recurringId']),
+      syncId: serializer.fromJson<String?>(json['syncId']),
     );
   }
   @override
@@ -1498,6 +1518,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'happenedAt': serializer.toJson<DateTime>(happenedAt),
       'note': serializer.toJson<String?>(note),
       'recurringId': serializer.toJson<int?>(recurringId),
+      'syncId': serializer.toJson<String?>(syncId),
     };
   }
 
@@ -1511,7 +1532,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           Value<int?> toAccountId = const Value.absent(),
           DateTime? happenedAt,
           Value<String?> note = const Value.absent(),
-          Value<int?> recurringId = const Value.absent()}) =>
+          Value<int?> recurringId = const Value.absent(),
+          Value<String?> syncId = const Value.absent()}) =>
       Transaction(
         id: id ?? this.id,
         ledgerId: ledgerId ?? this.ledgerId,
@@ -1523,6 +1545,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         happenedAt: happenedAt ?? this.happenedAt,
         note: note.present ? note.value : this.note,
         recurringId: recurringId.present ? recurringId.value : this.recurringId,
+        syncId: syncId.present ? syncId.value : this.syncId,
       );
   Transaction copyWithCompanion(TransactionsCompanion data) {
     return Transaction(
@@ -1540,6 +1563,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       note: data.note.present ? data.note.value : this.note,
       recurringId:
           data.recurringId.present ? data.recurringId.value : this.recurringId,
+      syncId: data.syncId.present ? data.syncId.value : this.syncId,
     );
   }
 
@@ -1555,14 +1579,15 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('toAccountId: $toAccountId, ')
           ..write('happenedAt: $happenedAt, ')
           ..write('note: $note, ')
-          ..write('recurringId: $recurringId')
+          ..write('recurringId: $recurringId, ')
+          ..write('syncId: $syncId')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, ledgerId, type, amount, categoryId,
-      accountId, toAccountId, happenedAt, note, recurringId);
+      accountId, toAccountId, happenedAt, note, recurringId, syncId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1576,7 +1601,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.toAccountId == this.toAccountId &&
           other.happenedAt == this.happenedAt &&
           other.note == this.note &&
-          other.recurringId == this.recurringId);
+          other.recurringId == this.recurringId &&
+          other.syncId == this.syncId);
 }
 
 class TransactionsCompanion extends UpdateCompanion<Transaction> {
@@ -1590,6 +1616,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<DateTime> happenedAt;
   final Value<String?> note;
   final Value<int?> recurringId;
+  final Value<String?> syncId;
   const TransactionsCompanion({
     this.id = const Value.absent(),
     this.ledgerId = const Value.absent(),
@@ -1601,6 +1628,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.happenedAt = const Value.absent(),
     this.note = const Value.absent(),
     this.recurringId = const Value.absent(),
+    this.syncId = const Value.absent(),
   });
   TransactionsCompanion.insert({
     this.id = const Value.absent(),
@@ -1613,6 +1641,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.happenedAt = const Value.absent(),
     this.note = const Value.absent(),
     this.recurringId = const Value.absent(),
+    this.syncId = const Value.absent(),
   })  : ledgerId = Value(ledgerId),
         type = Value(type),
         amount = Value(amount);
@@ -1627,6 +1656,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<DateTime>? happenedAt,
     Expression<String>? note,
     Expression<int>? recurringId,
+    Expression<String>? syncId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1639,6 +1669,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (happenedAt != null) 'happened_at': happenedAt,
       if (note != null) 'note': note,
       if (recurringId != null) 'recurring_id': recurringId,
+      if (syncId != null) 'sync_id': syncId,
     });
   }
 
@@ -1652,7 +1683,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<int?>? toAccountId,
       Value<DateTime>? happenedAt,
       Value<String?>? note,
-      Value<int?>? recurringId}) {
+      Value<int?>? recurringId,
+      Value<String?>? syncId}) {
     return TransactionsCompanion(
       id: id ?? this.id,
       ledgerId: ledgerId ?? this.ledgerId,
@@ -1664,6 +1696,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       happenedAt: happenedAt ?? this.happenedAt,
       note: note ?? this.note,
       recurringId: recurringId ?? this.recurringId,
+      syncId: syncId ?? this.syncId,
     );
   }
 
@@ -1700,6 +1733,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     if (recurringId.present) {
       map['recurring_id'] = Variable<int>(recurringId.value);
     }
+    if (syncId.present) {
+      map['sync_id'] = Variable<String>(syncId.value);
+    }
     return map;
   }
 
@@ -1715,7 +1751,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('toAccountId: $toAccountId, ')
           ..write('happenedAt: $happenedAt, ')
           ..write('note: $note, ')
-          ..write('recurringId: $recurringId')
+          ..write('recurringId: $recurringId, ')
+          ..write('syncId: $syncId')
           ..write(')'))
         .toString();
   }
@@ -5470,6 +5507,7 @@ typedef $$TransactionsTableCreateCompanionBuilder = TransactionsCompanion
   Value<DateTime> happenedAt,
   Value<String?> note,
   Value<int?> recurringId,
+  Value<String?> syncId,
 });
 typedef $$TransactionsTableUpdateCompanionBuilder = TransactionsCompanion
     Function({
@@ -5483,6 +5521,7 @@ typedef $$TransactionsTableUpdateCompanionBuilder = TransactionsCompanion
   Value<DateTime> happenedAt,
   Value<String?> note,
   Value<int?> recurringId,
+  Value<String?> syncId,
 });
 
 class $$TransactionsTableFilterComposer
@@ -5523,6 +5562,9 @@ class $$TransactionsTableFilterComposer
 
   ColumnFilters<int> get recurringId => $composableBuilder(
       column: $table.recurringId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get syncId => $composableBuilder(
+      column: $table.syncId, builder: (column) => ColumnFilters(column));
 }
 
 class $$TransactionsTableOrderingComposer
@@ -5563,6 +5605,9 @@ class $$TransactionsTableOrderingComposer
 
   ColumnOrderings<int> get recurringId => $composableBuilder(
       column: $table.recurringId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get syncId => $composableBuilder(
+      column: $table.syncId, builder: (column) => ColumnOrderings(column));
 }
 
 class $$TransactionsTableAnnotationComposer
@@ -5603,6 +5648,9 @@ class $$TransactionsTableAnnotationComposer
 
   GeneratedColumn<int> get recurringId => $composableBuilder(
       column: $table.recurringId, builder: (column) => column);
+
+  GeneratedColumn<String> get syncId =>
+      $composableBuilder(column: $table.syncId, builder: (column) => column);
 }
 
 class $$TransactionsTableTableManager extends RootTableManager<
@@ -5641,6 +5689,7 @@ class $$TransactionsTableTableManager extends RootTableManager<
             Value<DateTime> happenedAt = const Value.absent(),
             Value<String?> note = const Value.absent(),
             Value<int?> recurringId = const Value.absent(),
+            Value<String?> syncId = const Value.absent(),
           }) =>
               TransactionsCompanion(
             id: id,
@@ -5653,6 +5702,7 @@ class $$TransactionsTableTableManager extends RootTableManager<
             happenedAt: happenedAt,
             note: note,
             recurringId: recurringId,
+            syncId: syncId,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -5665,6 +5715,7 @@ class $$TransactionsTableTableManager extends RootTableManager<
             Value<DateTime> happenedAt = const Value.absent(),
             Value<String?> note = const Value.absent(),
             Value<int?> recurringId = const Value.absent(),
+            Value<String?> syncId = const Value.absent(),
           }) =>
               TransactionsCompanion.insert(
             id: id,
@@ -5677,6 +5728,7 @@ class $$TransactionsTableTableManager extends RootTableManager<
             happenedAt: happenedAt,
             note: note,
             recurringId: recurringId,
+            syncId: syncId,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

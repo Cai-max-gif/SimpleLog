@@ -497,6 +497,7 @@ class CloudTransactionRepository implements TransactionRepository {
     int? toAccountId,
     required DateTime happenedAt,
     String? note,
+    String? syncId,
   }) async {
     final result = await supabase.databaseService!.insert(
       table: 'transactions',
@@ -793,5 +794,29 @@ class CloudTransactionRepository implements TransactionRepository {
     required DateTime month,
   }) async {
     throw UnimplementedError('云端日历功能暂不支持');
+  }
+
+  @override
+  Future<Transaction?> getTransactionBySyncId(String syncId) async {
+    throw UnimplementedError('云端 syncId 查询暂不支持');
+  }
+
+  @override
+  Future<void> updateTransactionBySyncId({
+    required String syncId,
+    required String type,
+    required double amount,
+    int? categoryId,
+    int? accountId,
+    int? toAccountId,
+    required DateTime happenedAt,
+    String? note,
+  }) async {
+    throw UnimplementedError('云端 syncId 更新暂不支持');
+  }
+
+  @override
+  Future<void> deleteTransactionBySyncId(String syncId) async {
+    throw UnimplementedError('云端 syncId 删除暂不支持');
   }
 }

@@ -2411,5 +2411,25 @@
   "aiProviderTestFailed": "Test failed",
   "aiProviderTestAll": "Test All",
   "aiProviderTestAllRetry": "Retry Test",
-  "aiModelInputHelper": "Leave empty to use default model"
+  "aiModelInputHelper": "Leave empty to use default model",
+
+  "syncPreviewTitle": "Sync Preview",
+  "syncPreviewSelectAll": "Select All",
+  "syncPreviewDeselectAll": "Deselect All",
+  "syncPreviewAdded": "Added",
+  "syncPreviewModified": "Modified",
+  "syncPreviewDeleted": "Deleted",
+  "syncPreviewAddedCount": "{count} added",
+  "@syncPreviewAddedCount": {"placeholders": {"count": {"type": "int"}}},
+  "syncPreviewModifiedCount": "{count} modified",
+  "@syncPreviewModifiedCount": {"placeholders": {"count": {"type": "int"}}},
+  "syncPreviewDeletedCount": "{count} deleted",
+  "@syncPreviewDeletedCount": {"placeholders": {"count": {"type": "int"}}},
+  "syncPreviewApply": "Apply {count} items",
+  "@syncPreviewApply": {"placeholders": {"count": {"type": "int"}}},
+  "syncPreviewEmpty": "Cloud data matches local, no sync needed",
+  "syncPreviewOldFormat": "Old cloud format, full replace required",
+  "syncPreviewOldFormatMessage": "Cloud data does not contain sync IDs. Local data will be cleared and re-imported from cloud.",
+  "syncPreviewApplied": "Applied {count} changes",
+  "@syncPreviewApplied": {"placeholders": {"count": {"type": "int"}}}
 }
