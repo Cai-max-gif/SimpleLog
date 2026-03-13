@@ -243,10 +243,15 @@ class LocalTransactionRepository implements TransactionRepository {
 
   @override
   Future<void> deleteTransaction(int id) async {
-    // 先删除关联的附件
+    // 先删除关联的标签
+    await (db.delete(db.transactionTags)
+          ..where((tt) => tt.transactionId.equals(id)))
+        .go();
+
+    // 再删除关联的附件
     await _deleteAttachmentsForTransaction(id);
 
-    // 再删除交易记录
+    // 最后删除交易记录
     await (db.delete(db.transactions)..where((t) => t.id.equals(id))).go();
   }
 
