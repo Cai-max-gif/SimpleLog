@@ -2453,5 +2453,7 @@
   "cloudSyncGuideLimitItem2": "No conflict merging: does not auto-merge edits from both sides — last upload wins",
   "cloudSyncGuideLimitItem3": "Cloud service delay: uploaded files may take seconds to minutes before other devices can read them, depending on your cloud provider",
   "cloudSyncGuideLimitItem4": "Excludes attachments: transaction image attachments are not synced — export separately via Data Management",
-  "accountReorderTip": "Long press and drag to reorder"
+  "accountReorderTip": "Long press and drag to reorder",
+  "mineMultiDeviceSyncTitle": "Multi-device Sync",
+  "mineMultiDeviceSyncSubtitle": "Auto-check cloud changes when entering page"
 }

@@ -56,6 +56,28 @@ final autoSyncSetterProvider = Provider<AutoSyncSetter>((ref) {
   return AutoSyncSetter(ref);
 });
 
+// 多设备同步开关（默认关闭）
+final multiDeviceSyncProvider = FutureProvider.autoDispose<bool>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final link = ref.keepAlive();
+  ref.onDispose(() => link.close());
+  return prefs.getBool('multi_device_sync') ?? false;
+});
+
+class MultiDeviceSyncSetter {
+  MultiDeviceSyncSetter(this._ref);
+  final Ref _ref;
+  Future<void> set(bool v) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('multi_device_sync', v);
+    _ref.invalidate(multiDeviceSyncProvider);
+  }
+}
+
+final multiDeviceSyncSetterProvider = Provider<MultiDeviceSyncSetter>((ref) {
+  return MultiDeviceSyncSetter(ref);
+});
+
 // ====== 云服务配置 ======
 
 final cloudServiceStoreProvider =

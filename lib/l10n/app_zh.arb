@@ -2413,5 +2413,7 @@
   "cloudSyncGuideLimitItem2": "无冲突合并：不会自动合并两端的修改，以最后上传的为准",
   "cloudSyncGuideLimitItem3": "文件服务延迟：上传后云端文件可能需要几秒到几分钟才能被其他设备读取，取决于你使用的云服务",
   "cloudSyncGuideLimitItem4": "不含附件：交易的图片附件不参与同步，需通过数据管理单独导出",
-  "accountReorderTip": "长按拖动可调整账户顺序"
+  "accountReorderTip": "长按拖动可调整账户顺序",
+  "mineMultiDeviceSyncTitle": "多设备同步",
+  "mineMultiDeviceSyncSubtitle": "进入页面时自动检查云端变更"
 }

@@ -10523,6 +10523,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Long press and drag to reorder'**
   String get accountReorderTip;
+
+  /// No description provided for @mineMultiDeviceSyncTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-device Sync'**
+  String get mineMultiDeviceSyncTitle;
+
+  /// No description provided for @mineMultiDeviceSyncSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-check cloud changes when entering page'**
+  String get mineMultiDeviceSyncSubtitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

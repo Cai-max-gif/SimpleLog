@@ -5519,6 +5519,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get accountReorderTip => '长按拖动可调整账户顺序';
+
+  @override
+  String get mineMultiDeviceSyncTitle => '多设备同步';
+
+  @override
+  String get mineMultiDeviceSyncSubtitle => '进入页面时自动检查云端变更';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

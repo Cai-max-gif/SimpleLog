@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 
 import '../../providers.dart';
@@ -29,13 +30,25 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
   @override
   void initState() {
     super.initState();
-    // 进入同步页时，清除状态缓存并强制刷新，以感知其他设备的变更
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    // 仅在多设备同步开关开启时，清除状态缓存并强制刷新
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final prefs = await SharedPreferences.getInstance();
+      final multiDevice = prefs.getBool('multi_device_sync') ?? false;
+      if (!multiDevice || !mounted) return;
       final sync = ref.read(syncServiceProvider);
       final ledgerId = ref.read(currentLedgerIdProvider);
       sync.clearStatusCache(ledgerId: ledgerId);
       ref.read(syncStatusRefreshProvider.notifier).state++;
     });
+  }
+
+  Future<void> _onRefresh() async {
+    final sync = ref.read(syncServiceProvider);
+    final ledgerId = ref.read(currentLedgerIdProvider);
+    sync.clearStatusCache(ledgerId: ledgerId);
+    ref.read(syncStatusRefreshProvider.notifier).state++;
+    // 等待状态刷新完成
+    await ref.read(syncStatusProvider(ledgerId).future);
   }
 
   @override
@@ -173,7 +186,9 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                   }
                 }
 
-                return ListView(
+                return RefreshIndicator(
+                  onRefresh: _onRefresh,
+                  child: ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
                     // 提示文案
@@ -620,11 +635,37 @@ class _CloudSyncPageState extends ConsumerState<CloudSyncPage> {
                                 ],
                               );
                             }),
+                          // 多设备同步 (所有云服务模式都支持)
+                          if (!isLocalMode)
+                            Consumer(builder: (ctx, r, _) {
+                              final multiDevice = r.watch(multiDeviceSyncProvider);
+                              final setter = r.read(multiDeviceSyncSetterProvider);
+                              final value = multiDevice.asData?.value ?? false;
+                              final can = canUseCloud;
+
+                              return Column(
+                                children: [
+                                  BeeTokens.cardDivider(context),
+                                  SwitchListTile(
+                                    title: Text(AppLocalizations.of(context)
+                                        .mineMultiDeviceSyncTitle),
+                                    subtitle: Text(AppLocalizations.of(context)
+                                        .mineMultiDeviceSyncSubtitle),
+                                    value: can ? value : false,
+                                    onChanged: can
+                                        ? (v) async {
+                                            await setter.set(v);
+                                          }
+                                        : null,
+                                  ),
+                                ],
+                              );
+                            }),
                         ],
                       ),
                     ),
                   ],
-                );
+                ));
                 },
               ),
             ),

@@ -5519,4 +5519,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountReorderTip => 'Long press and drag to reorder';
+
+  @override
+  String get mineMultiDeviceSyncTitle => 'Multi-device Sync';
+
+  @override
+  String get mineMultiDeviceSyncSubtitle => 'Auto-check cloud changes when entering page';
 }

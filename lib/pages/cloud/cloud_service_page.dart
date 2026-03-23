@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import 'package:flutter_cloud_sync_icloud/flutter_cloud_sync_icloud.dart';
 import '../../providers/sync_providers.dart';
@@ -42,6 +43,11 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
   Future<void> _autoTestActiveConnection() async {
     if (_hasAutoTested) return;
     _hasAutoTested = true;
+
+    // 多设备同步关闭时，跳过自动测试
+    final prefs = await SharedPreferences.getInstance();
+    final multiDevice = prefs.getBool('multi_device_sync') ?? false;
+    if (!multiDevice) return;
 
     final activeAsync = ref.read(activeCloudConfigProvider);
     if (!activeAsync.hasValue) return;
