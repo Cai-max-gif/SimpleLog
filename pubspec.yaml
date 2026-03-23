@@ -106,6 +106,12 @@ flutter:
     - assets/bee.svg
     - assets/logo2.png
     - assets/icons/ai.svg
+    - assets/icons/cash.svg
+    - assets/icons/bank_card.svg
+    - assets/icons/credit_card.svg
+    - assets/icons/alipay.svg
+    - assets/icons/wechat.svg
+    - assets/icons/other_account.svg
     - assets/images/
   # 字体已移动到可选依赖，使用系统字体以减少应用体积
   # fonts:
