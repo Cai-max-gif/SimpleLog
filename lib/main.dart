@@ -12,6 +12,8 @@ import 'providers/ui_state_providers.dart';
 import 'utils/notification_factory.dart';
 import 'pages/auth/splash_page.dart';
 import 'pages/auth/welcome_page.dart';
+import 'pages/auth/app_lock_screen.dart';
+import 'providers/security_providers.dart';
 import 'services/system/reminder_monitor_service.dart';
 import 'services/platform/screenshot_monitor_service.dart';
 import 'services/platform/image_share_handler_service.dart';
@@ -327,6 +329,12 @@ class MainApp extends ConsumerWidget {
     // 欢迎页面完成后，根据初始化状态显示对应页面
     if (initState != AppInitState.ready) {
       return const SplashPage();
+    }
+
+    // 检查是否需要显示锁屏
+    final isLocked = ref.watch(isAppLockedProvider);
+    if (isLocked) {
+      return const AppLockScreen();
     }
 
     return const BeeApp();

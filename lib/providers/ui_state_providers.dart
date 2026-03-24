@@ -14,6 +14,7 @@ import '../services/billing/post_processor.dart';
 import '../services/system/logger_service.dart';
 import '../services/ai/ai_constants.dart';
 import '../services/platform/app_link_service.dart';
+import 'security_providers.dart';
 
 // 底部导航索引（0: 明细, 1: 图表, 2: 账本, 3: 我的）
 final bottomTabIndexProvider = StateProvider<int>((ref) => 0);
@@ -187,6 +188,7 @@ final appSplashInitProvider = FutureProvider<void>((ref) async {
       ref.watch(smartBillingAutoTagsInitProvider.future),
       ref.watch(smartBillingAutoAttachmentInitProvider.future),
       ref.watch(incomeExpenseColorSchemeInitProvider.future),
+      ref.watch(securityInitProvider.future),
     ]);
     logger.info(tag, '基础配置初始化完成: ${DateTime.now().difference(stepTime).inMilliseconds}ms');
     stepTime = DateTime.now();

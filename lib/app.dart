@@ -23,6 +23,8 @@ import 'pages/ai/ai_chat_page.dart';
 import 'services/platform/app_link_service.dart';
 import 'services/platform/quick_actions_service.dart';
 import 'services/system/logger_service.dart';
+import 'services/security/app_lock_service.dart';
+import 'providers/security_providers.dart';
 
 class BeeApp extends ConsumerStatefulWidget {
   const BeeApp({super.key});
@@ -376,9 +378,21 @@ class _BeeAppState extends ConsumerState<BeeApp>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    // 当app从后台恢复到前台时，更新小组件数据
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.paused) {
+      // 记录进入后台时间
+      AppLockService.recordBackgroundTime();
+    } else if (state == AppLifecycleState.resumed) {
+      // 检查是否需要锁定
+      _checkAppLockOnResume();
+      // 当app从后台恢复到前台时，更新小组件数据
       _updateWidget();
+    }
+  }
+
+  Future<void> _checkAppLockOnResume() async {
+    final shouldLock = await AppLockService.shouldLockOnResume();
+    if (shouldLock && mounted) {
+      ref.read(isAppLockedProvider.notifier).state = true;
     }
   }
 

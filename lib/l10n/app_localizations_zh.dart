@@ -5531,6 +5531,69 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mineMultiDeviceSyncSubtitle => '进入页面时自动检查云端变更';
+
+  @override
+  String get appLockTitle => '应用锁';
+
+  @override
+  String get appLockDesc => 'PIN码与生物识别保护隐私';
+
+  @override
+  String get appLockEnable => '启用应用锁';
+
+  @override
+  String get appLockEnableDesc => '启动和切回应用时需要验证身份';
+
+  @override
+  String get appLockSetPin => '设置密码';
+
+  @override
+  String get appLockChangePin => '修改密码';
+
+  @override
+  String get appLockVerifyPin => '验证密码';
+
+  @override
+  String get appLockVerifyCurrentPin => '请输入当前密码';
+
+  @override
+  String get appLockSetNewPin => '请设置新密码';
+
+  @override
+  String get appLockConfirmPin => '请再次输入密码';
+
+  @override
+  String get appLockEnterPin => '请输入密码';
+
+  @override
+  String get appLockPinSetSuccess => '密码设置成功';
+
+  @override
+  String get appLockDisabled => '应用锁已关闭';
+
+  @override
+  String get appLockBiometric => '生物识别解锁';
+
+  @override
+  String get appLockBiometricDesc => '使用Face ID或指纹快速解锁';
+
+  @override
+  String get appLockBiometricReason => '请验证身份以解锁蜜蜂记账';
+
+  @override
+  String get appLockTimeout => '自动锁定时间';
+
+  @override
+  String get appLockTimeoutImmediate => '立即';
+
+  @override
+  String get appLockTimeout1Min => '1分钟后';
+
+  @override
+  String get appLockTimeout5Min => '5分钟后';
+
+  @override
+  String get appLockTimeout15Min => '15分钟后';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11056,4 +11119,67 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get accountReorderTip => '長按拖動可調整帳戶順序';
+
+  @override
+  String get appLockTitle => '應用鎖';
+
+  @override
+  String get appLockDesc => 'PIN碼與生物辨識保護隱私';
+
+  @override
+  String get appLockEnable => '啟用應用鎖';
+
+  @override
+  String get appLockEnableDesc => '啟動和切回應用時需要驗證身份';
+
+  @override
+  String get appLockSetPin => '設定密碼';
+
+  @override
+  String get appLockChangePin => '修改密碼';
+
+  @override
+  String get appLockVerifyPin => '驗證密碼';
+
+  @override
+  String get appLockVerifyCurrentPin => '請輸入當前密碼';
+
+  @override
+  String get appLockSetNewPin => '請設定新密碼';
+
+  @override
+  String get appLockConfirmPin => '請再次輸入密碼';
+
+  @override
+  String get appLockEnterPin => '請輸入密碼';
+
+  @override
+  String get appLockPinSetSuccess => '密碼設定成功';
+
+  @override
+  String get appLockDisabled => '應用鎖已關閉';
+
+  @override
+  String get appLockBiometric => '生物辨識解鎖';
+
+  @override
+  String get appLockBiometricDesc => '使用Face ID或指紋快速解鎖';
+
+  @override
+  String get appLockBiometricReason => '請驗證身份以解鎖蜜蜂記帳';
+
+  @override
+  String get appLockTimeout => '自動鎖定時間';
+
+  @override
+  String get appLockTimeoutImmediate => '立即';
+
+  @override
+  String get appLockTimeout1Min => '1分鐘後';
+
+  @override
+  String get appLockTimeout5Min => '5分鐘後';
+
+  @override
+  String get appLockTimeout15Min => '15分鐘後';
 }

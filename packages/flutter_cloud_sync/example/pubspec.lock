@@ -117,6 +117,20 @@ packages:
       relative: true
     source: path
     version: "0.1.0"
+  flutter_cloud_sync_icloud:
+    dependency: transitive
+    description:
+      path: "../../flutter_cloud_sync_icloud"
+      relative: true
+    source: path
+    version: "0.1.0"
+  flutter_cloud_sync_s3:
+    dependency: transitive
+    description:
+      path: "../../flutter_cloud_sync_s3"
+      relative: true
+    source: path
+    version: "0.1.0"
   flutter_cloud_sync_supabase:
     dependency: transitive
     description:

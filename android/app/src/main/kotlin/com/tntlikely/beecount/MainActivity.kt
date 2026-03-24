@@ -14,11 +14,11 @@ import android.provider.Settings
 import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileInputStream
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
-class MainActivity: FlutterActivity() {
+class MainActivity: FlutterFragmentActivity() {
     private val CHANNEL = "notification_channel"
     private val INSTALL_CHANNEL = "com.tntlikely.beecount/install"
     private val SCREENSHOT_CHANNEL = "com.tntlikely.beecount/screenshot"
