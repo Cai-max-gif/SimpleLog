@@ -8,6 +8,7 @@ import '../../styles/tokens.dart';
 import '../../services/billing/post_processor.dart';
 import '../../services/attachment_service.dart';
 import '../biz/amount_editor_sheet.dart';
+import '../../utils/account_type_utils.dart';
 import '../ui/ui.dart';
 
 /// 转账表单组件
@@ -388,10 +389,9 @@ class _TransferFormState extends ConsumerState<TransferForm> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              _getIconForType(account.type),
+            AccountTypeIcon(
+              type: account.type,
               size: 32,
-              color: isSelected ? primary : Colors.grey[600],
             ),
             const SizedBox(height: 8),
             Padding(
@@ -414,22 +414,4 @@ class _TransferFormState extends ConsumerState<TransferForm> {
     );
   }
 
-  IconData _getIconForType(String type) {
-    switch (type) {
-      case 'cash':
-        return Icons.payments_outlined;
-      case 'bank_card':
-        return Icons.credit_card;
-      case 'credit_card':
-        return Icons.credit_score;
-      case 'alipay':
-        return Icons.currency_yuan;
-      case 'wechat':
-        return Icons.chat;
-      case 'other':
-        return Icons.account_balance_outlined;
-      default:
-        return Icons.account_balance_wallet_outlined;
-    }
-  }
 }

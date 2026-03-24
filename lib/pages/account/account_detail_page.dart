@@ -12,6 +12,7 @@ import '../../utils/ui_scale_extensions.dart';
 import '../../utils/transaction_edit_utils.dart';
 import '../../services/data/category_service.dart';
 import '../../widgets/category_icon.dart';
+import '../../utils/account_type_utils.dart';
 
 /// 账户详情页面
 /// 显示账户的统计信息和相关交易
@@ -41,7 +42,7 @@ class AccountDetailPage extends ConsumerWidget {
         children: [
           PrimaryHeader(
             title: account.name,
-            subtitle: _getTypeLabel(context, account.type),
+            subtitle: getAccountTypeLabel(context, account.type),
             showBack: true,
           ),
           Expanded(
@@ -203,25 +204,6 @@ class AccountDetailPage extends ConsumerWidget {
     );
   }
 
-  String _getTypeLabel(BuildContext context, String type) {
-    final l10n = AppLocalizations.of(context);
-    switch (type) {
-      case 'cash':
-        return l10n.accountTypeCash;
-      case 'bank_card':
-        return l10n.accountTypeBankCard;
-      case 'credit_card':
-        return l10n.accountTypeCreditCard;
-      case 'alipay':
-        return l10n.accountTypeAlipay;
-      case 'wechat':
-        return l10n.accountTypeWechat;
-      case 'other':
-        return l10n.accountTypeOther;
-      default:
-        return type;
-    }
-  }
 
   Future<void> _editTransaction(
       BuildContext context, WidgetRef ref, db.Transaction tx) async {

@@ -11,67 +11,9 @@ import '../../l10n/app_localizations.dart';
 import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/currencies.dart';
+import '../../utils/account_type_utils.dart';
 import 'account_edit_page.dart';
 import 'account_detail_page.dart';
-
-/// 固定的账户类型顺序
-const _typeOrder = ['cash', 'bank_card', 'credit_card', 'alipay', 'wechat', 'other'];
-
-IconData _getIconForType(String type) {
-  switch (type) {
-    case 'cash':
-      return Icons.payments_outlined;
-    case 'bank_card':
-      return Icons.credit_card;
-    case 'credit_card':
-      return Icons.credit_score;
-    case 'alipay':
-      return Icons.currency_yuan;
-    case 'wechat':
-      return Icons.chat;
-    case 'other':
-      return Icons.account_balance_outlined;
-    default:
-      return Icons.account_balance_wallet_outlined;
-  }
-}
-
-String _getTypeLabel(BuildContext context, String type) {
-  final l10n = AppLocalizations.of(context);
-  switch (type) {
-    case 'cash':
-      return l10n.accountTypeCash;
-    case 'bank_card':
-      return l10n.accountTypeBankCard;
-    case 'credit_card':
-      return l10n.accountTypeCreditCard;
-    case 'alipay':
-      return l10n.accountTypeAlipay;
-    case 'wechat':
-      return l10n.accountTypeWechat;
-    case 'other':
-      return l10n.accountTypeOther;
-    default:
-      return type;
-  }
-}
-
-Color _getColorForType(String type, Color primaryColor) {
-  switch (type) {
-    case 'alipay':
-      return const Color(0xFF1677FF);
-    case 'wechat':
-      return const Color(0xFF07C160);
-    case 'cash':
-      return Colors.orange;
-    case 'bank_card':
-      return const Color(0xFF1890FF);
-    case 'credit_card':
-      return Colors.purple;
-    default:
-      return primaryColor;
-  }
-}
 
 class AccountsPage extends ConsumerStatefulWidget {
   const AccountsPage({super.key});
@@ -345,7 +287,7 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
                       ),
 
                       // 2. 按类型分组的账户列表
-                      ..._typeOrder
+                      ...accountTypeOrder
                           .where((type) => groups.containsKey(type) && groups[type]!.isNotEmpty)
                           .map((type) {
                         final groupList = groups[type]!;
@@ -365,7 +307,7 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
 
                       // 处理不在固定类型列表中的类型
                       ...groups.keys
-                          .where((type) => !_typeOrder.contains(type) && groups[type]!.isNotEmpty)
+                          .where((type) => !accountTypeOrder.contains(type) && groups[type]!.isNotEmpty)
                           .map((type) {
                         final groupList = groups[type]!;
                         return _AccountTypeGroup(
@@ -463,7 +405,7 @@ class _AccountTypeGroupState extends ConsumerState<_AccountTypeGroup> {
 
   @override
   Widget build(BuildContext context) {
-    final typeColor = _getColorForType(widget.type, widget.primaryColor);
+    final typeColor = getColorForAccountType(widget.type, widget.primaryColor);
     final canReorder = widget.accounts.length > 1;
 
     return Column(
@@ -489,15 +431,17 @@ class _AccountTypeGroupState extends ConsumerState<_AccountTypeGroup> {
                     color: typeColor.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8.0.scaled(context, ref)),
                   ),
-                  child: Icon(
-                    _getIconForType(widget.type),
-                    size: 18.0.scaled(context, ref),
-                    color: typeColor,
+                  child: Center(
+                    child: AccountTypeIcon(
+                      type: widget.type,
+                      size: 18.0.scaled(context, ref),
+                      color: typeColor,
+                    ),
                   ),
                 ),
                 SizedBox(width: 10.0.scaled(context, ref)),
                 Text(
-                  _getTypeLabel(context, widget.type),
+                  getAccountTypeLabel(context, widget.type),
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
@@ -562,8 +506,6 @@ class _AccountTypeGroupState extends ConsumerState<_AccountTypeGroup> {
                         account: account,
                         primaryColor: widget.primaryColor,
                         typeColor: typeColor,
-                        icon: _getIconForType(account.type),
-
                         stats: widget.allStats?[account.id],
                         onTap: () => widget.onTap(account),
                         onEdit: () => widget.onEdit(account),
@@ -577,7 +519,6 @@ class _AccountTypeGroupState extends ConsumerState<_AccountTypeGroup> {
                       account: account,
                       primaryColor: widget.primaryColor,
                       typeColor: typeColor,
-                      icon: _getIconForType(account.type),
                       stats: widget.allStats?[account.id],
                       onTap: () => widget.onTap(account),
                       onEdit: () => widget.onEdit(account),
@@ -740,9 +681,9 @@ class _CompactDefaultAccount extends ConsumerWidget {
                 final isSelected = account.id == currentDefaultId;
                 return ListTile(
                   dense: true,
-                  leading: Icon(
-                    _getIconForType(account.type),
-                    color: _getColorForType(account.type, primaryColor),
+                  leading: AccountTypeIcon(
+                    type: account.type,
+                    size: 24,
                   ),
                   title: Text(
                     account.name,
@@ -777,7 +718,6 @@ class _AccountCard extends ConsumerWidget {
   final db.Account account;
   final Color primaryColor;
   final Color typeColor;
-  final IconData icon;
   final ({double balance, double expense, double income})? stats;
   final VoidCallback onTap;
   final VoidCallback onEdit;
@@ -786,7 +726,6 @@ class _AccountCard extends ConsumerWidget {
     required this.account,
     required this.primaryColor,
     required this.typeColor,
-    required this.icon,
     this.stats,
     required this.onTap,
     required this.onEdit,
@@ -842,9 +781,24 @@ class _AccountCard extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 顶部：账户名称 + 币种 + 编辑
+                    // 顶部：图标 + 账户名称 + 币种 + 编辑
                     Row(
                       children: [
+                        Container(
+                          width: 32.0.scaled(context, ref),
+                          height: 32.0.scaled(context, ref),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: AccountTypeIcon(
+                              type: account.type,
+                              size: 18.0.scaled(context, ref),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10.0.scaled(context, ref)),
                         Expanded(
                           child: Row(
                             mainAxisSize: MainAxisSize.min,

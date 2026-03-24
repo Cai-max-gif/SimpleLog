@@ -10,6 +10,7 @@ import '../../services/billing/post_processor.dart';
 import '../../utils/currencies.dart';
 import '../../styles/tokens.dart';
 import '../../utils/ui_scale_extensions.dart';
+import '../../utils/account_type_utils.dart';
 
 class AccountEditPage extends ConsumerStatefulWidget {
   final db.Account? account; // null表示新建
@@ -95,45 +96,6 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
             ? AppLocalizations.of(context).accountNameDuplicate
             : null;
       });
-    }
-  }
-
-  IconData _getIconForType(String type) {
-    switch (type) {
-      case 'cash':
-        return Icons.payments_outlined;
-      case 'bank_card':
-        return Icons.credit_card;
-      case 'credit_card':
-        return Icons.credit_score;
-      case 'alipay':
-        return Icons.currency_yuan; // 使用￥符号代表支付宝
-      case 'wechat':
-        return Icons.chat; // 使用聊天图标代表微信
-      case 'other':
-        return Icons.account_balance_outlined;
-      default:
-        return Icons.account_balance_wallet_outlined;
-    }
-  }
-
-  String _getTypeLabel(BuildContext context, String type) {
-    final l10n = AppLocalizations.of(context);
-    switch (type) {
-      case 'cash':
-        return l10n.accountTypeCash;
-      case 'bank_card':
-        return l10n.accountTypeBankCard;
-      case 'credit_card':
-        return l10n.accountTypeCreditCard;
-      case 'alipay':
-        return l10n.accountTypeAlipay;
-      case 'wechat':
-        return l10n.accountTypeWechat;
-      case 'other':
-        return l10n.accountTypeOther;
-      default:
-        return type;
     }
   }
 
@@ -253,8 +215,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                               final isSelected = _selectedType == type;
                               return _AccountTypeCard(
                                 type: type,
-                                icon: _getIconForType(type),
-                                label: _getTypeLabel(context, type),
+                                label: getAccountTypeLabel(context, type),
                                 isSelected: isSelected,
                                 primaryColor: primaryColor,
                                 onTap: () {
@@ -662,7 +623,6 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
 /// 账户类型选择卡片
 class _AccountTypeCard extends ConsumerWidget {
   final String type;
-  final IconData icon;
   final String label;
   final bool isSelected;
   final Color primaryColor;
@@ -670,7 +630,6 @@ class _AccountTypeCard extends ConsumerWidget {
 
   const _AccountTypeCard({
     required this.type,
-    required this.icon,
     required this.label,
     required this.isSelected,
     required this.primaryColor,
@@ -695,9 +654,8 @@ class _AccountTypeCard extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              color: isSelected ? primaryColor : BeeTokens.textSecondary(context),
+            AccountTypeIcon(
+              type: type,
               size: 28.0.scaled(context, ref),
             ),
             SizedBox(height: 8.0.scaled(context, ref)),

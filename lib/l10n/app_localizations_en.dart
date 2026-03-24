@@ -146,6 +146,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonClose => 'Close';
 
   @override
+  String get commonOther => 'Other';
+
+  @override
   String get commonSearch => 'Search';
 
   @override
@@ -403,6 +406,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get analyticsCategoryRanking => 'Category Ranking';
+
+  @override
+  String get analyticsTotalAmount => 'Total';
 
   @override
   String get analyticsNoDataSubtext => 'Swipe left/right to switch periods, or tap button to toggle income/expense';
@@ -5525,4 +5531,67 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mineMultiDeviceSyncSubtitle => 'Auto-check cloud changes when entering page';
+
+  @override
+  String get appLockTitle => 'App Lock';
+
+  @override
+  String get appLockDesc => 'PIN & biometric to protect privacy';
+
+  @override
+  String get appLockEnable => 'Enable App Lock';
+
+  @override
+  String get appLockEnableDesc => 'Require authentication on launch and resume';
+
+  @override
+  String get appLockSetPin => 'Set PIN';
+
+  @override
+  String get appLockChangePin => 'Change PIN';
+
+  @override
+  String get appLockVerifyPin => 'Verify PIN';
+
+  @override
+  String get appLockVerifyCurrentPin => 'Enter current PIN';
+
+  @override
+  String get appLockSetNewPin => 'Set new PIN';
+
+  @override
+  String get appLockConfirmPin => 'Confirm PIN';
+
+  @override
+  String get appLockEnterPin => 'Enter PIN';
+
+  @override
+  String get appLockPinSetSuccess => 'PIN set successfully';
+
+  @override
+  String get appLockDisabled => 'App Lock disabled';
+
+  @override
+  String get appLockBiometric => 'Biometric Unlock';
+
+  @override
+  String get appLockBiometricDesc => 'Use Face ID or fingerprint to unlock';
+
+  @override
+  String get appLockBiometricReason => 'Verify identity to unlock Bee Accounting';
+
+  @override
+  String get appLockTimeout => 'Auto-lock Timeout';
+
+  @override
+  String get appLockTimeoutImmediate => 'Immediately';
+
+  @override
+  String get appLockTimeout1Min => 'After 1 minute';
+
+  @override
+  String get appLockTimeout5Min => 'After 5 minutes';
+
+  @override
+  String get appLockTimeout15Min => 'After 15 minutes';
 }

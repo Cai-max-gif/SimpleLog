@@ -11,6 +11,7 @@ import '../../styles/tokens.dart';
 import '../../utils/currencies.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/website_urls.dart';
+import '../../utils/account_type_utils.dart';
 import '../../widgets/biz/amount_text.dart';
 import '../../widgets/biz/ledger_picker_sheet.dart';
 import '../../widgets/biz/section_card.dart';
@@ -474,42 +475,6 @@ class _AccountsCard extends ConsumerWidget {
 
   const _AccountsCard({required this.primaryColor});
 
-  IconData _getIconForType(String type) {
-    switch (type) {
-      case 'cash':
-        return Icons.payments_outlined;
-      case 'bank_card':
-        return Icons.credit_card;
-      case 'credit_card':
-        return Icons.credit_score;
-      case 'alipay':
-        return Icons.currency_yuan;
-      case 'wechat':
-        return Icons.chat;
-      case 'other':
-        return Icons.account_balance_outlined;
-      default:
-        return Icons.account_balance_wallet_outlined;
-    }
-  }
-
-  Color _getColorForType(String type) {
-    switch (type) {
-      case 'alipay':
-        return const Color(0xFF1677FF);
-      case 'wechat':
-        return const Color(0xFF07C160);
-      case 'cash':
-        return Colors.orange;
-      case 'bank_card':
-        return const Color(0xFF1890FF);
-      case 'credit_card':
-        return Colors.purple;
-      default:
-        return Colors.blue;
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
@@ -756,7 +721,7 @@ class _AccountsCard extends ConsumerWidget {
     double balance,
   ) {
     final useCompact = ref.watch(compactAmountProvider);
-    final typeColor = _getColorForType(account.type);
+    final typeColor = getColorForAccountType(account.type, primaryColor);
 
     return Container(
       width: 140.0.scaled(context, ref),
@@ -786,10 +751,19 @@ class _AccountsCard extends ConsumerWidget {
           // 账户名和图标
           Row(
             children: [
-              Icon(
-                _getIconForType(account.type),
-                size: 16.0.scaled(context, ref),
-                color: Colors.white.withValues(alpha: 0.9),
+              Container(
+                width: 22.0.scaled(context, ref),
+                height: 22.0.scaled(context, ref),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: AccountTypeIcon(
+                    type: account.type,
+                    size: 14.0.scaled(context, ref),
+                  ),
+                ),
               ),
               SizedBox(width: 6.0.scaled(context, ref)),
               Expanded(

@@ -354,6 +354,12 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get commonClose;
 
+  /// No description provided for @commonOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get commonOther;
+
   /// No description provided for @commonSearch.
   ///
   /// In en, this message translates to:
@@ -815,6 +821,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Category Ranking'**
   String get analyticsCategoryRanking;
+
+  /// No description provided for @analyticsTotalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get analyticsTotalAmount;
 
   /// No description provided for @analyticsNoDataSubtext.
   ///
@@ -10535,6 +10547,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Auto-check cloud changes when entering page'**
   String get mineMultiDeviceSyncSubtitle;
+
+  /// No description provided for @appLockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App Lock'**
+  String get appLockTitle;
+
+  /// No description provided for @appLockDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN & biometric to protect privacy'**
+  String get appLockDesc;
+
+  /// No description provided for @appLockEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable App Lock'**
+  String get appLockEnable;
+
+  /// No description provided for @appLockEnableDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Require authentication on launch and resume'**
+  String get appLockEnableDesc;
+
+  /// No description provided for @appLockSetPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Set PIN'**
+  String get appLockSetPin;
+
+  /// No description provided for @appLockChangePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Change PIN'**
+  String get appLockChangePin;
+
+  /// No description provided for @appLockVerifyPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify PIN'**
+  String get appLockVerifyPin;
+
+  /// No description provided for @appLockVerifyCurrentPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter current PIN'**
+  String get appLockVerifyCurrentPin;
+
+  /// No description provided for @appLockSetNewPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Set new PIN'**
+  String get appLockSetNewPin;
+
+  /// No description provided for @appLockConfirmPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm PIN'**
+  String get appLockConfirmPin;
+
+  /// No description provided for @appLockEnterPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter PIN'**
+  String get appLockEnterPin;
+
+  /// No description provided for @appLockPinSetSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN set successfully'**
+  String get appLockPinSetSuccess;
+
+  /// No description provided for @appLockDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'App Lock disabled'**
+  String get appLockDisabled;
+
+  /// No description provided for @appLockBiometric.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric Unlock'**
+  String get appLockBiometric;
+
+  /// No description provided for @appLockBiometricDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Face ID or fingerprint to unlock'**
+  String get appLockBiometricDesc;
+
+  /// No description provided for @appLockBiometricReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify identity to unlock Bee Accounting'**
+  String get appLockBiometricReason;
+
+  /// No description provided for @appLockTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-lock Timeout'**
+  String get appLockTimeout;
+
+  /// No description provided for @appLockTimeoutImmediate.
+  ///
+  /// In en, this message translates to:
+  /// **'Immediately'**
+  String get appLockTimeoutImmediate;
+
+  /// No description provided for @appLockTimeout1Min.
+  ///
+  /// In en, this message translates to:
+  /// **'After 1 minute'**
+  String get appLockTimeout1Min;
+
+  /// No description provided for @appLockTimeout5Min.
+  ///
+  /// In en, this message translates to:
+  /// **'After 5 minutes'**
+  String get appLockTimeout5Min;
+
+  /// No description provided for @appLockTimeout15Min.
+  ///
+  /// In en, this message translates to:
+  /// **'After 15 minutes'**
+  String get appLockTimeout15Min;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

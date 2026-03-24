@@ -6,6 +6,7 @@ import '../../styles/tokens.dart';
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/charts/line_chart.dart';
+import '../../widgets/charts/category_pie_chart.dart';
 import '../../widgets/analytics/analytics_summary.dart';
 import '../../widgets/analytics/category_rank_row.dart';
 import '../../widgets/ui/capsule_switcher.dart';
@@ -26,6 +27,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
   bool _chartSwiped = false; // 吸收图表区域横滑，避免父级切换收入/支出
   bool _localHeaderDismissed = false; // 本地快速隐藏，实际持久化在 provider 中
   bool _localChartDismissed = false;
+  bool _showPieChart = false; // 切换饼图/排行榜
 
   // 显示周期选择器
   void _showPeriodPicker() async {
@@ -822,6 +824,20 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                               style: BeeTextTokens.title(context),
                             ),
                             const Spacer(),
+                            // 饼图/列表切换按钮
+                            if (catData.isNotEmpty && sum > 0)
+                              GestureDetector(
+                                onTap: () =>
+                                    setState(() => _showPieChart = !_showPieChart),
+                                child: Icon(
+                                  _showPieChart
+                                      ? Icons.format_list_bulleted
+                                      : Icons.pie_chart_outline,
+                                  size: 20,
+                                  color: BeeTokens.textSecondary(context),
+                                ),
+                              ),
+                            if (!headerDismissed) const SizedBox(width: 12),
                             if (!headerDismissed)
                               InkWell(
                                 onTap: () async {
@@ -859,7 +875,12 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                           ],
                         ),
                       if (_type != 'balance') const SizedBox(height: 8),
-                      if (_type != 'balance')
+                      if (_type != 'balance' && _showPieChart && catData.isNotEmpty && sum > 0)
+                        CategoryPieChart(
+                          data: catData,
+                          sum: sum,
+                        ),
+                      if (_type != 'balance' && !_showPieChart)
                         for (final item in catData)
                           CategoryRankRow(
                             categoryId: item.id,
