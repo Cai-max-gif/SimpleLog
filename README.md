@@ -4,7 +4,7 @@
 
 ![GitHub stars](https://img.shields.io/github/stars/TNT-Likely/BeeCount?style=social)
 ![License](https://img.shields.io/badge/license-商业源代码许可-orange.svg)
-![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20HarmonyOS-lightgrey.svg)
+![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-lightgrey.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.27%2B-02569B?logo=flutter)
 ![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
 
@@ -30,7 +30,7 @@
 <br/>
 <br/>
 
-[🌐 官网](https://beecount-website.pages.dev) | [📖 使用文档](https://beecount-website.pages.dev/docs/intro) | [💝 捐赠支持](#-捐赠) | [💬 微信群](demo/wechat/README.md) | [💬 Telegram](https://t.me/beecount) | [🌐 English](README_EN.md)
+[🌐 官网](https://beecount-website.pages.dev) | [📖 使用文档](https://beecount-website.pages.dev/docs/intro) | [💝 捐赠支持](#-捐赠) | [💬 Telegram](https://t.me/beecount) | [🌐 English](README_EN.md)
 
 </div>
 
@@ -44,7 +44,7 @@
 >
 > 💡 在 App Store 或 Google Play 搜索 **"蜜蜂记账 - 简洁记账本"** 即可下载
 >
-> 📱 **HarmonyOS** - 正在上架中 | 支持 HarmonyOS 5.0+ | [鸿蒙版本仓库](https://github.com/TNT-Likely/beecount-openharmony)
+> ~~📱 **HarmonyOS** - 已停止更新，不再上架~~ | [鸿蒙版本仓库](https://github.com/TNT-Likely/beecount-openharmony)
 
 ---
 
@@ -677,7 +677,7 @@ A:
 | 仓库 | 说明 |
 |------|------|
 | [BeeCount-Website](https://github.com/TNT-Likely/BeeCount-Website) | 官网/文档仓库 |
-| [beecount-openharmony](https://github.com/TNT-Likely/beecount-openharmony) | 鸿蒙版本仓库 |
+| [beecount-openharmony](https://github.com/TNT-Likely/beecount-openharmony) | 鸿蒙版本仓库（已停止更新） |
 | [BeeShot](https://github.com/TNT-Likely/BeeShot) | App Store 截图生成器 |
 
 ---

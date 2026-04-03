@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pages/main/home_page.dart';
 import 'pages/main/analytics_page.dart';
-import 'pages/main/discover_page.dart';
+import 'pages/account/accounts_page.dart';
 import 'pages/main/mine_page.dart';
 import 'pages/transaction/transaction_editor_page.dart';
 import 'providers.dart';
@@ -25,6 +26,8 @@ import 'services/platform/quick_actions_service.dart';
 import 'services/system/logger_service.dart';
 import 'services/security/app_lock_service.dart';
 import 'providers/security_providers.dart';
+import 'styles/tokens.dart';
+import 'providers/avatar_providers.dart';
 
 class BeeApp extends ConsumerStatefulWidget {
   const BeeApp({super.key});
@@ -38,7 +41,7 @@ class _BeeAppState extends ConsumerState<BeeApp>
   final _pages = const [
     HomePage(),
     AnalyticsPage(),
-    DiscoverPage(),
+    AccountsPage(asTab: true),
     MinePage(),
   ];
 
@@ -62,7 +65,6 @@ class _BeeAppState extends ConsumerState<BeeApp>
   // 记账按钮相关状态
   late AnimationController _expandController;
   late Animation<double> _expandAnimation;
-  bool _isOpen = false;
   int? _hoveredIndex;
   OverlayEntry? _overlayEntry;
   final GlobalKey _centerButtonKey = GlobalKey();
@@ -214,10 +216,7 @@ class _BeeAppState extends ConsumerState<BeeApp>
   }
 
   void _onLongPressStart(LongPressStartDetails details) {
-    setState(() {
-      _isOpen = true;
-      _expandController.forward();
-    });
+    _expandController.forward();
     _showOverlay();
   }
 
@@ -251,11 +250,8 @@ class _BeeAppState extends ConsumerState<BeeApp>
       }
     }
 
-    setState(() {
-      _isOpen = false;
-      _hoveredIndex = null;
-      _expandController.reverse();
-    });
+    _hoveredIndex = null;
+    _expandController.reverse();
     _removeOverlay();
   }
 
@@ -423,64 +419,6 @@ class _BeeAppState extends ConsumerState<BeeApp>
     }
   }
 
-  /// 构建记账按钮（独立在 Stack 最上层，防止点击穿透）
-  Widget _buildCenterButton(Color primaryColor, double bottomPadding) {
-    const barHeight = 56.0;
-    const buttonSize = 64.0;
-    const buttonOverhang = buttonSize - (barHeight - 8);
-
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: barHeight + bottomPadding - buttonOverhang - 52, // 往下移12像素
-      child: Center(
-        child: GestureDetector(
-          key: _centerButtonKey,
-          behavior: HitTestBehavior.opaque, // 防止点击穿透
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const TransactionEditorPage(
-                  initialKind: 'expense',
-                  quickAdd: true,
-                ),
-              ),
-            );
-          },
-          onLongPressStart: _onLongPressStart,
-          onLongPressMoveUpdate: _onLongPressMoveUpdate,
-          onLongPressEnd: _onLongPressEnd,
-          child: Container(
-            // 扩大点击区域，防止误触交易记录
-            padding: const EdgeInsets.all(20),
-            child: AnimatedBuilder(
-              animation: _expandAnimation,
-              builder: (context, child) {
-                return Transform.rotate(
-                  angle: _expandAnimation.value * 3.14159265359 / 4,
-                  child: Container(
-                    width: buttonSize,
-                    height: buttonSize,
-                    decoration: BoxDecoration(
-                      color: primaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      _isOpen ? Icons.close : Icons.add,
-                      color: Colors.white,
-                      size: 32,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final idx = ref.watch(bottomTabIndexProvider);
@@ -488,6 +426,7 @@ class _BeeAppState extends ConsumerState<BeeApp>
     final primaryColor = ref.watch(primaryColorProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bottomPadding = MediaQuery.of(context).padding.bottom;
+    final avatarPath = ref.watch(avatarPathProvider).asData?.value;
 
     return PopScope(
       canPop: false,
@@ -507,6 +446,7 @@ class _BeeAppState extends ConsumerState<BeeApp>
       child: Stack(
         children: [
           Scaffold(
+            extendBody: true, // 让页面内容延伸到底部栏后面
             body: IndexedStack(
               index: idx,
               children: _pages,
@@ -517,6 +457,8 @@ class _BeeAppState extends ConsumerState<BeeApp>
               isDark: isDark,
               bottomPadding: bottomPadding,
               l10n: l10n,
+              avatarPath: avatarPath,
+              centerButtonKey: _centerButtonKey,
               onTabTap: (index) {
                 final now = DateTime.now();
                 if (_lastTappedIndex == index &&
@@ -534,10 +476,22 @@ class _BeeAppState extends ConsumerState<BeeApp>
                   ref.read(bottomTabIndexProvider.notifier).state = index;
                 }
               },
+              onCenterTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const TransactionEditorPage(
+                      initialKind: 'expense',
+                      quickAdd: true,
+                    ),
+                  ),
+                );
+              },
+              onCenterLongPressStart: _onLongPressStart,
+              onCenterLongPressMoveUpdate: _onLongPressMoveUpdate,
+              onCenterLongPressEnd: _onLongPressEnd,
             ),
           ),
-          // 记账按钮（提升到 Stack 最上层，防止点击穿透）
-          _buildCenterButton(primaryColor, bottomPadding),
           // 开发模式下的主题切换按钮
           if (kDebugMode)
             Positioned(
@@ -571,155 +525,20 @@ class _BeeAppState extends ConsumerState<BeeApp>
   }
 }
 
-/// FAB 长按提示气泡组件（带箭头和呼吸动画）
-class _FabTipBubble extends StatefulWidget {
-  final String text;
-  final Color primaryColor;
-  final VoidCallback onDismiss;
-
-  const _FabTipBubble({
-    required this.text,
-    required this.primaryColor,
-    required this.onDismiss,
-  });
-
-  @override
-  State<_FabTipBubble> createState() => _FabTipBubbleState();
-}
-
-class _FabTipBubbleState extends State<_FabTipBubble>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _opacityAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    )..repeat(reverse: true);
-
-    _opacityAnimation = Tween<double>(begin: 0.7, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final primaryColor = widget.primaryColor;
-
-    return AnimatedBuilder(
-      animation: _opacityAnimation,
-      builder: (context, child) {
-        return Opacity(
-          opacity: _opacityAnimation.value,
-          child: child,
-        );
-      },
-      child: GestureDetector(
-        onTap: widget.onDismiss,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // 气泡主体
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: primaryColor.withValues(alpha: 0.4),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.touch_app,
-                    color: Colors.white,
-                    size: 18,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    widget.text,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    padding: const EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.3),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // 箭头指向 FAB
-            CustomPaint(
-              size: const Size(16, 10),
-              painter: _ArrowPainter(color: primaryColor),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// 箭头绘制器
-class _ArrowPainter extends CustomPainter {
-  final Color color;
-
-  _ArrowPainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-
-    final path = Path()
-      ..moveTo(0, 0)
-      ..lineTo(size.width / 2, size.height)
-      ..lineTo(size.width, 0)
-      ..close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-/// 闲鱼风格底部导航栏（带圆滑凸起，记账按钮已独立）
+/// Telegram 风格悬浮胶囊底部导航栏
 class _BeeBottomBar extends StatelessWidget {
   final int currentIndex;
   final Color primaryColor;
   final bool isDark;
   final double bottomPadding;
   final AppLocalizations l10n;
+  final String? avatarPath;
+  final GlobalKey centerButtonKey;
   final ValueChanged<int> onTabTap;
+  final VoidCallback onCenterTap;
+  final GestureLongPressStartCallback onCenterLongPressStart;
+  final GestureLongPressMoveUpdateCallback onCenterLongPressMoveUpdate;
+  final GestureLongPressEndCallback onCenterLongPressEnd;
 
   const _BeeBottomBar({
     required this.currentIndex,
@@ -727,63 +546,59 @@ class _BeeBottomBar extends StatelessWidget {
     required this.isDark,
     required this.bottomPadding,
     required this.l10n,
+    this.avatarPath,
+    required this.centerButtonKey,
     required this.onTabTap,
+    required this.onCenterTap,
+    required this.onCenterLongPressStart,
+    required this.onCenterLongPressMoveUpdate,
+    required this.onCenterLongPressEnd,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = isDark ? const Color(0xFF1C1C1E) : Colors.white;
+    final bgColor = BeeTokens.tabBarBackground(context);
     final inactiveColor = isDark ? Colors.white70 : Colors.black54;
 
     const barHeight = 56.0;
-    const buttonSize = 64.0; // 按钮大小
-    const bumpHeight = 20.0; // 凸起背景的高度
-    const bumpExtraWidth = 2.0; // 凸起比按钮宽多少（每侧）
 
     return SizedBox(
-      height: barHeight + bottomPadding,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          // 背景（使用 CustomPaint 绘制圆滑凸起）
-          Positioned.fill(
-            child: CustomPaint(
-              painter: _SmoothBumpPainter(
-                color: bgColor,
-                bumpHalfWidth: buttonSize / 2 + bumpExtraWidth, // 凸起的半宽度
-                bumpHeight: bumpHeight, // 凸起高度
-              ),
-            ),
+      height: barHeight + bottomPadding + 12, // 12dp 浮动间距
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          bottom: bottomPadding + 12,
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(28),
+            boxShadow: BeeTokens.tabBarShadow,
           ),
-
-          // Tab 项
-          Positioned(
-            left: 0,
-            right: 0,
-            top: 0,
-            height: barHeight,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(28),
             child: Row(
               children: [
                 _buildTabItem(
-                    0, Icons.list_alt_outlined, l10n.tabHome, inactiveColor),
+                    0, Icons.receipt_long_outlined, Icons.receipt_long, l10n.tabHome, inactiveColor),
                 _buildTabItem(1, Icons.pie_chart_outline_rounded,
-                    l10n.tabAnalytics, inactiveColor),
-                // 中间占位（记账按钮已独立到外层 Stack）
-                const Expanded(child: SizedBox()),
-                _buildTabItem(
-                    2, Icons.explore_outlined, l10n.tabDiscover, inactiveColor),
-                _buildTabItem(3, Icons.person_outline_rounded, l10n.tabMine,
-                    inactiveColor),
+                    Icons.pie_chart_rounded, l10n.tabInsights, inactiveColor),
+                // 中间记账按钮（作为 Tab 样式）
+                _buildCenterTabItem(inactiveColor),
+                _buildTabItem(2, Icons.account_balance_wallet_outlined,
+                    Icons.account_balance_wallet, l10n.tabAssets, inactiveColor),
+                _buildAvatarTabItem(3, l10n.tabMine, inactiveColor),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildTabItem(
-      int index, IconData icon, String label, Color inactiveColor) {
+      int index, IconData icon, IconData activeIcon, String label, Color inactiveColor) {
     final isActive = index == currentIndex;
     final iconColor = isActive ? primaryColor : inactiveColor;
 
@@ -791,81 +606,126 @@ class _BeeBottomBar extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => onTabTap(index),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: iconColor, size: 24),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 10,
-                color: inactiveColor, // 文字颜色不变
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-              ),
+        child: Center(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+            decoration: BoxDecoration(
+              color: isActive
+                  ? primaryColor.withValues(alpha: 0.12)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(22),
             ),
-          ],
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(isActive ? activeIcon : icon, color: iconColor, size: 22),
+                const SizedBox(height: 1),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: isActive ? primaryColor : inactiveColor,
+                    fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
-}
 
-/// 圆滑凸起背景绘制器 - 闲鱼风格
-class _SmoothBumpPainter extends CustomPainter {
-  final Color color;
-  final double bumpHalfWidth; // 凸起的半宽度（从中心到起点的距离）
-  final double bumpHeight; // 凸起的高度
-
-  _SmoothBumpPainter({
-    required this.color,
-    required this.bumpHalfWidth,
-    required this.bumpHeight,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final centerX = size.width / 2;
-    // 计算圆弧半径，使圆弧顶点刚好到达 bumpHeight 高度
-    // 公式：r = (h^2 + w^2) / (2*h)
-    final arcRadius =
-        (bumpHeight * bumpHeight + bumpHalfWidth * bumpHalfWidth) /
-            (2 * bumpHeight);
-
-    final path = Path();
-
-    // 从左下角开始
-    path.moveTo(0, size.height);
-    path.lineTo(0, 0);
-
-    // 左边平直部分到凸起开始
-    path.lineTo(centerX - bumpHalfWidth, 0);
-
-    // 使用圆弧绘制凸起（向上凸出，顺时针方向）
-    path.arcToPoint(
-      Offset(centerX + bumpHalfWidth, 0),
-      radius: Radius.circular(arcRadius),
-      clockwise: true,
+  Widget _buildCenterTabItem(Color inactiveColor) {
+    return Expanded(
+      child: GestureDetector(
+        key: centerButtonKey,
+        behavior: HitTestBehavior.opaque,
+        onTap: onCenterTap,
+        onLongPressStart: onCenterLongPressStart,
+        onLongPressMoveUpdate: onCenterLongPressMoveUpdate,
+        onLongPressEnd: onCenterLongPressEnd,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.add_circle_outline, color: inactiveColor, size: 22),
+              const SizedBox(height: 1),
+              Text(
+                l10n.tabRecord,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: inactiveColor,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
-
-    // 右边平直部分
-    path.lineTo(size.width, 0);
-    path.lineTo(size.width, size.height);
-    path.close();
-
-    // 绘制背景
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-    canvas.drawPath(path, paint);
   }
 
-  @override
-  bool shouldRepaint(covariant _SmoothBumpPainter oldDelegate) {
-    return oldDelegate.color != color ||
-        oldDelegate.bumpHalfWidth != bumpHalfWidth ||
-        oldDelegate.bumpHeight != bumpHeight;
+  Widget _buildAvatarTabItem(int index, String label, Color inactiveColor) {
+    final isActive = index == currentIndex;
+    final hasAvatar = avatarPath != null;
+
+    Widget iconWidget;
+    if (hasAvatar) {
+      iconWidget = Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: isActive ? Border.all(color: primaryColor, width: 1.5) : null,
+          image: DecorationImage(
+            image: FileImage(File(avatarPath!)),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    } else {
+      iconWidget = Icon(isActive ? Icons.person_rounded : Icons.person_outline_rounded,
+          color: isActive ? primaryColor : inactiveColor, size: 24);
+    }
+
+    return Expanded(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => onTabTap(index),
+        child: Center(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+            decoration: BoxDecoration(
+              color: isActive
+                  ? primaryColor.withValues(alpha: 0.12)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(22),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                iconWidget,
+                const SizedBox(height: 1),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: isActive ? primaryColor : inactiveColor,
+                    fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

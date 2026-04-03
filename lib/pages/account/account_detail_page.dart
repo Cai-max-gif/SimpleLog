@@ -190,125 +190,31 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
       backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
-          // ======== Hero 渐变头部 ========
+          // ======== 简洁头部 ========
           PrimaryHeader(
             title: account.name,
             subtitle: getAccountTypeLabel(context, account.type),
             showBack: true,
-            statusBarIconBrightness: Brightness.light,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: isDark
-                    ? [
-                        primaryColor.withValues(alpha: 0.25),
-                        primaryColor.withValues(alpha: 0.1),
-                      ]
-                    : [primaryColor, primaryColor.withValues(alpha: 0.8)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            content: ClipRect(
-              child: Stack(
-                children: [
-                  // 装饰圆圈
-                  Positioned(
-                    right: -20,
-                    top: -30,
-                    child: Container(
-                      width: 80.0.scaled(context, ref),
-                      height: 80.0.scaled(context, ref),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isDark
-                            ? primaryColor.withValues(alpha: 0.08)
-                            : Colors.white.withValues(alpha: 0.1),
-                      ),
-                    ),
-                  ),
-                  // 统计行
-                  statsAsync.when(
-                    data: (stats) => Padding(
-                      padding: EdgeInsets.only(
-                        top: 4.0.scaled(context, ref),
-                        bottom: 8.0.scaled(context, ref),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: _HeroStatCell(
-                              label: account.type == 'credit_card'
-                                  ? l10n.creditCardOwed
-                                  : l10n.accountBalance,
-                              value: stats.balance,
-                              currencyCode: currencyCode,
-                              isDark: isDark,
-                            ),
-                          ),
-                          Container(
-                            width: 1,
-                            height: 36.0.scaled(context, ref),
-                            color: Colors.white.withValues(alpha: 0.2),
-                          ),
-                          Expanded(
-                            child: _HeroStatCell(
-                              label: l10n.homeIncome,
-                              value: stats.income,
-                              currencyCode: currencyCode,
-                              isDark: isDark,
-                            ),
-                          ),
-                          Container(
-                            width: 1,
-                            height: 36.0.scaled(context, ref),
-                            color: Colors.white.withValues(alpha: 0.2),
-                          ),
-                          Expanded(
-                            child: _HeroStatCell(
-                              label: l10n.homeExpense,
-                              value: stats.expense,
-                              currencyCode: currencyCode,
-                              isDark: isDark,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    loading: () => Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 16.0.scaled(context, ref)),
-                      child: Center(
-                        child: SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white.withValues(alpha: 0.6),
-                          ),
-                        ),
-                      ),
-                    ),
-                    error: (_, __) => const SizedBox.shrink(),
-                  ),
-                ],
-              ),
-            ),
+            compact: true,
           ),
           Expanded(
             child: ListView(
               controller: _scrollController,
               padding: EdgeInsets.symmetric(
                 horizontal: 0,
-                vertical: 12.0.scaled(context, ref),
+                vertical: 8.0.scaled(context, ref),
               ),
               children: [
+                // 0. 余额/收入/支出统计卡片
+                _buildStatsCard(context, ref, account, statsAsync, currencyCode, l10n),
+                SizedBox(height: 4.0.scaled(context, ref)),
                 // 1. 账户概览卡片（合并 metadata + 类型统计）
                 _buildOverviewCard(
                   context, ref, account, statsAsync,
                   currencyCode, primaryColor, typeColor, l10n,
                 ),
 
-                SizedBox(height: 12.0.scaled(context, ref)),
+                SizedBox(height: 8.0.scaled(context, ref)),
 
                 // 2. 图表区域（支出分布/收入分布 切换）
                 _buildDetailChartSection(
@@ -332,6 +238,64 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// 余额/收入/支出统计卡片
+  Widget _buildStatsCard(
+    BuildContext context,
+    WidgetRef ref,
+    db.Account account,
+    AsyncValue<({double balance, double income, double expense})> statsAsync,
+    String currencyCode,
+    AppLocalizations l10n,
+  ) {
+    return SectionCard(
+      margin: EdgeInsets.symmetric(horizontal: 12.0.scaled(context, ref)),
+      child: statsAsync.when(
+        data: (stats) => Row(
+          children: [
+            Expanded(
+              child: _DetailStatCell(
+                label: account.type == 'credit_card'
+                    ? l10n.creditCardOwed
+                    : l10n.accountBalance,
+                value: stats.balance,
+                currencyCode: currencyCode,
+              ),
+            ),
+            Container(
+              width: 1,
+              height: 36.0.scaled(context, ref),
+              color: BeeTokens.divider(context),
+            ),
+            Expanded(
+              child: _DetailStatCell(
+                label: l10n.homeIncome,
+                value: stats.income,
+                currencyCode: currencyCode,
+              ),
+            ),
+            Container(
+              width: 1,
+              height: 36.0.scaled(context, ref),
+              color: BeeTokens.divider(context),
+            ),
+            Expanded(
+              child: _DetailStatCell(
+                label: l10n.homeExpense,
+                value: stats.expense,
+                currencyCode: currencyCode,
+              ),
+            ),
+          ],
+        ),
+        loading: () => SizedBox(
+          height: 60.0.scaled(context, ref),
+          child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+        ),
+        error: (_, __) => const SizedBox.shrink(),
       ),
     );
   }
@@ -930,28 +894,29 @@ class _DetailChartTab extends StatelessWidget {
 // Hero 统计单元格（头部用，白色文字）
 // ============================================
 
-class _HeroStatCell extends ConsumerWidget {
+class _DetailStatCell extends ConsumerWidget {
   final String label;
   final double value;
   final String currencyCode;
-  final bool isDark;
 
-  const _HeroStatCell({
+  const _DetailStatCell({
     required this.label,
     required this.value,
     required this.currencyCode,
-    required this.isDark,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final textColor =
-        isDark ? Colors.white.withValues(alpha: 0.9) : Colors.white;
-    final labelColor =
-        isDark ? Colors.white.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.8);
-
     return Column(
       children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            color: BeeTokens.textTertiary(context),
+          ),
+        ),
+        SizedBox(height: 4.0.scaled(context, ref)),
         AmountText(
           value: value,
           signed: false,
@@ -961,15 +926,7 @@ class _HeroStatCell extends ConsumerWidget {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: textColor,
-          ),
-        ),
-        SizedBox(height: 4.0.scaled(context, ref)),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 11,
-            color: labelColor,
+            color: BeeTokens.textPrimary(context),
           ),
         ),
       ],

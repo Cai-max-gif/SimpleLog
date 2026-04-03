@@ -5,7 +5,9 @@
     "description": "The application title"
   },
   "tabHome": "Home",
-  "tabAnalytics": "Charts",
+  "tabInsights": "Insights",
+  "tabAssets": "Assets",
+  "tabRecord": "Record",
   "tabMine": "Mine",
   "commonCancel": "Cancel",
   "commonConfirm": "Confirm",
@@ -692,7 +694,6 @@
   "categoryShareSubject": "BeeCount Category Configuration",
   "categoryShareFailed": "Share failed",
   "categoryImportInvalidFile": "Please select a category package file (.zip)",
-  "categoryImportNoCategories": "No category data in file",
   "categoryImportModeTitle": "Select Import Mode",
   "categoryImportModeMerge": "Merge",
   "categoryImportModeMergeDesc": "Keep existing, add new ones",
@@ -702,9 +703,15 @@
   "categoryImportSuccessDetail": "Imported {imported} categories, skipped {skipped}, imported {icons} icons",
   "@categoryImportSuccessDetail": {
     "placeholders": {
-      "imported": {"type": "int"},
-      "skipped": {"type": "int"},
-      "icons": {"type": "int"}
+      "imported": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      },
+      "icons": {
+        "type": "int"
+      }
     }
   },
   "categoryImportFailed": "Import failed",
@@ -905,7 +912,6 @@
   "cloudSelectServiceType": "Select Cloud Service Type",
   "cloudMultiDeviceWarningTitle": "Multi-Device Tips",
   "cloudMultiDeviceWarningMessage": "Upload before switching devices, download on the new device before editing. Don't edit the same ledger on two devices at once. Tap for details →",
-  "cloudMultiDeviceWarningDetail": "Multi-Device Sync:\n\n⚠️ Limitations:\n• Not real-time — requires manual upload and download\n• No conflict resolution — if two devices edit simultaneously, the later upload overwrites the earlier one\n• Sync status may be delayed, refreshes when entering the sync page\n\n✅ Recommended workflow:\n1. Edit on one device at a time\n2. Upload promptly after editing\n3. Download on the other device before editing\n4. When downloading, you can preview differences and selectively apply changes",
   "cloudWebdavUrlLabel": "WebDAV Server URL",
   "cloudWebdavUrlHint": "https://dav.jianguoyun.com/dav/",
   "cloudWebdavUsernameLabel": "Username",
@@ -1489,7 +1495,6 @@
   "cloudWebdavRemotePathLabel": "Remote Path",
   "cloudWebdavRemotePathHelperText": "Remote directory path for data storage",
   "accountsTitle": "Asset Management",
-  "accountsManageDesc": "Net worth, asset composition & account management",
   "accountsEmptyMessage": "No accounts yet, tap the top right to add",
   "accountAddTooltip": "Add Account",
   "accountAddButton": "Add Account",
@@ -1522,7 +1527,6 @@
   "accountSelectTitle": "Select Account",
   "accountNone": "No Account",
   "accountsEnableFeature": "Enable Account Feature",
-  "accountsFeatureDescription": "Manage multiple payment accounts and track balance changes for each account",
   "privacyOpenSourceUrlError": "Cannot open link",
   "updateCorruptedFileTitle": "Corrupted Installation Package",
   "updateCorruptedFileMessage": "The previously downloaded installation package is incomplete or corrupted. Delete and re-download?",
@@ -1695,8 +1699,6 @@
   "aboutPageLoadingVersion": "Loading version...",
   "aboutWebsite": "Official Website",
   "aboutGitHubRepo": "GitHub Repository",
-  "aboutWeChatGroup": "WeChat Group",
-  "aboutWeChatGroupDesc": "Tap to view QR code",
   "aboutXiaohongshu": "Xiaohongshu",
   "aboutDouyin": "Douyin",
   "aboutSupportDevelopment": "Support Development",
@@ -1851,22 +1853,10 @@
   "accountNoTransactions": "No transactions",
   "accountTransactionHistory": "Transaction History",
   "accountTotalBalance": "Net Assets",
-  "accountTotalExpense": "Total Expense",
-  "accountTotalIncome": "Total Income",
   "accountCurrencyLocked": "This account has transactions and cannot change currency",
   "accountDefaultIncomeTitle": "Default Income Account",
-  "accountDefaultIncomeDescription": "Auto-select this account when creating income",
   "accountDefaultExpenseTitle": "Default Expense Account",
-  "accountDefaultExpenseDescription": "Auto-select this account when creating expense",
   "accountDefaultNone": "Not Set",
-  "accountDefaultSet": "Set: {name}",
-  "@accountDefaultSet": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "commonNotice": "Notice",
   "transferTitle": "Transfer",
   "transferIconSettings": "Transfer Icon Settings",
@@ -2150,34 +2140,10 @@
     }
   },
   "tagClearUnusedFailed": "Clear failed",
-  "tabDiscover": "Discover",
-  "discoverTitle": "Discover",
-  "discoverBudget": "Budget",
-  "discoverBudgetSubtitle": "Set and track spending budgets",
-  "discoverBudgetEmpty": "Set budget to control spending",
-  "discoverAccounts": "Asset Overview",
-  "discoverAccountsEmpty": "Add accounts to track cash flow",
-  "discoverAccountsTotal": "Net Worth",
-  "discoverAccountsCount": "{count} accounts",
-  "@discoverAccountsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "discoverCommonFeatures": "Features",
-  "discoverAISettings": "AI Settings",
-  "discoverCategory": "Categories",
-  "discoverTags": "Tags",
-  "discoverImport": "Import",
-  "discoverExport": "Export",
-  "discoverHelp": "Help",
-  "discoverConfigManagement": "Config",
-  "discoverAutoBilling": "Auto",
   "homeSwitchLedger": "Select Ledger",
   "homeManageLedgers": "Manage Ledgers",
   "budgetTitle": "Budget",
+  "budgetShowOnHome": "Show budget on home",
   "budgetEmptyHint": "No budget set yet",
   "budgetAddTotal": "Add Total Budget",
   "budgetMonthlyBudget": "Monthly Budget",
@@ -2414,7 +2380,6 @@
   "aiProviderTestAll": "Test All",
   "aiProviderTestAllRetry": "Retry Test",
   "aiModelInputHelper": "Leave empty to use default model",
-
   "syncPreviewTitle": "Sync Preview",
   "syncPreviewSelectAll": "Select All",
   "syncPreviewDeselectAll": "Deselect All",
@@ -2422,19 +2387,48 @@
   "syncPreviewModified": "Modified",
   "syncPreviewDeleted": "Deleted",
   "syncPreviewAddedCount": "{count} added",
-  "@syncPreviewAddedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@syncPreviewAddedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "syncPreviewModifiedCount": "{count} modified",
-  "@syncPreviewModifiedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@syncPreviewModifiedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "syncPreviewDeletedCount": "{count} deleted",
-  "@syncPreviewDeletedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@syncPreviewDeletedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "syncPreviewApply": "Apply {count} items",
-  "@syncPreviewApply": {"placeholders": {"count": {"type": "int"}}},
+  "@syncPreviewApply": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "syncPreviewEmpty": "Cloud data matches local, no sync needed",
   "syncPreviewOldFormat": "Old cloud format, full replace required",
   "syncPreviewOldFormatMessage": "Cloud data does not contain sync IDs. Local data will be cleared and re-imported from cloud.",
   "syncPreviewApplied": "Applied {count} changes",
-  "@syncPreviewApplied": {"placeholders": {"count": {"type": "int"}}},
-
+  "@syncPreviewApplied": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "cloudSyncGuideTitle": "Cloud Sync Guide",
   "cloudSyncGuideGotIt": "Got it",
   "cloudSyncGuideHowItWorks": "How it works",
@@ -2455,7 +2449,6 @@
   "cloudSyncGuideLimitItem2": "No conflict merging: does not auto-merge edits from both sides — last upload wins",
   "cloudSyncGuideLimitItem3": "Cloud service delay: uploaded files may take seconds to minutes before other devices can read them, depending on your cloud provider",
   "cloudSyncGuideLimitItem4": "Excludes attachments: transaction image attachments are not synced — export separately via Data Management",
-  "accountReorderTip": "Long press and drag to reorder",
   "mineMultiDeviceSyncTitle": "Multi-device Sync",
   "mineMultiDeviceSyncSubtitle": "Auto-check cloud changes when entering page",
   "appLockTitle": "App Lock",
@@ -2479,7 +2472,6 @@
   "appLockTimeout1Min": "After 1 minute",
   "appLockTimeout5Min": "After 5 minutes",
   "appLockTimeout15Min": "After 15 minutes",
-
   "creditCardSettings": "Credit Card Settings",
   "creditLimit": "Credit Limit",
   "creditLimitHint": "Enter credit limit",
@@ -2491,7 +2483,9 @@
   "dayOfMonth": "{day}th of each month",
   "@dayOfMonth": {
     "placeholders": {
-      "day": { "type": "int" }
+      "day": {
+        "type": "int"
+      }
     }
   },
   "creditCardReminderTitle": "Payment Reminder",
@@ -2499,23 +2493,12 @@
   "creditCardReminderDaysBefore": "{days} days before",
   "@creditCardReminderDaysBefore": {
     "placeholders": {
-      "days": { "type": "int" }
-    }
-  },
-  "creditCardReminderNotification": "{accountName} payment due soon",
-  "@creditCardReminderNotification": {
-    "placeholders": {
-      "accountName": { "type": "String" }
-    }
-  },
-  "creditCardReminderNotificationBody": "Payment due on the {day}th, please pay on time",
-  "@creditCardReminderNotificationBody": {
-    "placeholders": {
-      "day": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "creditCardInitialBalanceHint": "Current debt (negative number)",
-  "creditUsageRate": "Usage Rate",
   "selectDay": "Select Day",
   "accountBankName": "Bank",
   "accountBankNameHint": "e.g. ICBC",
@@ -2525,76 +2508,42 @@
   "accountNoteHint": "Add a note",
   "accountMetaInfo": "Account Info",
   "accountBalanceTrend": "Balance Trend",
-  "periodDays7": "7 Days",
-  "periodDays30": "30 Days",
-  "periodDays90": "90 Days",
   "accountCategoryBreakdown": "Category Breakdown",
   "accountCategoryExpense": "Expense",
   "accountCategoryIncome": "Income",
-  "accountLoadMore": "Load More",
   "accountNoMoreData": "No more data",
-  "accountUncategorized": "Uncategorized",
-
   "totalAssets": "Total Assets",
   "totalLiabilities": "Total Liabilities",
   "assetAccounts": "Asset Accounts",
   "liabilityAccounts": "Liability Accounts",
-  "netWorthTrend": "Net Worth Trend",
   "assetComposition": "Asset Composition",
   "accountTypeInvestment": "Investment",
   "accountTypeLoan": "Loan",
   "accountTypeReceivable": "Receivable",
-  "investmentCurrentValue": "Market Value",
-  "investmentAdjustment": "Valuation Adjustment",
-  "investmentTotalInvested": "Total Invested",
-  "investmentProfitLoss": "Profit/Loss",
-  "investmentReturnRate": "Return Rate",
-  "investmentInputNewValue": "Enter new value",
-  "investmentInputDelta": "Enter change amount",
-  "investmentNewValueHint": "Enter new market value",
-  "investmentDeltaHint": "Positive for gain, negative for loss",
-  "loanOriginalAmount": "Loan Amount",
-  "loanRepaid": "Repaid",
-  "loanRemaining": "Remaining",
-  "loanProgress": "Repayment Progress",
-  "loanRepaidPercent": "{percent}% Repaid",
-  "@loanRepaidPercent": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "loanInitialBalanceLabel": "Loan Amount",
-  "loanInitialBalanceHint": "Enter total loan amount",
-  "loanNegativeNote": "Loan amount will be recorded as negative balance",
-  "receivableAmount": "Receivable Amount",
-  "receivableCollected": "Collected",
-  "receivableRemaining": "Pending",
-  "receivableInitialBalanceLabel": "Receivable Amount",
-  "investmentInitialBalanceLabel": "Initial Investment",
   "adjustmentTransaction": "Valuation Adjustment",
   "creditCardBillingInfo": "Bills on {billingDay}th · Due on {paymentDueDay}th",
   "@creditCardBillingInfo": {
     "placeholders": {
-      "billingDay": { "type": "int" },
-      "paymentDueDay": { "type": "int" }
+      "billingDay": {
+        "type": "int"
+      },
+      "paymentDueDay": {
+        "type": "int"
+      }
     }
   },
   "creditCardDaysUntilPayment": "{days} days until payment due",
   "@creditCardDaysUntilPayment": {
     "placeholders": {
-      "days": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "creditCardPaymentDueToday": "Payment due today",
-  "creditCardPaymentOverdue": "{days} days past due",
-  "@creditCardPaymentOverdue": {
-    "placeholders": {
-      "days": { "type": "int" }
-    }
-  },
   "creditCardQuickRepay": "Record Repayment",
-  "loanQuickRepay": "Record Repayment",
-  "receivableQuickCollect": "Record Collection"
+  "budgetManagement": "Budget",
+  "budgetManagementDesc": "Set monthly budget and control spending",
+  "budgetSetupHint": "Set a budget to control monthly spending",
+  "budgetSetupAction": "Set up"
 }

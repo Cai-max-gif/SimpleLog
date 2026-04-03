@@ -94,7 +94,7 @@
 💌 **联系方式：**
 
 - GitHub Issues: [提交设计建议](https://github.com/TNT-Likely/BeeCount/issues)
-- 微信群: 扫描 [README](../../README.md) 中的二维码加入
+- Telegram: [加入讨论群](https://t.me/beecount)
 
 ## 报告 Bug
 

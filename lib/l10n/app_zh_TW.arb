@@ -11,8 +11,6 @@
   "aboutPageTitle": "關於",
   "aboutSupportDevelopment": "支持開發",
   "aboutSupportDevelopmentSubtitle": "請開發者喝杯咖啡",
-  "aboutWeChatGroup": "微信群",
-  "aboutWeChatGroupDesc": "點擊檢視二維碼",
   "aboutWebsite": "官方網站",
   "aboutWidget": "關于小組件",
   "aboutXiaohongshu": "小紅書",
@@ -20,19 +18,9 @@
   "accountAddTooltip": "添加帳戶",
   "accountBalance": "余額",
   "accountCurrencyLocked": "該帳戶已有交易記錄，無法變更幣別",
-  "accountDefaultExpenseDescription": "新建支出時自動選中此帳戶",
   "accountDefaultExpenseTitle": "預設支出帳戶",
-  "accountDefaultIncomeDescription": "新建收入時自動選中此帳戶",
   "accountDefaultIncomeTitle": "預設收入帳戶",
   "accountDefaultNone": "不設定",
-  "accountDefaultSet": "已設定: {name}",
-  "@accountDefaultSet": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "accountDeleteConfirm": "確認刪除該帳戶吗？",
   "accountDeleteWarningMessage": "該帳戶有 {count} 筆關聯交易，刪除后交易记錄中的帳戶信息將被清空。確認刪除吗？",
   "accountDeleteWarningTitle": "確認刪除",
@@ -48,8 +36,6 @@
   "accountNone": "不選擇帳戶",
   "accountSelectTitle": "選擇帳戶",
   "accountTotalBalance": "淨資產",
-  "accountTotalExpense": "總支出",
-  "accountTotalIncome": "總收入",
   "accountTransactionHistory": "交易歷史",
   "accountTypeAlipay": "支付宝",
   "accountTypeBankCard": "银行卡",
@@ -60,8 +46,6 @@
   "accountTypeWechat": "微信",
   "accountsEmptyMessage": "還没有帳戶，点击右上角添加",
   "accountsEnableFeature": "啟用帳戶功能",
-  "accountsFeatureDescription": "啟用后可以管理多个支付帳戶，追踪每个帳戶的余額變化",
-  "accountsManageDesc": "淨資產、資產構成與帳戶管理",
   "accountsTitle": "資產管理",
   "aiChatClearHistory": "清除對話歷史",
   "aiChatClearHistoryDialogContent": "確定要清除所有對話記錄嗎？此操作不可恢復。",
@@ -523,6 +507,7 @@
   "budgetSaveSuccess": "預算儲存成功",
   "budgetStartDayLabel": "起始日",
   "budgetTitle": "預算管理",
+  "budgetShowOnHome": "在首頁顯示預算",
   "budgetTypeCategoryLabel": "分類預算",
   "budgetTypeTotalLabel": "總預算",
   "budgetUsed": "已用",
@@ -601,14 +586,19 @@
   "categoryImportModeOverwrite": "覆蓋",
   "categoryImportModeOverwriteDesc": "清空未使用分類後匯入",
   "categoryImportModeTitle": "選擇匯入模式",
-  "categoryImportNoCategories": "檔案中沒有分類資料",
   "categoryImportSuccess": "匯入成功",
   "categoryImportSuccessDetail": "已匯入 {imported} 個分類，跳過 {skipped} 個，匯入 {icons} 個圖示",
   "@categoryImportSuccessDetail": {
     "placeholders": {
-      "imported": {"type": "int"},
-      "skipped": {"type": "int"},
-      "icons": {"type": "int"}
+      "imported": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      },
+      "icons": {
+        "type": "int"
+      }
     }
   },
   "categoryIncome": "收入分類",
@@ -779,7 +769,6 @@
   "cloudSelectServiceType": "選擇雲端服務類型",
   "cloudMultiDeviceWarningTitle": "多裝置使用提醒",
   "cloudMultiDeviceWarningMessage": "換裝置前記得先上傳，到新裝置後先下載再記帳。不要同時在兩台裝置上記同一個帳本。點擊查看詳情 →",
-  "cloudMultiDeviceWarningDetail": "多裝置同步說明：\n\n⚠️ 當前限制：\n• 非即時同步，需手動上傳和下載\n• 不支援衝突處理：若兩台裝置同時修改，後上傳的會覆蓋先上傳的\n• 同步狀態存在延遲，進入同步頁面時才會重新整理\n\n✅ 建議用法：\n1. 同一時間只在一台裝置上編輯\n2. 編輯完成後及時上傳\n3. 在另一台裝置下載同步後再開始編輯\n4. 下載時可預覽差異，逐條選擇要同步的變更",
   "cloudSyncGuideTitle": "雲端同步使用指南",
   "cloudSyncGuideGotIt": "我知道了",
   "cloudSyncGuideHowItWorks": "運作原理",
@@ -1000,30 +989,6 @@
   "disableFailed": "停用失敗",
   "disableSuccess": "自動記帳已停用",
   "disabled": "已停用",
-  "discoverAISettings": "AI 設定",
-  "discoverAccounts": "資產總覽",
-  "discoverAccountsCount": "{count} 個帳戶",
-  "@discoverAccountsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "discoverAccountsEmpty": "新增帳戶，追蹤資金流向",
-  "discoverAccountsTotal": "淨資產",
-  "discoverAutoBilling": "自動記賬",
-  "discoverBudget": "預算管理",
-  "discoverBudgetEmpty": "設定預算，控制支出",
-  "discoverBudgetSubtitle": "設定和追蹤支出預算",
-  "discoverCategory": "分類管理",
-  "discoverCommonFeatures": "常用功能",
-  "discoverConfigManagement": "配置管理",
-  "discoverExport": "匯出",
-  "discoverHelp": "使用幫助",
-  "discoverImport": "匯入",
-  "discoverTags": "標籤管理",
-  "discoverTitle": "發現",
   "donationDescription": "說明",
   "donationDescriptionDetail": "感謝您使用蜜蜂記帳！如果這個應用對您有幫助，歡迎請開發者喝杯咖啡作為鼓勵。您的支持是我持續改進的動力。",
   "donationEntrySubtitle": "支持應用持續開發",
@@ -1759,8 +1724,8 @@
   "syncNoCloudBackupMessage": "雲端暫無備份",
   "syncNotConfiguredMessage": "未設定雲端",
   "syncNotLoggedInMessage": "未登入",
-  "tabAnalytics": "圖表",
-  "tabDiscover": "發現",
+  "tabInsights": "洞察",
+  "tabAssets": "資產",
   "tabHome": "明細",
   "tabMine": "我的",
   "tagAddTitle": "新增標籤",
@@ -2158,10 +2123,8 @@
   "aiProviderTestAll": "一鍵測試全部",
   "aiProviderTestAllRetry": "重新測試",
   "aiModelInputHelper": "留空則使用預設模型",
-  "aiModelRecommended": "推薦模型",
   "transferIconSettings": "轉帳圖示設定",
   "transferIconSettingsDesc": "自訂轉帳記錄的顯示圖示",
-
   "syncPreviewTitle": "同步預覽",
   "syncPreviewSelectAll": "全選",
   "syncPreviewDeselectAll": "取消全選",
@@ -2169,19 +2132,48 @@
   "syncPreviewModified": "修改",
   "syncPreviewDeleted": "刪除",
   "syncPreviewAddedCount": "新增 {count} 條",
-  "@syncPreviewAddedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@syncPreviewAddedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "syncPreviewModifiedCount": "修改 {count} 條",
-  "@syncPreviewModifiedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@syncPreviewModifiedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "syncPreviewDeletedCount": "刪除 {count} 條",
-  "@syncPreviewDeletedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@syncPreviewDeletedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "syncPreviewApply": "套用 {count} 項",
-  "@syncPreviewApply": {"placeholders": {"count": {"type": "int"}}},
+  "@syncPreviewApply": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "syncPreviewEmpty": "雲端資料與本機一致，無需同步",
   "syncPreviewOldFormat": "雲端資料格式較舊，將執行全量替換",
   "syncPreviewOldFormatMessage": "雲端資料不包含同步標識，無法逐條對比。將清空當前帳本資料並從雲端重新匯入。",
   "syncPreviewApplied": "已套用 {count} 項變更",
-  "@syncPreviewApplied": {"placeholders": {"count": {"type": "int"}}},
-  "accountReorderTip": "長按拖動可調整帳戶順序",
+  "@syncPreviewApplied": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "appLockTitle": "應用鎖",
   "appLockDesc": "PIN碼與生物辨識保護隱私",
   "appLockEnable": "啟用應用鎖",
@@ -2203,7 +2195,6 @@
   "appLockTimeout1Min": "1分鐘後",
   "appLockTimeout5Min": "5分鐘後",
   "appLockTimeout15Min": "15分鐘後",
-
   "creditCardSettings": "信用卡設定",
   "creditLimit": "信用額度",
   "creditLimitHint": "請輸入信用額度",
@@ -2215,7 +2206,9 @@
   "dayOfMonth": "每月{day}日",
   "@dayOfMonth": {
     "placeholders": {
-      "day": { "type": "int" }
+      "day": {
+        "type": "int"
+      }
     }
   },
   "creditCardReminderTitle": "還款提醒",
@@ -2223,23 +2216,12 @@
   "creditCardReminderDaysBefore": "提前{days}天提醒",
   "@creditCardReminderDaysBefore": {
     "placeholders": {
-      "days": { "type": "int" }
-    }
-  },
-  "creditCardReminderNotification": "{accountName}還款日即將到來",
-  "@creditCardReminderNotification": {
-    "placeholders": {
-      "accountName": { "type": "String" }
-    }
-  },
-  "creditCardReminderNotificationBody": "還款日為每月{day}日，請及時還款",
-  "@creditCardReminderNotificationBody": {
-    "placeholders": {
-      "day": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "creditCardInitialBalanceHint": "目前欠款（填負數）",
-  "creditUsageRate": "額度使用率",
   "selectDay": "選擇日期",
   "accountBankName": "開戶行",
   "accountBankNameHint": "例如：工商銀行",
@@ -2249,36 +2231,33 @@
   "accountNoteHint": "新增備註資訊",
   "accountMetaInfo": "帳戶資訊",
   "accountBalanceTrend": "餘額趨勢",
-  "periodDays7": "近7天",
-  "periodDays30": "近30天",
-  "periodDays90": "近90天",
   "accountCategoryBreakdown": "分類統計",
   "accountCategoryExpense": "支出",
   "accountCategoryIncome": "收入",
-  "accountLoadMore": "載入更多",
   "accountNoMoreData": "沒有更多資料了",
-  "accountUncategorized": "未分類",
   "creditCardBillingInfo": "每月{billingDay}日出帳 · {paymentDueDay}日還款",
   "@creditCardBillingInfo": {
     "placeholders": {
-      "billingDay": { "type": "int" },
-      "paymentDueDay": { "type": "int" }
+      "billingDay": {
+        "type": "int"
+      },
+      "paymentDueDay": {
+        "type": "int"
+      }
     }
   },
   "creditCardDaysUntilPayment": "距還款日還有{days}天",
   "@creditCardDaysUntilPayment": {
     "placeholders": {
-      "days": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "creditCardPaymentDueToday": "今天是還款日",
-  "creditCardPaymentOverdue": "已過還款日{days}天",
-  "@creditCardPaymentOverdue": {
-    "placeholders": {
-      "days": { "type": "int" }
-    }
-  },
   "creditCardQuickRepay": "記一筆還款",
-  "loanQuickRepay": "記一筆還款",
-  "receivableQuickCollect": "記一筆收款"
+  "budgetManagement": "預算管理",
+  "budgetManagementDesc": "設置月度預算，控制支出",
+  "budgetSetupHint": "設置預算，輕鬆掌控每月開支",
+  "budgetSetupAction": "去設置"
 }

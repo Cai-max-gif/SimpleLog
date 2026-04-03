@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../data/db.dart' as db;
 import '../../providers.dart';
+import '../../providers/budget_providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../widgets/category_icon.dart';
@@ -342,6 +343,7 @@ class _TagDetailPageState extends ConsumerState<TagDetailPage> {
 
       ref.invalidate(countsForLedgerProvider(ledgerId));
       ref.read(statsRefreshProvider.notifier).state++;
+      ref.read(budgetRefreshProvider.notifier).state++;
       ref.read(tagListRefreshProvider.notifier).state++;
     } catch (e) {
       if (mounted) {

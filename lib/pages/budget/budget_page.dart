@@ -5,10 +5,11 @@ import '../../data/repositories/budget_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers.dart';
 import '../../providers/budget_providers.dart';
+import '../../providers/theme_providers.dart';
 import '../../styles/tokens.dart';
 import '../../utils/currencies.dart';
 import '../../utils/ui_scale_extensions.dart';
-import '../../widgets/biz/section_card.dart';
+import '../../widgets/biz/biz.dart';
 import '../../widgets/ui/ui.dart';
 import 'budget_edit_page.dart';
 import 'widgets/budget_progress_bar.dart';
@@ -74,9 +75,13 @@ class BudgetPage extends ConsumerWidget {
         if (overview.categoryBudgets.isNotEmpty)
           _buildCategoryBudgetsCard(
               context, ref, overview.categoryBudgets, l10n, currencySymbol),
+        SizedBox(height: 12.0.scaled(context, ref)),
+        // 首页显示开关
+        _buildSettingsCard(context, ref, l10n),
       ],
     );
   }
+
 
   Widget _buildEmptyState(
       BuildContext context, WidgetRef ref, AppLocalizations l10n) {
@@ -100,7 +105,8 @@ class BudgetPage extends ConsumerWidget {
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: () => _addBudget(context),
-            icon: Icon(Icons.add, color: BeeTokens.buttonPrimaryText(context)),
+            icon: Icon(Icons.add,
+                color: BeeTokens.buttonPrimaryText(context)),
             label: Text(l10n.budgetAddTotal),
             style: ElevatedButton.styleFrom(
               backgroundColor: BeeTokens.buttonPrimary(context),
@@ -273,6 +279,28 @@ class BudgetPage extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSettingsCard(
+      BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+    return SectionCard(
+      margin: EdgeInsets.zero,
+      child: AppListTile(
+        leading: Icons.visibility_outlined,
+        title: l10n.budgetShowOnHome,
+        trailing: Switch.adaptive(
+          value: ref.watch(homeBudgetCardEnabledProvider),
+          onChanged: (value) {
+            ref.read(homeBudgetCardEnabledProvider.notifier).toggle(value);
+          },
+          activeColor: ref.watch(primaryColorProvider),
+        ),
+        onTap: () {
+          final current = ref.read(homeBudgetCardEnabledProvider);
+          ref.read(homeBudgetCardEnabledProvider.notifier).toggle(!current);
+        },
       ),
     );
   }

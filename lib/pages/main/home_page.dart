@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_list_view/flutter_list_view.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+import '../../providers/budget_providers.dart';
+import '../budget/budget_page.dart';
 import '../../providers.dart';
 import '../settings/personalize_page.dart' show headerStyleProvider;
 import '../../data/db.dart';
@@ -19,6 +20,8 @@ import '../../services/system/logger_service.dart';
 import '../../services/export/share_poster_service.dart';
 import '../report/annual_report_page.dart';
 import '../calendar/calendar_page.dart';
+import '../../widgets/biz/ledger_picker_sheet.dart';
+import '../../widgets/biz/home_budget_summary.dart';
 
 // 优化版首页 - 使用FlutterListView实现精准定位和丝滑跳转
 class HomePage extends ConsumerStatefulWidget {
@@ -51,12 +54,18 @@ class _HomePageState extends ConsumerState<HomePage> {
   static const String _annualReportDismissedKey =
       'annual_report_reminder_dismissed';
 
+  // 预算设置引导卡片状态
+  bool _showBudgetSetupHint = false;
+  static const String _budgetSetupHintDismissedKey =
+      'budget_setup_hint_dismissed';
+
   @override
   void initState() {
     super.initState();
     _listController = FlutterListViewController();
     _checkLastMonthReminder();
     _checkAnnualReportReminder();
+    _checkBudgetSetupHint();
   }
 
   // 检查是否应该显示上月报告提醒
@@ -128,6 +137,31 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (mounted) {
       setState(() {
         _showAnnualReportReminder = false;
+      });
+    }
+  }
+
+  // 检查是否应该显示预算设置引导卡片
+  Future<void> _checkBudgetSetupHint() async {
+    final prefs = await SharedPreferences.getInstance();
+    final dismissed = prefs.getBool(_budgetSetupHintDismissedKey) ?? false;
+    if (dismissed) return;
+
+    if (mounted) {
+      setState(() {
+        _showBudgetSetupHint = true;
+      });
+    }
+  }
+
+  // 关闭预算设置引导卡片（永不再显示）
+  Future<void> _dismissBudgetSetupHint() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_budgetSetupHintDismissedKey, true);
+
+    if (mounted) {
+      setState(() {
+        _showBudgetSetupHint = false;
       });
     }
   }
@@ -459,6 +493,107 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
+  // 预算设置引导卡片（无预算时显示，样式与月初提醒一致）
+  Widget _buildBudgetSetupHintCard(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final primaryColor = ref.watch(primaryColorProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Stack(
+          children: [
+            // 左侧装饰条
+            Positioned(
+              left: 0,
+              top: 0,
+              bottom: 0,
+              child: Container(
+                width: 4,
+                color: primaryColor,
+              ),
+            ),
+            // 主体内容
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+              child: Row(
+                children: [
+                  // 图标 + 文案
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.pie_chart_outline_rounded,
+                          color: primaryColor,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            l10n.budgetSetupHint,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: isDark ? Colors.white70 : Colors.black54,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // 去设置按钮
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const BudgetPage()),
+                      );
+                    },
+                    child: Text(
+                      l10n.budgetSetupAction,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: primaryColor,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // 关闭按钮
+                  GestureDetector(
+                    onTap: _dismissBudgetSetupHint,
+                    behavior: HitTestBehavior.opaque,
+                    child: Icon(
+                      Icons.close,
+                      size: 18,
+                      color: isDark ? Colors.white38 : Colors.black26,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final repo = ref.watch(repositoryProvider);
@@ -510,121 +645,135 @@ class _HomePageState extends ConsumerState<HomePage> {
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // 头部 - 使用Stack实现真正居中
+                  // 头部 - 左: BeeIcon + 账本切换, 右: 操作按钮
                   SizedBox(
-                    height: 48, // IconButton默认高度
-                    child: Stack(
+                    height: 48,
+                    child: Row(
                       children: [
-                        // 底层：居中的图标和文字
-                        Center(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              BeeIcon(
-                                color: Theme.of(context).colorScheme.primary,
-                                size: 32,
-                              ),
-                              Text(
-                                AppLocalizations.of(context).homeAppTitle,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(
+                        // 左侧：BeeIcon + 标题 + 账本切换胶囊
+                        BeeIcon(
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 28,
+                        ),
+                        Text(
+                          AppLocalizations.of(context).homeAppTitle,
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.color,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
+                        const SizedBox(width: 6),
+                        Consumer(builder: (context, ref, _) {
+                          final currentLedger =
+                              ref.watch(currentLedgerProvider);
+                          return currentLedger.when(
+                            data: (ledger) => GestureDetector(
+                              onTap: () => showLedgerPicker(context),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.white.withValues(alpha: 0.1)
+                                      : Colors.black.withValues(alpha: 0.05),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ConstrainedBox(
+                                      constraints:
+                                          const BoxConstraints(maxWidth: 80),
+                                      child: Text(
+                                        ledger?.name ?? '',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.color,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 2),
+                                    Icon(
+                                      Icons.keyboard_arrow_down,
+                                      size: 16,
                                       color: Theme.of(context)
                                           .textTheme
-                                          .bodyLarge
-                                          ?.color,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w600,
+                                          .bodyMedium
+                                          ?.color
+                                          ?.withOpacity(0.5),
                                     ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // 上层：左侧AI助手按钮（仅在开启时显示）
-                        if (aiEnabled)
-                          Positioned(
-                            left: -10,
-                            top: 0,
-                            bottom: 0,
-                            child: IconButton(
-                              tooltip: AppLocalizations.of(context).aiChatTitle,
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                              onPressed: () {
-                                // 用户离开首页，切换到 Stream 模式
-                                _transactionListKey.currentState
-                                    ?.switchToStreamMode();
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => const AIChatPage(),
-                                  ),
-                                );
-                              },
-                              icon: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: SvgPicture.asset(
-                                  'assets/icons/ai.svg',
-                                  width: 20,
-                                  height: 20,
-                                  colorFilter: ColorFilter.mode(
-                                    Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? Colors.white
-                                        : Colors.black,
-                                    BlendMode.srcIn,
-                                  ),
+                                  ],
                                 ),
                               ),
                             ),
+                            loading: () => const SizedBox.shrink(),
+                            error: (_, __) => const SizedBox.shrink(),
+                          );
+                        }),
+                        const Spacer(),
+                        // 右侧操作按钮
+                        if (aiEnabled)
+                          IconButton(
+                            tooltip: AppLocalizations.of(context).aiChatTitle,
+                            onPressed: () {
+                              _transactionListKey.currentState
+                                  ?.switchToStreamMode();
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const AIChatPage(),
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                              Icons.chat_bubble_outline,
+                              size: 20,
+                              color: Theme.of(context).iconTheme.color,
+                            ),
                           ),
-                        // 上层：右侧按钮（日历 + 搜索）
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          bottom: 0,
-                          child: Row(
-                            children: [
-                              // 日历按钮
-                              IconButton(
-                                tooltip:
-                                    AppLocalizations.of(context).calendarTitle,
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const CalendarPage(),
-                                    ),
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.calendar_month_outlined,
-                                  size: 20,
-                                  color: Theme.of(context).iconTheme.color,
-                                ),
+                        IconButton(
+                          tooltip: AppLocalizations.of(context).calendarTitle,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const CalendarPage(),
                               ),
-                              // 搜索按钮
-                              IconButton(
-                                tooltip:
-                                    AppLocalizations.of(context).homeSearch,
-                                onPressed: () {
-                                  // 用户离开首页，切换到 Stream 模式
-                                  _transactionListKey.currentState
-                                      ?.switchToStreamMode();
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => const SearchPage(),
-                                    ),
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.search,
-                                  size: 20,
-                                  color: Theme.of(context).iconTheme.color,
-                                ),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.calendar_month_outlined,
+                            size: 20,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
+                        ),
+                        IconButton(
+                          tooltip: AppLocalizations.of(context).homeSearch,
+                          onPressed: () {
+                            _transactionListKey.currentState
+                                ?.switchToStreamMode();
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const SearchPage(),
                               ),
-                            ],
+                            );
+                          },
+                          icon: Icon(
+                            Icons.search,
+                            size: 20,
+                            color: Theme.of(context).iconTheme.color,
                           ),
                         ),
                       ],
@@ -713,7 +862,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ],
               ),
-              bottom: null,
+              bottom: const HomeBudgetSummary(),
             );
           }),
           const SizedBox(height: 0),
@@ -722,6 +871,20 @@ class _HomePageState extends ConsumerState<HomePage> {
           // 年度账单提醒卡片（12月15日 - 次年1月31日）
           if (_showAnnualReportReminder)
             _buildAnnualReportReminderCard(context),
+          // 预算设置引导卡片（无预算 + 未关闭过）
+          Consumer(builder: (context, ref, _) {
+            final overviewAsync = ref.watch(budgetOverviewProvider);
+            final hasBudget = overviewAsync.when(
+              data: (overview) =>
+                  overview != null && overview.totalBudget != null,
+              loading: () => true, // loading 时不显示引导
+              error: (_, __) => true, // 出错时不显示引导
+            );
+            if (!hasBudget && _showBudgetSetupHint) {
+              return _buildBudgetSetupHintCard(context);
+            }
+            return const SizedBox.shrink();
+          }),
           Expanded(
             child: StreamBuilder<List<({Transaction t, Category? category})>>(
               key: ValueKey('transactions_$_streamBuilderKey'), // 使用递增key强制重建
@@ -778,6 +941,17 @@ class _HeaderCenterSummary extends ConsumerWidget {
     final (income, expense) = cachedTotals ?? (0.0, 0.0);
     final balance = income - expense;
 
+    final amountStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ) ??
+        TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Theme.of(context).textTheme.bodyLarge?.color,
+        );
+
     Widget item(String title, double value) => Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -785,34 +959,25 @@ class _HeaderCenterSummary extends ConsumerWidget {
             Text(title,
                 textAlign: TextAlign.left, style: BeeTextTokens.label(context)),
             const SizedBox(height: 2),
-            AmountText(
-              value: value,
-              signed: false,
-              decimals: 2,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.color, // ⭐ 自适应主文字颜色
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ) ??
-                  TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.color, // ⭐ 自适应主文字颜色
-                  ),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: AmountText(
+                value: value,
+                signed: false,
+                decimals: 2,
+                style: amountStyle,
+              ),
             ),
           ],
         );
     return Row(
       children: [
         Expanded(child: item(AppLocalizations.of(context).homeIncome, income)),
+        const SizedBox(width: 4),
         Expanded(
             child: item(AppLocalizations.of(context).homeExpense, expense)),
+        const SizedBox(width: 4),
         Expanded(
             child: item(AppLocalizations.of(context).homeBalance, balance)),
       ],

@@ -1,8 +1,34 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/db.dart';
 import '../data/repositories/budget_repository.dart';
 import '../providers.dart';
+
+/// 首页预算卡片显示开关（持久化）
+const _budgetCardEnabledKey = 'home_budget_card_enabled';
+
+final homeBudgetCardEnabledProvider =
+    StateNotifierProvider<_BudgetCardEnabledNotifier, bool>(
+  (ref) => _BudgetCardEnabledNotifier(),
+);
+
+class _BudgetCardEnabledNotifier extends StateNotifier<bool> {
+  _BudgetCardEnabledNotifier() : super(true) {
+    _load();
+  }
+
+  Future<void> _load() async {
+    final prefs = await SharedPreferences.getInstance();
+    state = prefs.getBool(_budgetCardEnabledKey) ?? true;
+  }
+
+  Future<void> toggle(bool value) async {
+    state = value;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_budgetCardEnabledKey, value);
+  }
+}
 
 /// 预算刷新触发器
 final budgetRefreshProvider = StateProvider<int>((ref) => 0);

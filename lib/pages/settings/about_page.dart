@@ -120,17 +120,6 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                           await _tryOpenUrl(url);
                         },
                       ),
-                      const Divider(height: 1, thickness: 0.5),
-                      AppListTile(
-                        leading: Icons.chat_outlined,
-                        title: AppLocalizations.of(context).aboutWeChatGroup,
-                        subtitle: AppLocalizations.of(context).aboutWeChatGroupDesc,
-                        onTap: () async {
-                          final url = Uri.parse(
-                              'https://github.com/TNT-Likely/BeeCount/blob/main/demo/wechat/README.md');
-                          await _tryOpenUrl(url);
-                        },
-                      ),
                       // 小红书号（仅简体中文显示）
                       if (Localizations.localeOf(context).languageCode == 'zh') ...[
                         const Divider(height: 1, thickness: 0.5),

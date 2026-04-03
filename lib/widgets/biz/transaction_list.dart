@@ -5,6 +5,7 @@ import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../data/db.dart';
 import '../../providers.dart';
+import '../../providers/budget_providers.dart';
 import '../../services/system/logger_service.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
@@ -308,6 +309,11 @@ class TransactionListState extends ConsumerState<TransactionList> {
         _flatItems.add(('transaction', item, list));
       }
     }
+
+    // 底部留白，避免被悬浮 Tab 栏遮挡
+    if (_flatItems.isNotEmpty) {
+      _flatItems.add(('bottomSpacer', null, null));
+    }
   }
 
   @override
@@ -346,6 +352,12 @@ class TransactionListState extends ConsumerState<TransactionList> {
         (BuildContext context, int index) {
           final item = _flatItems[index];
           final type = item.$1 as String;
+
+          if (type == 'bottomSpacer') {
+            // 悬浮 Tab 栏高度(56) + 浮动间距(12) + 安全区 + 额外间距
+            final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
+            return SizedBox(height: 56 + 12 + bottomPadding + 16);
+          }
 
           if (type == 'header') {
             // 渲染日期头部
@@ -458,6 +470,7 @@ class TransactionListState extends ConsumerState<TransactionList> {
                 final curLedger = ref.read(currentLedgerIdProvider);
                 ref.invalidate(countsForLedgerProvider(curLedger));
                 ref.read(statsRefreshProvider.notifier).state++;
+                ref.read(budgetRefreshProvider.notifier).state++;
                 PostProcessor.sync(ref, ledgerId: curLedger);
 
                 if (context.mounted) {

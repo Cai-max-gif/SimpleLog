@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers.dart';
+import '../../providers/budget_providers.dart';
 import '../../data/db.dart' as db;
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
@@ -398,8 +399,7 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
                   // 刷新：账本笔数与全局统计
                   ref.invalidate(countsForLedgerProvider(ledgerId));
                   ref.read(statsRefreshProvider.notifier).state++;
-
-                  // 响应式provider会自动更新，无需手动刷新交易列表
+                  ref.read(budgetRefreshProvider.notifier).state++;
                 } catch (e) {
                   if (context.mounted) {
                     showToast(context, '${AppLocalizations.of(context).categoryDetailDeleteFailed}: $e');
@@ -479,8 +479,7 @@ class _CategoryDetailPageState extends ConsumerState<CategoryDetailPage> {
                   // 刷新：账本笔数与全局统计
                   ref.invalidate(countsForLedgerProvider(ledgerId));
                   ref.read(statsRefreshProvider.notifier).state++;
-
-                  // 响应式provider会自动更新，无需手动刷新交易列表
+                  ref.read(budgetRefreshProvider.notifier).state++;
                 } catch (e) {
                   if (context.mounted) {
                     showToast(context, '${AppLocalizations.of(context).categoryDetailDeleteFailed}: $e');

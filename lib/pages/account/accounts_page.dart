@@ -17,7 +17,8 @@ import 'account_edit_page.dart';
 import 'account_detail_page.dart';
 
 class AccountsPage extends ConsumerStatefulWidget {
-  const AccountsPage({super.key});
+  final bool asTab;
+  const AccountsPage({super.key, this.asTab = false});
 
   @override
   ConsumerState<AccountsPage> createState() => _AccountsPageState();
@@ -82,23 +83,11 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
       backgroundColor: BeeTokens.scaffoldBackground(context),
       body: Column(
         children: [
-          // ======== 渐变 Header + 净资产 ========
+          // ======== 简洁 Header ========
           PrimaryHeader(
             title: l10n.accountsTitle,
-            showBack: true,
-            statusBarIconBrightness: Brightness.light,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: isDark
-                    ? [
-                        primaryColor.withValues(alpha: 0.25),
-                        primaryColor.withValues(alpha: 0.1),
-                      ]
-                    : [primaryColor, primaryColor.withValues(alpha: 0.8)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
+            showBack: !widget.asTab,
+            compact: true,
             actions: [
               IconButton(
                 onPressed: () => _showSettingsSheet(context, ref, accountFeatureAsync, accountsAsync),
@@ -111,19 +100,6 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
                 tooltip: l10n.accountAddTooltip,
               ),
             ],
-            content: netWorthByCurrencyAsync.when(
-              data: (nwByCurrency) => _buildHeaderContent(context, ref, nwByCurrency, isDark, primaryColor),
-              loading: () => SizedBox(
-                height: 80.0.scaled(context, ref),
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    strokeWidth: 2,
-                  ),
-                ),
-              ),
-              error: (_, __) => const SizedBox.shrink(),
-            ),
           ),
 
           // ======== 主内容 ========
@@ -133,9 +109,13 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
                 final groups = _reorderingGroups ?? _groupAccounts(accounts);
 
                 return ListView(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.0.scaled(context, ref),
-                    vertical: 8.0.scaled(context, ref),
+                  padding: EdgeInsets.only(
+                    left: 12.0.scaled(context, ref),
+                    right: 12.0.scaled(context, ref),
+                    top: 8.0.scaled(context, ref),
+                    bottom: widget.asTab
+                        ? 8.0.scaled(context, ref) + 56 + MediaQuery.of(context).padding.bottom + 24
+                        : 8.0.scaled(context, ref),
                   ),
                   children: [
                     if (accounts.isEmpty)
@@ -173,23 +153,9 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
                         ),
                       )
                     else ...[
-                      // 1. 资产构成图
-                      compositionAsync.when(
-                        data: (data) => SectionCard(
-                          margin: EdgeInsets.zero,
-                          child: Padding(
-                            padding: EdgeInsets.all(12.0.scaled(context, ref)),
-                            child: AssetCompositionChart(data: data, embedded: true),
-                          ),
-                        ),
-                        loading: () => SectionCard(
-                          margin: EdgeInsets.zero,
-                          child: SizedBox(
-                            height: 180.0.scaled(context, ref),
-                            child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                          ),
-                        ),
-                        error: (_, __) => const SizedBox.shrink(),
+                      // 0. 净资产汇总 + 资产构成（合并卡片）
+                      _buildNetWorthAndCompositionCard(
+                        context, ref, netWorthByCurrencyAsync, compositionAsync, primaryColor,
                       ),
 
                       // 2. 资产账户分组
@@ -253,161 +219,262 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
     );
   }
 
-  /// Header 内的净资产展示
-  Widget _buildHeaderContent(
+  /// 净资产汇总 + 资产构成合并卡片
+  Widget _buildNetWorthAndCompositionCard(
+    BuildContext context,
+    WidgetRef ref,
+    AsyncValue<Map<String, ({double totalAssets, double totalLiabilities, double netWorth})>> netWorthAsync,
+    AsyncValue<List<({String type, double totalBalance})>> compositionAsync,
+    Color primaryColor,
+  ) {
+    final isSingleCurrency = netWorthAsync.asData?.value != null
+        ? netWorthAsync.asData!.value.length <= 1
+        : true;
+
+    return SectionCard(
+      margin: EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // 净资产部分
+          netWorthAsync.when(
+            data: (nwByCurrency) => _buildNetWorthContent(context, ref, nwByCurrency),
+            loading: () => SizedBox(
+              height: 80.0.scaled(context, ref),
+              child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+            ),
+            error: (_, __) => const SizedBox.shrink(),
+          ),
+          // 饼图仅在单货币时显示
+          if (isSingleCurrency) ...[
+            // 分割线
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.0.scaled(context, ref)),
+              child: Divider(height: 1, color: BeeTokens.divider(context)),
+            ),
+            // 资产构成饼图部分
+            compositionAsync.when(
+              data: (data) => Padding(
+                padding: EdgeInsets.all(12.0.scaled(context, ref)),
+                child: AssetCompositionChart(data: data, embedded: true),
+              ),
+              loading: () => SizedBox(
+                height: 180.0.scaled(context, ref),
+                child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+              ),
+              error: (_, __) => const SizedBox.shrink(),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// 净资产内容（不含外层 SectionCard）
+  Widget _buildNetWorthContent(
     BuildContext context,
     WidgetRef ref,
     Map<String, ({double totalAssets, double totalLiabilities, double netWorth})> nwByCurrency,
-    bool isDark,
-    Color primaryColor,
   ) {
     final l10n = AppLocalizations.of(context);
     final useCompact = ref.watch(compactAmountProvider);
 
-    // 单币种时保持原有布局
     final isSingleCurrency = nwByCurrency.length <= 1;
-
-    // 单币种时取唯一数据（空map给默认值）
     final singleNw = nwByCurrency.isEmpty
         ? (totalAssets: 0.0, totalLiabilities: 0.0, netWorth: 0.0)
         : nwByCurrency.values.first;
 
-    // 汇总全部币种的资产/负债（用于多币种底部展示）
-    double allAssets = 0, allLiabilities = 0;
-    for (final v in nwByCurrency.values) {
-      allAssets += v.totalAssets;
-      allLiabilities += v.totalLiabilities;
-    }
-
-    return SizedBox(
-      width: double.infinity,
-      child: ClipRect(
-        child: Stack(
-          children: [
-            // 装饰圆圈
-            Positioned(
-              right: -20,
-              top: -30,
-              child: Container(
-                width: 80.0.scaled(context, ref),
-                height: 80.0.scaled(context, ref),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isDark
-                      ? primaryColor.withValues(alpha: 0.08)
-                      : Colors.white.withValues(alpha: 0.1),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // 净资产标签
+        Text(
+          l10n.accountTotalBalance,
+          style: TextStyle(
+            fontSize: 12,
+            color: BeeTokens.textTertiary(context),
+          ),
+        ),
+        SizedBox(height: 4.0.scaled(context, ref)),
+        if (isSingleCurrency) ...[
+          AmountText(
+            value: singleNw.netWorth,
+            signed: false,
+            showCurrency: false,
+            useCompactFormat: useCompact,
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: singleNw.netWorth >= 0
+                  ? BeeTokens.incomeColor(context, ref)
+                  : BeeTokens.expenseColor(context, ref),
+            ),
+          ),
+        ] else ...[
+          ...nwByCurrency.entries.toList().asMap().entries.map((mapEntry) {
+            final isFirst = mapEntry.key == 0;
+            final currency = mapEntry.value.key;
+            final nw = mapEntry.value.value;
+            return Padding(
+              padding: EdgeInsets.only(top: isFirst ? 0 : 2.0.scaled(context, ref)),
+              child: AmountText(
+                value: nw.netWorth,
+                signed: false,
+                showCurrency: true,
+                currencyCode: currency,
+                useCompactFormat: useCompact,
+                style: TextStyle(
+                  fontSize: isFirst ? 26 : 20,
+                  fontWeight: FontWeight.bold,
+                  color: nw.netWorth >= 0
+                      ? BeeTokens.incomeColor(context, ref)
+                      : BeeTokens.expenseColor(context, ref),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: 4.0.scaled(context, ref),
-                bottom: 8.0.scaled(context, ref),
+            );
+          }),
+        ],
+        SizedBox(height: 12.0.scaled(context, ref)),
+        // 总资产 | 总负债
+        if (isSingleCurrency)
+          Row(
+            children: [
+              Expanded(
+                child: _StatCell(
+                  label: l10n.totalAssets,
+                  value: singleNw.totalAssets,
+                  valueColor: BeeTokens.incomeColor(context, ref),
+                ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // 净资产标签
-                  Text(
-                    l10n.accountTotalBalance,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.white.withValues(alpha: 0.7),
-                    ),
-                  ),
-                  SizedBox(height: 2.0.scaled(context, ref)),
-                  if (isSingleCurrency) ...[
-                    // 单币种：大号净资产金额
-                    AmountText(
-                      value: singleNw.netWorth,
-                      signed: false,
-                      showCurrency: false,
-                      useCompactFormat: useCompact,
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: singleNw.netWorth >= 0
-                            ? const Color(0xFF81C784)
-                            : const Color(0xFFE57373),
-                      ),
-                    ),
-                    SizedBox(height: 12.0.scaled(context, ref)),
-                    // 总资产 | 总负债
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _HeaderStatCell(
-                            label: l10n.totalAssets,
-                            value: singleNw.totalAssets,
-                            valueColor: const Color(0xFF81C784),
-                          ),
-                        ),
-                        Container(
-                          width: 1,
-                          height: 32.0.scaled(context, ref),
-                          color: Colors.white.withValues(alpha: 0.2),
-                        ),
-                        Expanded(
-                          child: _HeaderStatCell(
-                            label: l10n.totalLiabilities,
-                            value: singleNw.totalLiabilities.abs(),
-                            valueColor: const Color(0xFFE57373),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ] else ...[
-                    // 多币种：逐行显示每个币种的净资产
-                    ...nwByCurrency.entries.map((entry) {
-                      final currency = entry.key;
-                      final nw = entry.value;
-                      return AmountText(
-                        value: nw.netWorth,
-                        signed: false,
-                        showCurrency: true,
-                        currencyCode: currency,
-                        useCompactFormat: useCompact,
+              Container(
+                width: 1,
+                height: 28.0.scaled(context, ref),
+                color: BeeTokens.divider(context),
+              ),
+              Expanded(
+                child: _StatCell(
+                  label: l10n.totalLiabilities,
+                  value: singleNw.totalLiabilities.abs(),
+                  valueColor: BeeTokens.expenseColor(context, ref),
+                ),
+              ),
+            ],
+          )
+        else
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        l10n.totalAssets,
                         style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: nw.netWorth >= 0
-                              ? const Color(0xFF81C784)
-                              : const Color(0xFFE57373),
+                          fontSize: 11,
+                          color: BeeTokens.textTertiary(context),
                         ),
-                      );
-                    }),
-                    SizedBox(height: 12.0.scaled(context, ref)),
-                    // 总资产 | 总负债（混合汇总）
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _HeaderStatCell(
-                            label: l10n.totalAssets,
-                            value: allAssets,
-                            valueColor: const Color(0xFF81C784),
-                          ),
+                      ),
+                      SizedBox(height: 2.0.scaled(context, ref)),
+                      _buildMultiCurrencyAmountRow(
+                        context, ref,
+                        entries: nwByCurrency.entries
+                            .where((e) => e.value.totalAssets != 0)
+                            .map((e) => (currency: e.key, value: e.value.totalAssets))
+                            .toList(),
+                        valueColor: BeeTokens.incomeColor(context, ref),
+                        useCompact: useCompact,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  color: BeeTokens.divider(context),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        l10n.totalLiabilities,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: BeeTokens.textTertiary(context),
                         ),
-                        Container(
-                          width: 1,
-                          height: 32.0.scaled(context, ref),
-                          color: Colors.white.withValues(alpha: 0.2),
-                        ),
-                        Expanded(
-                          child: _HeaderStatCell(
-                            label: l10n.totalLiabilities,
-                            value: allLiabilities.abs(),
-                            valueColor: const Color(0xFFE57373),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ],
+                      ),
+                      SizedBox(height: 2.0.scaled(context, ref)),
+                      _buildMultiCurrencyAmountRow(
+                        context, ref,
+                        entries: nwByCurrency.entries
+                            .where((e) => e.value.totalLiabilities != 0)
+                            .map((e) => (currency: e.key, value: e.value.totalLiabilities.abs()))
+                            .toList(),
+                        valueColor: BeeTokens.expenseColor(context, ref),
+                        useCompact: useCompact,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
+  /// 多货币金额横排（用 · 分隔）
+  Widget _buildMultiCurrencyAmountRow(
+    BuildContext context,
+    WidgetRef ref, {
+    required List<({String currency, double value})> entries,
+    required Color valueColor,
+    required bool useCompact,
+  }) {
+    if (entries.isEmpty) {
+      return Text(
+        '-',
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: BeeTokens.textTertiary(context),
+        ),
+      );
+    }
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.centerLeft,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (int i = 0; i < entries.length; i++) ...[
+            if (i > 0)
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.0.scaled(context, ref)),
+                child: Text(
+                  '·',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: BeeTokens.textTertiary(context),
+                  ),
+                ),
+              ),
+            AmountText(
+              value: entries[i].value,
+              signed: false,
+              showCurrency: true,
+              currencyCode: entries[i].currency,
+              useCompactFormat: useCompact,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: valueColor,
               ),
             ),
           ],
-        ),
+        ],
       ),
     );
   }
@@ -430,15 +497,22 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
         groups.containsKey(type) && groups[type]!.isNotEmpty);
     if (!hasAccounts) return [];
 
-    // 计算小计
-    double subtotal = 0;
+    // 按币种分组计算小计
+    final Map<String, double> subtotalByCurrency = {};
     for (final type in typeOrder) {
       if (groups.containsKey(type)) {
         for (final account in groups[type]!) {
-          subtotal += allStats?[account.id]?.balance ?? 0;
+          final balance = allStats?[account.id]?.balance ?? 0;
+          subtotalByCurrency.update(
+            account.currency,
+            (v) => v + balance,
+            ifAbsent: () => balance,
+          );
         }
       }
     }
+    final useCompact = ref.watch(compactAmountProvider);
+    final isSingleCurrency = subtotalByCurrency.length <= 1;
 
     return [
       // 分类标题
@@ -462,17 +536,29 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
               ),
             ),
             const Spacer(),
-            AmountText(
-              value: subtotal,
-              signed: false,
-              showCurrency: false,
-              useCompactFormat: ref.watch(compactAmountProvider),
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: iconColor,
+            if (isSingleCurrency)
+              AmountText(
+                value: subtotalByCurrency.values.firstOrNull ?? 0,
+                signed: false,
+                showCurrency: false,
+                useCompactFormat: useCompact,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: iconColor,
+                ),
+              )
+            else
+              Flexible(
+                child: _buildMultiCurrencyAmountRow(
+                  context, ref,
+                  entries: subtotalByCurrency.entries
+                      .map((e) => (currency: e.key, value: e.value))
+                      .toList(),
+                  valueColor: iconColor,
+                  useCompact: useCompact,
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -646,12 +732,12 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
 }
 
 /// Header 内统计项（白色文字）
-class _HeaderStatCell extends ConsumerWidget {
+class _StatCell extends ConsumerWidget {
   final String label;
   final double value;
   final Color? valueColor;
 
-  const _HeaderStatCell({
+  const _StatCell({
     required this.label,
     required this.value,
     this.valueColor,
@@ -661,6 +747,14 @@ class _HeaderStatCell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            color: BeeTokens.textTertiary(context),
+          ),
+        ),
+        SizedBox(height: 2.0.scaled(context, ref)),
         AmountText(
           value: value,
           signed: false,
@@ -669,15 +763,7 @@ class _HeaderStatCell extends ConsumerWidget {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: valueColor ?? Colors.white,
-          ),
-        ),
-        SizedBox(height: 2.0.scaled(context, ref)),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 11,
-            color: Colors.white.withValues(alpha: 0.7),
+            color: valueColor ?? BeeTokens.textPrimary(context),
           ),
         ),
       ],

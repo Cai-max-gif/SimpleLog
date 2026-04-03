@@ -13,7 +13,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tabHome => '明细';
 
   @override
-  String get tabAnalytics => '图表';
+  String get tabInsights => '洞察';
+
+  @override
+  String get tabAssets => '资产';
+
+  @override
+  String get tabRecord => '记账';
 
   @override
   String get tabMine => '我的';
@@ -1624,9 +1630,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryImportInvalidFile => '请选择分类包文件（.zip）';
 
   @override
-  String get categoryImportNoCategories => '文件中没有分类数据';
-
-  @override
   String get categoryImportModeTitle => '选择导入模式';
 
   @override
@@ -2253,9 +2256,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get cloudMultiDeviceWarningMessage => '换设备前记得先上传，到新设备后先下载再记账。不要同时在两台设备上记同一个账本。点击查看详情 →';
-
-  @override
-  String get cloudMultiDeviceWarningDetail => '多设备同步说明：\n\n⚠️ 当前限制：\n• 非实时同步，需手动上传和下载\n• 不支持冲突处理：若两台设备同时修改，后上传的会覆盖先上传的\n• 同步状态存在延迟，进入同步页面时才会刷新\n\n✅ 推荐用法：\n1. 同一时间只在一台设备上编辑\n2. 编辑完成后及时上传\n3. 在另一台设备下载同步后再开始编辑\n4. 下载时可预览差异，逐条选择要同步的变更';
 
   @override
   String get cloudWebdavUrlLabel => 'WebDAV 服务器地址';
@@ -3411,9 +3411,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountsTitle => '资产管理';
 
   @override
-  String get accountsManageDesc => '净资产、资产构成与账户管理';
-
-  @override
   String get accountsEmptyMessage => '还没有账户，点击右上角添加';
 
   @override
@@ -3489,9 +3486,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get accountsEnableFeature => '启用账户功能';
-
-  @override
-  String get accountsFeatureDescription => '启用后可以管理多个支付账户，追踪每个账户的余额变化';
 
   @override
   String get privacyOpenSourceUrlError => '无法打开链接';
@@ -3944,12 +3938,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutGitHubRepo => 'GitHub 仓库';
 
   @override
-  String get aboutWeChatGroup => '微信群';
-
-  @override
-  String get aboutWeChatGroupDesc => '点击查看二维码';
-
-  @override
   String get aboutXiaohongshu => '小红书';
 
   @override
@@ -4241,33 +4229,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountTotalBalance => '净资产';
 
   @override
-  String get accountTotalExpense => '总支出';
-
-  @override
-  String get accountTotalIncome => '总收入';
-
-  @override
   String get accountCurrencyLocked => '该账户已有交易记录，不允许修改币种';
 
   @override
   String get accountDefaultIncomeTitle => '默认收入账户';
 
   @override
-  String get accountDefaultIncomeDescription => '新建收入时自动选中此账户';
-
-  @override
   String get accountDefaultExpenseTitle => '默认支出账户';
 
   @override
-  String get accountDefaultExpenseDescription => '新建支出时自动选中此账户';
-
-  @override
   String get accountDefaultNone => '不设置';
-
-  @override
-  String accountDefaultSet(String name) {
-    return '已设置: $name';
-  }
 
   @override
   String get commonNotice => '提示';
@@ -4929,62 +4900,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tagClearUnusedFailed => '清理失败';
 
   @override
-  String get tabDiscover => '发现';
-
-  @override
-  String get discoverTitle => '发现';
-
-  @override
-  String get discoverBudget => '预算管理';
-
-  @override
-  String get discoverBudgetSubtitle => '设置和追踪支出预算';
-
-  @override
-  String get discoverBudgetEmpty => '设置预算，控制支出';
-
-  @override
-  String get discoverAccounts => '资产总览';
-
-  @override
-  String get discoverAccountsEmpty => '添加账户，追踪资金流向';
-
-  @override
-  String get discoverAccountsTotal => '净资产';
-
-  @override
-  String discoverAccountsCount(int count) {
-    return '$count 个账户';
-  }
-
-  @override
-  String get discoverCommonFeatures => '常用功能';
-
-  @override
-  String get discoverAISettings => 'AI设置';
-
-  @override
-  String get discoverCategory => '分类管理';
-
-  @override
-  String get discoverTags => '标签管理';
-
-  @override
-  String get discoverImport => '导入';
-
-  @override
-  String get discoverExport => '导出';
-
-  @override
-  String get discoverHelp => '使用帮助';
-
-  @override
-  String get discoverConfigManagement => '配置管理';
-
-  @override
-  String get discoverAutoBilling => '自动记账';
-
-  @override
   String get homeSwitchLedger => '选择账本';
 
   @override
@@ -4992,6 +4907,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get budgetTitle => '预算管理';
+
+  @override
+  String get budgetShowOnHome => '在首页显示预算';
 
   @override
   String get budgetEmptyHint => '还没有设置预算';
@@ -5524,9 +5442,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudSyncGuideLimitItem4 => '不含附件：交易的图片附件不参与同步，需通过数据管理单独导出';
 
   @override
-  String get accountReorderTip => '长按拖动可调整账户顺序';
-
-  @override
   String get mineMultiDeviceSyncTitle => '多设备同步';
 
   @override
@@ -5636,20 +5551,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String creditCardReminderNotification(String accountName) {
-    return '$accountName还款日即将到来';
-  }
-
-  @override
-  String creditCardReminderNotificationBody(int day) {
-    return '还款日为每月$day日，请及时还款';
-  }
-
-  @override
   String get creditCardInitialBalanceHint => '当前欠款（填负数）';
-
-  @override
-  String get creditUsageRate => '额度使用率';
 
   @override
   String get selectDay => '选择日期';
@@ -5679,15 +5581,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountBalanceTrend => '余额趋势';
 
   @override
-  String get periodDays7 => '近7天';
-
-  @override
-  String get periodDays30 => '近30天';
-
-  @override
-  String get periodDays90 => '近90天';
-
-  @override
   String get accountCategoryBreakdown => '分类统计';
 
   @override
@@ -5697,13 +5590,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountCategoryIncome => '收入';
 
   @override
-  String get accountLoadMore => '加载更多';
-
-  @override
   String get accountNoMoreData => '没有更多数据了';
-
-  @override
-  String get accountUncategorized => '未分类';
 
   @override
   String get totalAssets => '总资产';
@@ -5718,9 +5605,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get liabilityAccounts => '负债账户';
 
   @override
-  String get netWorthTrend => '净资产趋势';
-
-  @override
   String get assetComposition => '资产构成';
 
   @override
@@ -5731,74 +5615,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get accountTypeReceivable => '应收款';
-
-  @override
-  String get investmentCurrentValue => '当前市值';
-
-  @override
-  String get investmentAdjustment => '估值调整';
-
-  @override
-  String get investmentTotalInvested => '累计投入';
-
-  @override
-  String get investmentProfitLoss => '浮动盈亏';
-
-  @override
-  String get investmentReturnRate => '收益率';
-
-  @override
-  String get investmentInputNewValue => '输入新市值';
-
-  @override
-  String get investmentInputDelta => '输入涨跌金额';
-
-  @override
-  String get investmentNewValueHint => '请输入新的市值';
-
-  @override
-  String get investmentDeltaHint => '正数为增值，负数为贬值';
-
-  @override
-  String get loanOriginalAmount => '贷款总额';
-
-  @override
-  String get loanRepaid => '已还金额';
-
-  @override
-  String get loanRemaining => '剩余本金';
-
-  @override
-  String get loanProgress => '还款进度';
-
-  @override
-  String loanRepaidPercent(String percent) {
-    return '已还 $percent%';
-  }
-
-  @override
-  String get loanInitialBalanceLabel => '贷款总额';
-
-  @override
-  String get loanInitialBalanceHint => '请输入贷款总金额';
-
-  @override
-  String get loanNegativeNote => '贷款金额将以负数余额形式记录';
-
-  @override
-  String get receivableAmount => '应收金额';
-
-  @override
-  String get receivableCollected => '已收回';
-
-  @override
-  String get receivableRemaining => '待收回';
-
-  @override
-  String get receivableInitialBalanceLabel => '应收金额';
-
-  @override
-  String get investmentInitialBalanceLabel => '初始投资金额';
 
   @override
   String get adjustmentTransaction => '估值调整';
@@ -5817,18 +5633,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get creditCardPaymentDueToday => '今天是还款日';
 
   @override
-  String creditCardPaymentOverdue(int days) {
-    return '已过还款日$days天';
-  }
-
-  @override
   String get creditCardQuickRepay => '记一笔还款';
 
   @override
-  String get loanQuickRepay => '记一笔还款';
+  String get budgetManagement => '预算管理';
 
   @override
-  String get receivableQuickCollect => '记一笔收款';
+  String get budgetManagementDesc => '设置月度预算，控制支出';
+
+  @override
+  String get budgetSetupHint => '设置预算，轻松掌控每月开支';
+
+  @override
+  String get budgetSetupAction => '去设置';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -5842,7 +5659,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get tabHome => '明細';
 
   @override
-  String get tabAnalytics => '圖表';
+  String get tabInsights => '洞察';
+
+  @override
+  String get tabAssets => '資產';
 
   @override
   String get tabMine => '我的';
@@ -7453,9 +7273,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get categoryImportInvalidFile => '請選擇分類包檔案（.zip）';
 
   @override
-  String get categoryImportNoCategories => '檔案中沒有分類資料';
-
-  @override
   String get categoryImportModeTitle => '選擇匯入模式';
 
   @override
@@ -8082,9 +7899,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get cloudMultiDeviceWarningMessage => '換裝置前記得先上傳，到新裝置後先下載再記帳。不要同時在兩台裝置上記同一個帳本。點擊查看詳情 →';
-
-  @override
-  String get cloudMultiDeviceWarningDetail => '多裝置同步說明：\n\n⚠️ 當前限制：\n• 非即時同步，需手動上傳和下載\n• 不支援衝突處理：若兩台裝置同時修改，後上傳的會覆蓋先上傳的\n• 同步狀態存在延遲，進入同步頁面時才會重新整理\n\n✅ 建議用法：\n1. 同一時間只在一台裝置上編輯\n2. 編輯完成後及時上傳\n3. 在另一台裝置下載同步後再開始編輯\n4. 下載時可預覽差異，逐條選擇要同步的變更';
 
   @override
   String get cloudWebdavUrlLabel => 'WebDAV 伺服器地址';
@@ -9240,9 +9054,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accountsTitle => '資產管理';
 
   @override
-  String get accountsManageDesc => '淨資產、資產構成與帳戶管理';
-
-  @override
   String get accountsEmptyMessage => '還没有帳戶，点击右上角添加';
 
   @override
@@ -9318,9 +9129,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get accountsEnableFeature => '啟用帳戶功能';
-
-  @override
-  String get accountsFeatureDescription => '啟用后可以管理多个支付帳戶，追踪每个帳戶的余額變化';
 
   @override
   String get privacyOpenSourceUrlError => '無法打開鏈接';
@@ -9773,12 +9581,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aboutGitHubRepo => 'GitHub 儲存庫';
 
   @override
-  String get aboutWeChatGroup => '微信群';
-
-  @override
-  String get aboutWeChatGroupDesc => '點擊檢視二維碼';
-
-  @override
   String get aboutXiaohongshu => '小紅書';
 
   @override
@@ -10070,33 +9872,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accountTotalBalance => '淨資產';
 
   @override
-  String get accountTotalExpense => '總支出';
-
-  @override
-  String get accountTotalIncome => '總收入';
-
-  @override
   String get accountCurrencyLocked => '該帳戶已有交易記錄，無法變更幣別';
 
   @override
   String get accountDefaultIncomeTitle => '預設收入帳戶';
 
   @override
-  String get accountDefaultIncomeDescription => '新建收入時自動選中此帳戶';
-
-  @override
   String get accountDefaultExpenseTitle => '預設支出帳戶';
 
   @override
-  String get accountDefaultExpenseDescription => '新建支出時自動選中此帳戶';
-
-  @override
   String get accountDefaultNone => '不設定';
-
-  @override
-  String accountDefaultSet(String name) {
-    return '已設定: $name';
-  }
 
   @override
   String get commonNotice => '提示';
@@ -10758,62 +10543,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get tagClearUnusedFailed => '清理失敗';
 
   @override
-  String get tabDiscover => '發現';
-
-  @override
-  String get discoverTitle => '發現';
-
-  @override
-  String get discoverBudget => '預算管理';
-
-  @override
-  String get discoverBudgetSubtitle => '設定和追蹤支出預算';
-
-  @override
-  String get discoverBudgetEmpty => '設定預算，控制支出';
-
-  @override
-  String get discoverAccounts => '資產總覽';
-
-  @override
-  String get discoverAccountsEmpty => '新增帳戶，追蹤資金流向';
-
-  @override
-  String get discoverAccountsTotal => '淨資產';
-
-  @override
-  String discoverAccountsCount(int count) {
-    return '$count 個帳戶';
-  }
-
-  @override
-  String get discoverCommonFeatures => '常用功能';
-
-  @override
-  String get discoverAISettings => 'AI 設定';
-
-  @override
-  String get discoverCategory => '分類管理';
-
-  @override
-  String get discoverTags => '標籤管理';
-
-  @override
-  String get discoverImport => '匯入';
-
-  @override
-  String get discoverExport => '匯出';
-
-  @override
-  String get discoverHelp => '使用幫助';
-
-  @override
-  String get discoverConfigManagement => '配置管理';
-
-  @override
-  String get discoverAutoBilling => '自動記賬';
-
-  @override
   String get homeSwitchLedger => '選擇帳本';
 
   @override
@@ -10821,6 +10550,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get budgetTitle => '預算管理';
+
+  @override
+  String get budgetShowOnHome => '在首頁顯示預算';
 
   @override
   String get budgetEmptyHint => '還沒有設定預算';
@@ -11353,9 +11085,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudSyncGuideLimitItem4 => '不含附件：交易的圖片附件不參與同步，需透過資料管理單獨匯出';
 
   @override
-  String get accountReorderTip => '長按拖動可調整帳戶順序';
-
-  @override
   String get appLockTitle => '應用鎖';
 
   @override
@@ -11459,20 +11188,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String creditCardReminderNotification(String accountName) {
-    return '$accountName還款日即將到來';
-  }
-
-  @override
-  String creditCardReminderNotificationBody(int day) {
-    return '還款日為每月$day日，請及時還款';
-  }
-
-  @override
   String get creditCardInitialBalanceHint => '目前欠款（填負數）';
-
-  @override
-  String get creditUsageRate => '額度使用率';
 
   @override
   String get selectDay => '選擇日期';
@@ -11502,15 +11218,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accountBalanceTrend => '餘額趨勢';
 
   @override
-  String get periodDays7 => '近7天';
-
-  @override
-  String get periodDays30 => '近30天';
-
-  @override
-  String get periodDays90 => '近90天';
-
-  @override
   String get accountCategoryBreakdown => '分類統計';
 
   @override
@@ -11520,13 +11227,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accountCategoryIncome => '收入';
 
   @override
-  String get accountLoadMore => '載入更多';
-
-  @override
   String get accountNoMoreData => '沒有更多資料了';
-
-  @override
-  String get accountUncategorized => '未分類';
 
   @override
   String creditCardBillingInfo(int billingDay, int paymentDueDay) {
@@ -11542,16 +11243,17 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get creditCardPaymentDueToday => '今天是還款日';
 
   @override
-  String creditCardPaymentOverdue(int days) {
-    return '已過還款日$days天';
-  }
-
-  @override
   String get creditCardQuickRepay => '記一筆還款';
 
   @override
-  String get loanQuickRepay => '記一筆還款';
+  String get budgetManagement => '預算管理';
 
   @override
-  String get receivableQuickCollect => '記一筆收款';
+  String get budgetManagementDesc => '設置月度預算，控制支出';
+
+  @override
+  String get budgetSetupHint => '設置預算，輕鬆掌控每月開支';
+
+  @override
+  String get budgetSetupAction => '去設置';
 }

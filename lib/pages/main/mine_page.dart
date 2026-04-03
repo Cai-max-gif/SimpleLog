@@ -17,6 +17,7 @@ import '../../cloud/sync_service.dart';
 import '../cloud/cloud_service_page.dart';
 import '../../services/system/logger_service.dart';
 import '../../services/ui/avatar_service.dart';
+import '../../providers/avatar_providers.dart';
 import '../../services/export/share_poster_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../category/category_manage_page.dart';
@@ -24,7 +25,7 @@ import '../category/category_migration_page.dart';
 import '../transaction/recurring_transaction_page.dart';
 import '../settings/reminder_settings_page.dart';
 import '../settings/language_settings_page.dart';
-import '../account/accounts_page.dart';
+import '../budget/budget_page.dart';
 import '../settings/widget_management_page.dart';
 import '../automation/auto_billing_settings_page.dart';
 import '../ai/ai_settings_page.dart';
@@ -304,19 +305,19 @@ class MinePage extends ConsumerWidget {
                         },
                       ),
                       BeeTokens.cardDivider(context),
-                      // 资产管理
+                      // 预算管理
                       AppListTile(
-                        leading: Icons.analytics_outlined,
-                        title: AppLocalizations.of(context).accountsTitle,
+                        leading: Icons.pie_chart_outline_rounded,
+                        title: AppLocalizations.of(context).budgetManagement,
                         subtitle:
-                            AppLocalizations.of(context).accountsManageDesc,
+                            AppLocalizations.of(context).budgetManagementDesc,
                         trailing: Icon(Icons.chevron_right,
                             color: BeeTokens.iconTertiary(context),
                             size: 20), // ⭐ 使用 Token
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (_) => const AccountsPage()),
+                                builder: (_) => const BudgetPage()),
                           );
                         },
                       ),
@@ -514,6 +515,8 @@ class MinePage extends ConsumerWidget {
                   ),
                 ),
                 SizedBox(height: BeeDimens.p16.scaled(context, ref)),
+                // 底部留白，避免被悬浮 Tab 栏遮挡
+                SizedBox(height: 56 + 12 + MediaQuery.of(context).viewPadding.bottom + 16),
               ],
             ),
           ),
@@ -783,16 +786,19 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
         final path = await AvatarService.pickAndSaveAvatar();
         if (mounted && path != null) {
           setState(() => _avatarPath = path);
+          ref.invalidate(avatarPathProvider);
         }
       } else if (result == 'camera') {
         final path = await AvatarService.takePhotoAndSaveAvatar();
         if (mounted && path != null) {
           setState(() => _avatarPath = path);
+          ref.invalidate(avatarPathProvider);
         }
       } else if (result == 'delete') {
         await AvatarService.deleteAvatar();
         if (mounted) {
           setState(() => _avatarPath = null);
+          ref.invalidate(avatarPathProvider);
         }
       }
     } catch (e) {

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' as d;
 import '../../data/db.dart';
 import '../../providers.dart';
+import '../../providers/budget_providers.dart';
 import '../../widgets/biz/biz.dart';
 import '../../widgets/ui/ui.dart';
 import '../../styles/tokens.dart';
@@ -425,6 +426,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
       for (final id in _selectedIds) {
         await repo.deleteTransaction(id);
       }
+      ref.read(budgetRefreshProvider.notifier).state++;
       await _refreshAfterBatchOperation(
           count, l10n.searchBatchDeleteSuccess(count));
     } catch (e) {

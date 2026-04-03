@@ -4,7 +4,7 @@
 
 ![GitHub stars](https://img.shields.io/github/stars/TNT-Likely/BeeCount?style=social)
 ![License](https://img.shields.io/badge/license-Business%20Source%20License-orange.svg)
-![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20HarmonyOS-lightgrey.svg)
+![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-lightgrey.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.27%2B-02569B?logo=flutter)
 ![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
 
@@ -30,7 +30,7 @@
 <br/>
 <br/>
 
-[🌐 Website](https://beecount-website.pages.dev/en/) | [📖 Documentation](https://beecount-website.pages.dev/en/docs/intro) | [💝 Donate](#-donate) | [💬 WeChat Group](demo/wechat/README.md) | [💬 Telegram](https://t.me/beecount) | [🇨🇳 中文](README.md)
+[🌐 Website](https://beecount-website.pages.dev/en/) | [📖 Documentation](https://beecount-website.pages.dev/en/docs/intro) | [💝 Donate](#-donate) | [💬 Telegram](https://t.me/beecount) | [🇨🇳 中文](README.md)
 
 </div>
 
@@ -44,7 +44,7 @@
 >
 > 💡 Search for **"BeeCount - Simple Ledger"** on App Store or Google Play to download
 >
-> 📱 **HarmonyOS** - Coming Soon | Supports HarmonyOS 5.0+ | [HarmonyOS Repository](https://github.com/TNT-Likely/beecount-openharmony)
+> ~~📱 **HarmonyOS** - Discontinued, no longer maintained~~ | [HarmonyOS Repository](https://github.com/TNT-Likely/beecount-openharmony)
 
 ---
 
@@ -691,7 +691,7 @@ See [LICENSE](LICENSE) for details.
 | Repository | Description |
 |------------|-------------|
 | [BeeCount-Website](https://github.com/TNT-Likely/BeeCount-Website) | Website & Documentation |
-| [beecount-openharmony](https://github.com/TNT-Likely/beecount-openharmony) | HarmonyOS Version |
+| [beecount-openharmony](https://github.com/TNT-Likely/beecount-openharmony) | HarmonyOS Version (Discontinued) |
 | [BeeShot](https://github.com/TNT-Likely/BeeShot) | App Store Screenshot Generator |
 
 ---
