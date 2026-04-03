@@ -30,7 +30,7 @@
 <br/>
 <br/>
 
-[🌐 Website](https://beecount-website.pages.dev/en/) | [📖 Documentation](https://beecount-website.pages.dev/en/docs/intro) | [💝 Donate](#-donate) | [💬 WeChat Group](demo/wechat/README.md) | [💬 Telegram](https://t.me/beecount) | [🇨🇳 中文](README.md)
+[🌐 Website](https://beecount-website.pages.dev/en/) | [📖 Documentation](https://beecount-website.pages.dev/en/docs/intro) | [💝 Donate](#-donate) | [💬 Telegram](https://t.me/beecount) | [🇨🇳 中文](README.md)
 
 </div>
 

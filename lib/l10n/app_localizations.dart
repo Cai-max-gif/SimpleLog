@@ -7506,18 +7506,6 @@ abstract class AppLocalizations {
   /// **'GitHub Repository'**
   String get aboutGitHubRepo;
 
-  /// No description provided for @aboutWeChatGroup.
-  ///
-  /// In en, this message translates to:
-  /// **'WeChat Group'**
-  String get aboutWeChatGroup;
-
-  /// No description provided for @aboutWeChatGroupDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap to view QR code'**
-  String get aboutWeChatGroupDesc;
-
   /// No description provided for @aboutXiaohongshu.
   ///
   /// In en, this message translates to:

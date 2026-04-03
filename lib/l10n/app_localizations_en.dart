@@ -3938,12 +3938,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutGitHubRepo => 'GitHub Repository';
 
   @override
-  String get aboutWeChatGroup => 'WeChat Group';
-
-  @override
-  String get aboutWeChatGroupDesc => 'Tap to view QR code';
-
-  @override
   String get aboutXiaohongshu => 'Xiaohongshu';
 
   @override

@@ -30,7 +30,7 @@
 <br/>
 <br/>
 
-[🌐 官网](https://beecount-website.pages.dev) | [📖 使用文档](https://beecount-website.pages.dev/docs/intro) | [💝 捐赠支持](#-捐赠) | [💬 微信群](demo/wechat/README.md) | [💬 Telegram](https://t.me/beecount) | [🌐 English](README_EN.md)
+[🌐 官网](https://beecount-website.pages.dev) | [📖 使用文档](https://beecount-website.pages.dev/docs/intro) | [💝 捐赠支持](#-捐赠) | [💬 Telegram](https://t.me/beecount) | [🌐 English](README_EN.md)
 
 </div>
 

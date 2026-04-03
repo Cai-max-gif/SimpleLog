@@ -3938,12 +3938,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutGitHubRepo => 'GitHub 仓库';
 
   @override
-  String get aboutWeChatGroup => '微信群';
-
-  @override
-  String get aboutWeChatGroupDesc => '点击查看二维码';
-
-  @override
   String get aboutXiaohongshu => '小红书';
 
   @override
@@ -9585,12 +9579,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get aboutGitHubRepo => 'GitHub 儲存庫';
-
-  @override
-  String get aboutWeChatGroup => '微信群';
-
-  @override
-  String get aboutWeChatGroupDesc => '點擊檢視二維碼';
 
   @override
   String get aboutXiaohongshu => '小紅書';
