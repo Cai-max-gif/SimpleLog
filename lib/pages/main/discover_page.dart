@@ -112,6 +112,8 @@ class DiscoverPage extends ConsumerWidget {
 
                 // 快捷记账入口
                 _QuickActionsCard(primaryColor: primaryColor),
+                // 底部留白，避免被悬浮 Tab 栏遮挡
+                SizedBox(height: 56 + 12 + MediaQuery.of(context).viewPadding.bottom + 16),
               ],
             ),
           ),

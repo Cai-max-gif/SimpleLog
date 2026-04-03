@@ -25,6 +25,7 @@ import 'services/platform/quick_actions_service.dart';
 import 'services/system/logger_service.dart';
 import 'services/security/app_lock_service.dart';
 import 'providers/security_providers.dart';
+import 'styles/tokens.dart';
 
 class BeeApp extends ConsumerStatefulWidget {
   const BeeApp({super.key});
@@ -427,12 +428,14 @@ class _BeeAppState extends ConsumerState<BeeApp>
   Widget _buildCenterButton(Color primaryColor, double bottomPadding) {
     const barHeight = 56.0;
     const buttonSize = 64.0;
-    const buttonOverhang = buttonSize - (barHeight - 8);
+    // 胶囊顶部距屏幕底部 = bottomPadding + 12(浮动间距) + barHeight
+    // 按钮中心对齐胶囊顶部边缘，加上 GestureDetector 的 20px padding
+    final bottom = bottomPadding + 12 + barHeight - buttonSize / 2 - 20;
 
     return Positioned(
       left: 0,
       right: 0,
-      bottom: barHeight + bottomPadding - buttonOverhang - 52, // 往下移12像素
+      bottom: bottom,
       child: Center(
         child: GestureDetector(
           key: _centerButtonKey,
@@ -465,6 +468,13 @@ class _BeeAppState extends ConsumerState<BeeApp>
                     decoration: BoxDecoration(
                       color: primaryColor,
                       shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: primaryColor.withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: Icon(
                       _isOpen ? Icons.close : Icons.add,
@@ -507,6 +517,7 @@ class _BeeAppState extends ConsumerState<BeeApp>
       child: Stack(
         children: [
           Scaffold(
+            extendBody: true, // 让页面内容延伸到底部栏后面
             body: IndexedStack(
               index: idx,
               children: _pages,
@@ -712,7 +723,7 @@ class _ArrowPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// 闲鱼风格底部导航栏（带圆滑凸起，记账按钮已独立）
+/// Telegram 风格悬浮胶囊底部导航栏
 class _BeeBottomBar extends StatelessWidget {
   final int currentIndex;
   final Color primaryColor;
@@ -732,36 +743,27 @@ class _BeeBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = isDark ? const Color(0xFF1C1C1E) : Colors.white;
+    final bgColor = BeeTokens.tabBarBackground(context);
     final inactiveColor = isDark ? Colors.white70 : Colors.black54;
 
     const barHeight = 56.0;
-    const buttonSize = 64.0; // 按钮大小
-    const bumpHeight = 20.0; // 凸起背景的高度
-    const bumpExtraWidth = 2.0; // 凸起比按钮宽多少（每侧）
 
     return SizedBox(
-      height: barHeight + bottomPadding,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          // 背景（使用 CustomPaint 绘制圆滑凸起）
-          Positioned.fill(
-            child: CustomPaint(
-              painter: _SmoothBumpPainter(
-                color: bgColor,
-                bumpHalfWidth: buttonSize / 2 + bumpExtraWidth, // 凸起的半宽度
-                bumpHeight: bumpHeight, // 凸起高度
-              ),
-            ),
+      height: barHeight + bottomPadding + 12, // 12dp 浮动间距
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          bottom: bottomPadding + 12,
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(28),
+            boxShadow: BeeTokens.tabBarShadow,
           ),
-
-          // Tab 项
-          Positioned(
-            left: 0,
-            right: 0,
-            top: 0,
-            height: barHeight,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(28),
             child: Row(
               children: [
                 _buildTabItem(
@@ -777,7 +779,7 @@ class _BeeBottomBar extends StatelessWidget {
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -801,7 +803,7 @@ class _BeeBottomBar extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: 10,
-                color: inactiveColor, // 文字颜色不变
+                color: inactiveColor,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
               ),
             ),
@@ -809,63 +811,6 @@ class _BeeBottomBar extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-/// 圆滑凸起背景绘制器 - 闲鱼风格
-class _SmoothBumpPainter extends CustomPainter {
-  final Color color;
-  final double bumpHalfWidth; // 凸起的半宽度（从中心到起点的距离）
-  final double bumpHeight; // 凸起的高度
-
-  _SmoothBumpPainter({
-    required this.color,
-    required this.bumpHalfWidth,
-    required this.bumpHeight,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final centerX = size.width / 2;
-    // 计算圆弧半径，使圆弧顶点刚好到达 bumpHeight 高度
-    // 公式：r = (h^2 + w^2) / (2*h)
-    final arcRadius =
-        (bumpHeight * bumpHeight + bumpHalfWidth * bumpHalfWidth) /
-            (2 * bumpHeight);
-
-    final path = Path();
-
-    // 从左下角开始
-    path.moveTo(0, size.height);
-    path.lineTo(0, 0);
-
-    // 左边平直部分到凸起开始
-    path.lineTo(centerX - bumpHalfWidth, 0);
-
-    // 使用圆弧绘制凸起（向上凸出，顺时针方向）
-    path.arcToPoint(
-      Offset(centerX + bumpHalfWidth, 0),
-      radius: Radius.circular(arcRadius),
-      clockwise: true,
-    );
-
-    // 右边平直部分
-    path.lineTo(size.width, 0);
-    path.lineTo(size.width, size.height);
-    path.close();
-
-    // 绘制背景
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _SmoothBumpPainter oldDelegate) {
-    return oldDelegate.color != color ||
-        oldDelegate.bumpHalfWidth != bumpHalfWidth ||
-        oldDelegate.bumpHeight != bumpHeight;
   }
 }
 

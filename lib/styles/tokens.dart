@@ -460,6 +460,25 @@ class BeeTokens {
           ? Colors.white.withOpacity(0.05)
           : Colors.black.withOpacity(0.05);
 
+  // ========== 悬浮 Tab 栏 Token (Floating Tab Bar) ==========
+
+  /// 悬浮 Tab 栏背景色
+  /// - 亮色模式：白色 95% 不透明
+  /// - 暗黑模式：深灰 95% 不透明
+  static Color tabBarBackground(BuildContext context) =>
+      isDark(context)
+          ? const Color(0xFF1C1C1E).withValues(alpha: 0.95)
+          : Colors.white.withValues(alpha: 0.95);
+
+  /// 悬浮 Tab 栏阴影
+  static List<BoxShadow> get tabBarShadow => [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.08),
+          blurRadius: 20,
+          offset: const Offset(0, 4),
+        ),
+      ];
+
   // ========== 辅助方法 ==========
 
   /// 判断当前是否为暗黑模式

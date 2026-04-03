@@ -41,12 +41,12 @@ class BeeTheme {
         backgroundColor: honeyGold,
         foregroundColor: Colors.white,
       ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: energyOrange,
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
-        backgroundColor: Colors.white,
-        elevation: 8,
+        backgroundColor: Colors.transparent, // 悬浮胶囊样式，外层透明
+        elevation: 0,
       ),
       textTheme: adjustedTextTheme,
     );
@@ -84,11 +84,11 @@ class BeeTheme {
         backgroundColor: honeyGoldDark,  // ⭐ 深金色
         foregroundColor: Colors.black,   // 黑色文字（对比度更好）
       ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: honeyGoldDark, // ⭐ 深金色
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
-        backgroundColor: Colors.black,   // ⭐ 改为纯黑
+        backgroundColor: Colors.transparent, // 悬浮胶囊样式，外层透明
         elevation: 0,
       ),
       cardTheme: CardTheme(
