@@ -2,11 +2,9 @@
   "@@locale": "zh",
   "appTitle": "蜜蜂记账",
   "tabHome": "明细",
-  "tabAnalytics": "图表",
   "tabInsights": "洞察",
   "tabAssets": "资产",
-  "homeBudgetMonthly": "本月预算",
-  "homeBudgetSetup": "设置预算，掌控开支",
+  "tabRecord": "记账",
   "tabMine": "我的",
   "commonCancel": "取消",
   "commonConfirm": "确定",
@@ -662,7 +660,6 @@
   "categoryShareSubject": "BeeCount 分类配置",
   "categoryShareFailed": "分享失败",
   "categoryImportInvalidFile": "请选择分类包文件（.zip）",
-  "categoryImportNoCategories": "文件中没有分类数据",
   "categoryImportModeTitle": "选择导入模式",
   "categoryImportModeMerge": "合并",
   "categoryImportModeMergeDesc": "保留现有分类，新增不存在的",
@@ -672,9 +669,15 @@
   "categoryImportSuccessDetail": "已导入 {imported} 个分类，跳过 {skipped} 个，导入 {icons} 个图标",
   "@categoryImportSuccessDetail": {
     "placeholders": {
-      "imported": {"type": "int"},
-      "skipped": {"type": "int"},
-      "icons": {"type": "int"}
+      "imported": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      },
+      "icons": {
+        "type": "int"
+      }
     }
   },
   "categoryImportFailed": "导入失败",
@@ -898,7 +901,6 @@
   "cloudSelectServiceType": "选择云服务类型",
   "cloudMultiDeviceWarningTitle": "多设备使用提醒",
   "cloudMultiDeviceWarningMessage": "换设备前记得先上传，到新设备后先下载再记账。不要同时在两台设备上记同一个账本。点击查看详情 →",
-  "cloudMultiDeviceWarningDetail": "多设备同步说明：\n\n⚠️ 当前限制：\n• 非实时同步，需手动上传和下载\n• 不支持冲突处理：若两台设备同时修改，后上传的会覆盖先上传的\n• 同步状态存在延迟，进入同步页面时才会刷新\n\n✅ 推荐用法：\n1. 同一时间只在一台设备上编辑\n2. 编辑完成后及时上传\n3. 在另一台设备下载同步后再开始编辑\n4. 下载时可预览差异，逐条选择要同步的变更",
   "cloudWebdavUrlLabel": "WebDAV 服务器地址",
   "cloudWebdavUrlHint": "https://dav.jianguoyun.com/dav/",
   "cloudWebdavUsernameLabel": "用户名",
@@ -1389,7 +1391,6 @@
   "cloudWebdavRemotePathLabel": "远程路径",
   "cloudWebdavRemotePathHelperText": "数据存储的远程目录路径",
   "accountsTitle": "资产管理",
-  "accountsManageDesc": "净资产、资产构成与账户管理",
   "accountsEmptyMessage": "还没有账户，点击右上角添加",
   "accountAddTooltip": "添加账户",
   "accountAddButton": "添加账户",
@@ -1422,7 +1423,6 @@
   "accountSelectTitle": "选择账户",
   "accountNone": "不选择账户",
   "accountsEnableFeature": "启用账户功能",
-  "accountsFeatureDescription": "启用后可以管理多个支付账户，追踪每个账户的余额变化",
   "privacyOpenSourceUrlError": "无法打开链接",
   "welcomeTitle": "欢迎使用 BeeCount",
   "welcomeDescription": "一个真正尊重您隐私的记账应用",
@@ -1815,22 +1815,10 @@
   "accountNoTransactions": "暂无交易记录",
   "accountTransactionHistory": "交易记录",
   "accountTotalBalance": "净资产",
-  "accountTotalExpense": "总支出",
-  "accountTotalIncome": "总收入",
   "accountCurrencyLocked": "该账户已有交易记录，不允许修改币种",
   "accountDefaultIncomeTitle": "默认收入账户",
-  "accountDefaultIncomeDescription": "新建收入时自动选中此账户",
   "accountDefaultExpenseTitle": "默认支出账户",
-  "accountDefaultExpenseDescription": "新建支出时自动选中此账户",
   "accountDefaultNone": "不设置",
-  "accountDefaultSet": "已设置: {name}",
-  "@accountDefaultSet": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "commonNotice": "提示",
   "transferTitle": "转账",
   "transferIconSettings": "转账图标设置",
@@ -2114,31 +2102,6 @@
     }
   },
   "tagClearUnusedFailed": "清理失败",
-  "tabDiscover": "发现",
-  "discoverTitle": "发现",
-  "discoverBudget": "预算管理",
-  "discoverBudgetSubtitle": "设置和追踪支出预算",
-  "discoverBudgetEmpty": "设置预算，控制支出",
-  "discoverAccounts": "资产总览",
-  "discoverAccountsEmpty": "添加账户，追踪资金流向",
-  "discoverAccountsTotal": "净资产",
-  "discoverAccountsCount": "{count} 个账户",
-  "@discoverAccountsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "discoverCommonFeatures": "常用功能",
-  "discoverAISettings": "AI设置",
-  "discoverCategory": "分类管理",
-  "discoverTags": "标签管理",
-  "discoverImport": "导入",
-  "discoverExport": "导出",
-  "discoverHelp": "使用帮助",
-  "discoverConfigManagement": "配置管理",
-  "discoverAutoBilling": "自动记账",
   "homeSwitchLedger": "选择账本",
   "homeManageLedgers": "管理账本",
   "budgetTitle": "预算管理",
@@ -2379,7 +2342,6 @@
   "aiProviderTestAll": "一键测试全部",
   "aiProviderTestAllRetry": "重新测试",
   "aiModelInputHelper": "留空则使用默认模型",
-
   "syncPreviewTitle": "同步预览",
   "syncPreviewSelectAll": "全选",
   "syncPreviewDeselectAll": "取消全选",
@@ -2387,19 +2349,48 @@
   "syncPreviewModified": "修改",
   "syncPreviewDeleted": "删除",
   "syncPreviewAddedCount": "新增 {count} 条",
-  "@syncPreviewAddedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@syncPreviewAddedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "syncPreviewModifiedCount": "修改 {count} 条",
-  "@syncPreviewModifiedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@syncPreviewModifiedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "syncPreviewDeletedCount": "删除 {count} 条",
-  "@syncPreviewDeletedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@syncPreviewDeletedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "syncPreviewApply": "应用 {count} 项",
-  "@syncPreviewApply": {"placeholders": {"count": {"type": "int"}}},
+  "@syncPreviewApply": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "syncPreviewEmpty": "云端数据与本地一致，无需同步",
   "syncPreviewOldFormat": "云端数据格式较旧，将执行全量替换",
   "syncPreviewOldFormatMessage": "云端数据不包含同步标识，无法逐条对比。将清空当前账本数据并从云端重新导入。",
   "syncPreviewApplied": "已应用 {count} 项变更",
-  "@syncPreviewApplied": {"placeholders": {"count": {"type": "int"}}},
-
+  "@syncPreviewApplied": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "cloudSyncGuideTitle": "云同步使用指南",
   "cloudSyncGuideGotIt": "我知道了",
   "cloudSyncGuideHowItWorks": "工作原理",
@@ -2420,7 +2411,6 @@
   "cloudSyncGuideLimitItem2": "无冲突合并：不会自动合并两端的修改，以最后上传的为准",
   "cloudSyncGuideLimitItem3": "文件服务延迟：上传后云端文件可能需要几秒到几分钟才能被其他设备读取，取决于你使用的云服务",
   "cloudSyncGuideLimitItem4": "不含附件：交易的图片附件不参与同步，需通过数据管理单独导出",
-  "accountReorderTip": "长按拖动可调整账户顺序",
   "mineMultiDeviceSyncTitle": "多设备同步",
   "mineMultiDeviceSyncSubtitle": "进入页面时自动检查云端变更",
   "appLockTitle": "应用锁",
@@ -2444,7 +2434,6 @@
   "appLockTimeout1Min": "1分钟后",
   "appLockTimeout5Min": "5分钟后",
   "appLockTimeout15Min": "15分钟后",
-
   "creditCardSettings": "信用卡设置",
   "creditLimit": "信用额度",
   "creditLimitHint": "请输入信用额度",
@@ -2456,7 +2445,9 @@
   "dayOfMonth": "每月{day}日",
   "@dayOfMonth": {
     "placeholders": {
-      "day": { "type": "int" }
+      "day": {
+        "type": "int"
+      }
     }
   },
   "creditCardReminderTitle": "还款提醒",
@@ -2464,23 +2455,12 @@
   "creditCardReminderDaysBefore": "提前{days}天提醒",
   "@creditCardReminderDaysBefore": {
     "placeholders": {
-      "days": { "type": "int" }
-    }
-  },
-  "creditCardReminderNotification": "{accountName}还款日即将到来",
-  "@creditCardReminderNotification": {
-    "placeholders": {
-      "accountName": { "type": "String" }
-    }
-  },
-  "creditCardReminderNotificationBody": "还款日为每月{day}日，请及时还款",
-  "@creditCardReminderNotificationBody": {
-    "placeholders": {
-      "day": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "creditCardInitialBalanceHint": "当前欠款（填负数）",
-  "creditUsageRate": "额度使用率",
   "selectDay": "选择日期",
   "accountBankName": "开户行",
   "accountBankNameHint": "例如：工商银行",
@@ -2490,78 +2470,40 @@
   "accountNoteHint": "添加备注信息",
   "accountMetaInfo": "账户信息",
   "accountBalanceTrend": "余额趋势",
-  "periodDays7": "近7天",
-  "periodDays30": "近30天",
-  "periodDays90": "近90天",
   "accountCategoryBreakdown": "分类统计",
   "accountCategoryExpense": "支出",
   "accountCategoryIncome": "收入",
-  "accountLoadMore": "加载更多",
   "accountNoMoreData": "没有更多数据了",
-  "accountUncategorized": "未分类",
-
   "totalAssets": "总资产",
   "totalLiabilities": "总负债",
   "assetAccounts": "资产账户",
   "liabilityAccounts": "负债账户",
-  "netWorthTrend": "净资产趋势",
   "assetComposition": "资产构成",
   "accountTypeInvestment": "投资理财",
   "accountTypeLoan": "贷款",
   "accountTypeReceivable": "应收款",
-  "investmentCurrentValue": "当前市值",
-  "investmentAdjustment": "估值调整",
-  "investmentTotalInvested": "累计投入",
-  "investmentProfitLoss": "浮动盈亏",
-  "investmentReturnRate": "收益率",
-  "investmentInputNewValue": "输入新市值",
-  "investmentInputDelta": "输入涨跌金额",
-  "investmentNewValueHint": "请输入新的市值",
-  "investmentDeltaHint": "正数为增值，负数为贬值",
-  "loanOriginalAmount": "贷款总额",
-  "loanRepaid": "已还金额",
-  "loanRemaining": "剩余本金",
-  "loanProgress": "还款进度",
-  "loanRepaidPercent": "已还 {percent}%",
-  "@loanRepaidPercent": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "loanInitialBalanceLabel": "贷款总额",
-  "loanInitialBalanceHint": "请输入贷款总金额",
-  "loanNegativeNote": "贷款金额将以负数余额形式记录",
-  "receivableAmount": "应收金额",
-  "receivableCollected": "已收回",
-  "receivableRemaining": "待收回",
-  "receivableInitialBalanceLabel": "应收金额",
-  "investmentInitialBalanceLabel": "初始投资金额",
   "adjustmentTransaction": "估值调整",
   "creditCardBillingInfo": "每月{billingDay}日出账 · {paymentDueDay}日还款",
   "@creditCardBillingInfo": {
     "placeholders": {
-      "billingDay": { "type": "int" },
-      "paymentDueDay": { "type": "int" }
+      "billingDay": {
+        "type": "int"
+      },
+      "paymentDueDay": {
+        "type": "int"
+      }
     }
   },
   "creditCardDaysUntilPayment": "距还款日还有{days}天",
   "@creditCardDaysUntilPayment": {
     "placeholders": {
-      "days": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "creditCardPaymentDueToday": "今天是还款日",
-  "creditCardPaymentOverdue": "已过还款日{days}天",
-  "@creditCardPaymentOverdue": {
-    "placeholders": {
-      "days": { "type": "int" }
-    }
-  },
   "creditCardQuickRepay": "记一笔还款",
-  "loanQuickRepay": "记一笔还款",
-  "receivableQuickCollect": "记一笔收款",
   "budgetManagement": "预算管理",
   "budgetManagementDesc": "设置月度预算，控制支出",
   "budgetSetupHint": "设置预算，轻松掌控每月开支",

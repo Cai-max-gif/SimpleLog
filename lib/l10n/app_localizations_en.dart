@@ -13,19 +13,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabHome => 'Home';
 
   @override
-  String get tabAnalytics => 'Charts';
-
-  @override
   String get tabInsights => 'Insights';
 
   @override
   String get tabAssets => 'Assets';
 
   @override
-  String get homeBudgetMonthly => 'Monthly Budget';
-
-  @override
-  String get homeBudgetSetup => 'Set a budget to track spending';
+  String get tabRecord => 'Record';
 
   @override
   String get tabMine => 'Mine';
@@ -1636,9 +1630,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryImportInvalidFile => 'Please select a category package file (.zip)';
 
   @override
-  String get categoryImportNoCategories => 'No category data in file';
-
-  @override
   String get categoryImportModeTitle => 'Select Import Mode';
 
   @override
@@ -2265,9 +2256,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cloudMultiDeviceWarningMessage => 'Upload before switching devices, download on the new device before editing. Don\'t edit the same ledger on two devices at once. Tap for details →';
-
-  @override
-  String get cloudMultiDeviceWarningDetail => 'Multi-Device Sync:\n\n⚠️ Limitations:\n• Not real-time — requires manual upload and download\n• No conflict resolution — if two devices edit simultaneously, the later upload overwrites the earlier one\n• Sync status may be delayed, refreshes when entering the sync page\n\n✅ Recommended workflow:\n1. Edit on one device at a time\n2. Upload promptly after editing\n3. Download on the other device before editing\n4. When downloading, you can preview differences and selectively apply changes';
 
   @override
   String get cloudWebdavUrlLabel => 'WebDAV Server URL';
@@ -3423,9 +3411,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountsTitle => 'Asset Management';
 
   @override
-  String get accountsManageDesc => 'Net worth, asset composition & account management';
-
-  @override
   String get accountsEmptyMessage => 'No accounts yet, tap the top right to add';
 
   @override
@@ -3501,9 +3486,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountsEnableFeature => 'Enable Account Feature';
-
-  @override
-  String get accountsFeatureDescription => 'Manage multiple payment accounts and track balance changes for each account';
 
   @override
   String get privacyOpenSourceUrlError => 'Cannot open link';
@@ -4253,33 +4235,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountTotalBalance => 'Net Assets';
 
   @override
-  String get accountTotalExpense => 'Total Expense';
-
-  @override
-  String get accountTotalIncome => 'Total Income';
-
-  @override
   String get accountCurrencyLocked => 'This account has transactions and cannot change currency';
 
   @override
   String get accountDefaultIncomeTitle => 'Default Income Account';
 
   @override
-  String get accountDefaultIncomeDescription => 'Auto-select this account when creating income';
-
-  @override
   String get accountDefaultExpenseTitle => 'Default Expense Account';
 
   @override
-  String get accountDefaultExpenseDescription => 'Auto-select this account when creating expense';
-
-  @override
   String get accountDefaultNone => 'Not Set';
-
-  @override
-  String accountDefaultSet(String name) {
-    return 'Set: $name';
-  }
 
   @override
   String get commonNotice => 'Notice';
@@ -4941,62 +4906,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagClearUnusedFailed => 'Clear failed';
 
   @override
-  String get tabDiscover => 'Discover';
-
-  @override
-  String get discoverTitle => 'Discover';
-
-  @override
-  String get discoverBudget => 'Budget';
-
-  @override
-  String get discoverBudgetSubtitle => 'Set and track spending budgets';
-
-  @override
-  String get discoverBudgetEmpty => 'Set budget to control spending';
-
-  @override
-  String get discoverAccounts => 'Asset Overview';
-
-  @override
-  String get discoverAccountsEmpty => 'Add accounts to track cash flow';
-
-  @override
-  String get discoverAccountsTotal => 'Net Worth';
-
-  @override
-  String discoverAccountsCount(int count) {
-    return '$count accounts';
-  }
-
-  @override
-  String get discoverCommonFeatures => 'Features';
-
-  @override
-  String get discoverAISettings => 'AI Settings';
-
-  @override
-  String get discoverCategory => 'Categories';
-
-  @override
-  String get discoverTags => 'Tags';
-
-  @override
-  String get discoverImport => 'Import';
-
-  @override
-  String get discoverExport => 'Export';
-
-  @override
-  String get discoverHelp => 'Help';
-
-  @override
-  String get discoverConfigManagement => 'Config';
-
-  @override
-  String get discoverAutoBilling => 'Auto';
-
-  @override
   String get homeSwitchLedger => 'Select Ledger';
 
   @override
@@ -5539,9 +5448,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudSyncGuideLimitItem4 => 'Excludes attachments: transaction image attachments are not synced — export separately via Data Management';
 
   @override
-  String get accountReorderTip => 'Long press and drag to reorder';
-
-  @override
   String get mineMultiDeviceSyncTitle => 'Multi-device Sync';
 
   @override
@@ -5651,20 +5557,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String creditCardReminderNotification(String accountName) {
-    return '$accountName payment due soon';
-  }
-
-  @override
-  String creditCardReminderNotificationBody(int day) {
-    return 'Payment due on the ${day}th, please pay on time';
-  }
-
-  @override
   String get creditCardInitialBalanceHint => 'Current debt (negative number)';
-
-  @override
-  String get creditUsageRate => 'Usage Rate';
 
   @override
   String get selectDay => 'Select Day';
@@ -5694,15 +5587,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountBalanceTrend => 'Balance Trend';
 
   @override
-  String get periodDays7 => '7 Days';
-
-  @override
-  String get periodDays30 => '30 Days';
-
-  @override
-  String get periodDays90 => '90 Days';
-
-  @override
   String get accountCategoryBreakdown => 'Category Breakdown';
 
   @override
@@ -5712,13 +5596,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountCategoryIncome => 'Income';
 
   @override
-  String get accountLoadMore => 'Load More';
-
-  @override
   String get accountNoMoreData => 'No more data';
-
-  @override
-  String get accountUncategorized => 'Uncategorized';
 
   @override
   String get totalAssets => 'Total Assets';
@@ -5733,9 +5611,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get liabilityAccounts => 'Liability Accounts';
 
   @override
-  String get netWorthTrend => 'Net Worth Trend';
-
-  @override
   String get assetComposition => 'Asset Composition';
 
   @override
@@ -5746,74 +5621,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountTypeReceivable => 'Receivable';
-
-  @override
-  String get investmentCurrentValue => 'Market Value';
-
-  @override
-  String get investmentAdjustment => 'Valuation Adjustment';
-
-  @override
-  String get investmentTotalInvested => 'Total Invested';
-
-  @override
-  String get investmentProfitLoss => 'Profit/Loss';
-
-  @override
-  String get investmentReturnRate => 'Return Rate';
-
-  @override
-  String get investmentInputNewValue => 'Enter new value';
-
-  @override
-  String get investmentInputDelta => 'Enter change amount';
-
-  @override
-  String get investmentNewValueHint => 'Enter new market value';
-
-  @override
-  String get investmentDeltaHint => 'Positive for gain, negative for loss';
-
-  @override
-  String get loanOriginalAmount => 'Loan Amount';
-
-  @override
-  String get loanRepaid => 'Repaid';
-
-  @override
-  String get loanRemaining => 'Remaining';
-
-  @override
-  String get loanProgress => 'Repayment Progress';
-
-  @override
-  String loanRepaidPercent(String percent) {
-    return '$percent% Repaid';
-  }
-
-  @override
-  String get loanInitialBalanceLabel => 'Loan Amount';
-
-  @override
-  String get loanInitialBalanceHint => 'Enter total loan amount';
-
-  @override
-  String get loanNegativeNote => 'Loan amount will be recorded as negative balance';
-
-  @override
-  String get receivableAmount => 'Receivable Amount';
-
-  @override
-  String get receivableCollected => 'Collected';
-
-  @override
-  String get receivableRemaining => 'Pending';
-
-  @override
-  String get receivableInitialBalanceLabel => 'Receivable Amount';
-
-  @override
-  String get investmentInitialBalanceLabel => 'Initial Investment';
 
   @override
   String get adjustmentTransaction => 'Valuation Adjustment';
@@ -5832,18 +5639,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get creditCardPaymentDueToday => 'Payment due today';
 
   @override
-  String creditCardPaymentOverdue(int days) {
-    return '$days days past due';
-  }
-
-  @override
   String get creditCardQuickRepay => 'Record Repayment';
-
-  @override
-  String get loanQuickRepay => 'Record Repayment';
-
-  @override
-  String get receivableQuickCollect => 'Record Collection';
 
   @override
   String get budgetManagement => 'Budget';

@@ -108,12 +108,6 @@ abstract class AppLocalizations {
   /// **'Home'**
   String get tabHome;
 
-  /// No description provided for @tabAnalytics.
-  ///
-  /// In en, this message translates to:
-  /// **'Charts'**
-  String get tabAnalytics;
-
   /// No description provided for @tabInsights.
   ///
   /// In en, this message translates to:
@@ -126,17 +120,11 @@ abstract class AppLocalizations {
   /// **'Assets'**
   String get tabAssets;
 
-  /// No description provided for @homeBudgetMonthly.
+  /// No description provided for @tabRecord.
   ///
   /// In en, this message translates to:
-  /// **'Monthly Budget'**
-  String get homeBudgetMonthly;
-
-  /// No description provided for @homeBudgetSetup.
-  ///
-  /// In en, this message translates to:
-  /// **'Set a budget to track spending'**
-  String get homeBudgetSetup;
+  /// **'Record'**
+  String get tabRecord;
 
   /// No description provided for @tabMine.
   ///
@@ -3102,12 +3090,6 @@ abstract class AppLocalizations {
   /// **'Please select a category package file (.zip)'**
   String get categoryImportInvalidFile;
 
-  /// No description provided for @categoryImportNoCategories.
-  ///
-  /// In en, this message translates to:
-  /// **'No category data in file'**
-  String get categoryImportNoCategories;
-
   /// No description provided for @categoryImportModeTitle.
   ///
   /// In en, this message translates to:
@@ -4295,12 +4277,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upload before switching devices, download on the new device before editing. Don\'t edit the same ledger on two devices at once. Tap for details →'**
   String get cloudMultiDeviceWarningMessage;
-
-  /// No description provided for @cloudMultiDeviceWarningDetail.
-  ///
-  /// In en, this message translates to:
-  /// **'Multi-Device Sync:\n\n⚠️ Limitations:\n• Not real-time — requires manual upload and download\n• No conflict resolution — if two devices edit simultaneously, the later upload overwrites the earlier one\n• Sync status may be delayed, refreshes when entering the sync page\n\n✅ Recommended workflow:\n1. Edit on one device at a time\n2. Upload promptly after editing\n3. Download on the other device before editing\n4. When downloading, you can preview differences and selectively apply changes'**
-  String get cloudMultiDeviceWarningDetail;
 
   /// No description provided for @cloudWebdavUrlLabel.
   ///
@@ -6492,12 +6468,6 @@ abstract class AppLocalizations {
   /// **'Asset Management'**
   String get accountsTitle;
 
-  /// No description provided for @accountsManageDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Net worth, asset composition & account management'**
-  String get accountsManageDesc;
-
   /// No description provided for @accountsEmptyMessage.
   ///
   /// In en, this message translates to:
@@ -6647,12 +6617,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enable Account Feature'**
   String get accountsEnableFeature;
-
-  /// No description provided for @accountsFeatureDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage multiple payment accounts and track balance changes for each account'**
-  String get accountsFeatureDescription;
 
   /// No description provided for @privacyOpenSourceUrlError.
   ///
@@ -8100,18 +8064,6 @@ abstract class AppLocalizations {
   /// **'Net Assets'**
   String get accountTotalBalance;
 
-  /// No description provided for @accountTotalExpense.
-  ///
-  /// In en, this message translates to:
-  /// **'Total Expense'**
-  String get accountTotalExpense;
-
-  /// No description provided for @accountTotalIncome.
-  ///
-  /// In en, this message translates to:
-  /// **'Total Income'**
-  String get accountTotalIncome;
-
   /// No description provided for @accountCurrencyLocked.
   ///
   /// In en, this message translates to:
@@ -8124,35 +8076,17 @@ abstract class AppLocalizations {
   /// **'Default Income Account'**
   String get accountDefaultIncomeTitle;
 
-  /// No description provided for @accountDefaultIncomeDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto-select this account when creating income'**
-  String get accountDefaultIncomeDescription;
-
   /// No description provided for @accountDefaultExpenseTitle.
   ///
   /// In en, this message translates to:
   /// **'Default Expense Account'**
   String get accountDefaultExpenseTitle;
 
-  /// No description provided for @accountDefaultExpenseDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto-select this account when creating expense'**
-  String get accountDefaultExpenseDescription;
-
   /// No description provided for @accountDefaultNone.
   ///
   /// In en, this message translates to:
   /// **'Not Set'**
   String get accountDefaultNone;
-
-  /// No description provided for @accountDefaultSet.
-  ///
-  /// In en, this message translates to:
-  /// **'Set: {name}'**
-  String accountDefaultSet(String name);
 
   /// No description provided for @commonNotice.
   ///
@@ -9432,114 +9366,6 @@ abstract class AppLocalizations {
   /// **'Clear failed'**
   String get tagClearUnusedFailed;
 
-  /// No description provided for @tabDiscover.
-  ///
-  /// In en, this message translates to:
-  /// **'Discover'**
-  String get tabDiscover;
-
-  /// No description provided for @discoverTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Discover'**
-  String get discoverTitle;
-
-  /// No description provided for @discoverBudget.
-  ///
-  /// In en, this message translates to:
-  /// **'Budget'**
-  String get discoverBudget;
-
-  /// No description provided for @discoverBudgetSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Set and track spending budgets'**
-  String get discoverBudgetSubtitle;
-
-  /// No description provided for @discoverBudgetEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'Set budget to control spending'**
-  String get discoverBudgetEmpty;
-
-  /// No description provided for @discoverAccounts.
-  ///
-  /// In en, this message translates to:
-  /// **'Asset Overview'**
-  String get discoverAccounts;
-
-  /// No description provided for @discoverAccountsEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'Add accounts to track cash flow'**
-  String get discoverAccountsEmpty;
-
-  /// No description provided for @discoverAccountsTotal.
-  ///
-  /// In en, this message translates to:
-  /// **'Net Worth'**
-  String get discoverAccountsTotal;
-
-  /// No description provided for @discoverAccountsCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} accounts'**
-  String discoverAccountsCount(int count);
-
-  /// No description provided for @discoverCommonFeatures.
-  ///
-  /// In en, this message translates to:
-  /// **'Features'**
-  String get discoverCommonFeatures;
-
-  /// No description provided for @discoverAISettings.
-  ///
-  /// In en, this message translates to:
-  /// **'AI Settings'**
-  String get discoverAISettings;
-
-  /// No description provided for @discoverCategory.
-  ///
-  /// In en, this message translates to:
-  /// **'Categories'**
-  String get discoverCategory;
-
-  /// No description provided for @discoverTags.
-  ///
-  /// In en, this message translates to:
-  /// **'Tags'**
-  String get discoverTags;
-
-  /// No description provided for @discoverImport.
-  ///
-  /// In en, this message translates to:
-  /// **'Import'**
-  String get discoverImport;
-
-  /// No description provided for @discoverExport.
-  ///
-  /// In en, this message translates to:
-  /// **'Export'**
-  String get discoverExport;
-
-  /// No description provided for @discoverHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'Help'**
-  String get discoverHelp;
-
-  /// No description provided for @discoverConfigManagement.
-  ///
-  /// In en, this message translates to:
-  /// **'Config'**
-  String get discoverConfigManagement;
-
-  /// No description provided for @discoverAutoBilling.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto'**
-  String get discoverAutoBilling;
-
   /// No description provided for @homeSwitchLedger.
   ///
   /// In en, this message translates to:
@@ -10560,12 +10386,6 @@ abstract class AppLocalizations {
   /// **'Excludes attachments: transaction image attachments are not synced — export separately via Data Management'**
   String get cloudSyncGuideLimitItem4;
 
-  /// No description provided for @accountReorderTip.
-  ///
-  /// In en, this message translates to:
-  /// **'Long press and drag to reorder'**
-  String get accountReorderTip;
-
   /// No description provided for @mineMultiDeviceSyncTitle.
   ///
   /// In en, this message translates to:
@@ -10776,29 +10596,11 @@ abstract class AppLocalizations {
   /// **'{days} days before'**
   String creditCardReminderDaysBefore(int days);
 
-  /// No description provided for @creditCardReminderNotification.
-  ///
-  /// In en, this message translates to:
-  /// **'{accountName} payment due soon'**
-  String creditCardReminderNotification(String accountName);
-
-  /// No description provided for @creditCardReminderNotificationBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Payment due on the {day}th, please pay on time'**
-  String creditCardReminderNotificationBody(int day);
-
   /// No description provided for @creditCardInitialBalanceHint.
   ///
   /// In en, this message translates to:
   /// **'Current debt (negative number)'**
   String get creditCardInitialBalanceHint;
-
-  /// No description provided for @creditUsageRate.
-  ///
-  /// In en, this message translates to:
-  /// **'Usage Rate'**
-  String get creditUsageRate;
 
   /// No description provided for @selectDay.
   ///
@@ -10854,24 +10656,6 @@ abstract class AppLocalizations {
   /// **'Balance Trend'**
   String get accountBalanceTrend;
 
-  /// No description provided for @periodDays7.
-  ///
-  /// In en, this message translates to:
-  /// **'7 Days'**
-  String get periodDays7;
-
-  /// No description provided for @periodDays30.
-  ///
-  /// In en, this message translates to:
-  /// **'30 Days'**
-  String get periodDays30;
-
-  /// No description provided for @periodDays90.
-  ///
-  /// In en, this message translates to:
-  /// **'90 Days'**
-  String get periodDays90;
-
   /// No description provided for @accountCategoryBreakdown.
   ///
   /// In en, this message translates to:
@@ -10890,23 +10674,11 @@ abstract class AppLocalizations {
   /// **'Income'**
   String get accountCategoryIncome;
 
-  /// No description provided for @accountLoadMore.
-  ///
-  /// In en, this message translates to:
-  /// **'Load More'**
-  String get accountLoadMore;
-
   /// No description provided for @accountNoMoreData.
   ///
   /// In en, this message translates to:
   /// **'No more data'**
   String get accountNoMoreData;
-
-  /// No description provided for @accountUncategorized.
-  ///
-  /// In en, this message translates to:
-  /// **'Uncategorized'**
-  String get accountUncategorized;
 
   /// No description provided for @totalAssets.
   ///
@@ -10932,12 +10704,6 @@ abstract class AppLocalizations {
   /// **'Liability Accounts'**
   String get liabilityAccounts;
 
-  /// No description provided for @netWorthTrend.
-  ///
-  /// In en, this message translates to:
-  /// **'Net Worth Trend'**
-  String get netWorthTrend;
-
   /// No description provided for @assetComposition.
   ///
   /// In en, this message translates to:
@@ -10961,138 +10727,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Receivable'**
   String get accountTypeReceivable;
-
-  /// No description provided for @investmentCurrentValue.
-  ///
-  /// In en, this message translates to:
-  /// **'Market Value'**
-  String get investmentCurrentValue;
-
-  /// No description provided for @investmentAdjustment.
-  ///
-  /// In en, this message translates to:
-  /// **'Valuation Adjustment'**
-  String get investmentAdjustment;
-
-  /// No description provided for @investmentTotalInvested.
-  ///
-  /// In en, this message translates to:
-  /// **'Total Invested'**
-  String get investmentTotalInvested;
-
-  /// No description provided for @investmentProfitLoss.
-  ///
-  /// In en, this message translates to:
-  /// **'Profit/Loss'**
-  String get investmentProfitLoss;
-
-  /// No description provided for @investmentReturnRate.
-  ///
-  /// In en, this message translates to:
-  /// **'Return Rate'**
-  String get investmentReturnRate;
-
-  /// No description provided for @investmentInputNewValue.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter new value'**
-  String get investmentInputNewValue;
-
-  /// No description provided for @investmentInputDelta.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter change amount'**
-  String get investmentInputDelta;
-
-  /// No description provided for @investmentNewValueHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter new market value'**
-  String get investmentNewValueHint;
-
-  /// No description provided for @investmentDeltaHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Positive for gain, negative for loss'**
-  String get investmentDeltaHint;
-
-  /// No description provided for @loanOriginalAmount.
-  ///
-  /// In en, this message translates to:
-  /// **'Loan Amount'**
-  String get loanOriginalAmount;
-
-  /// No description provided for @loanRepaid.
-  ///
-  /// In en, this message translates to:
-  /// **'Repaid'**
-  String get loanRepaid;
-
-  /// No description provided for @loanRemaining.
-  ///
-  /// In en, this message translates to:
-  /// **'Remaining'**
-  String get loanRemaining;
-
-  /// No description provided for @loanProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'Repayment Progress'**
-  String get loanProgress;
-
-  /// No description provided for @loanRepaidPercent.
-  ///
-  /// In en, this message translates to:
-  /// **'{percent}% Repaid'**
-  String loanRepaidPercent(String percent);
-
-  /// No description provided for @loanInitialBalanceLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Loan Amount'**
-  String get loanInitialBalanceLabel;
-
-  /// No description provided for @loanInitialBalanceHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter total loan amount'**
-  String get loanInitialBalanceHint;
-
-  /// No description provided for @loanNegativeNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Loan amount will be recorded as negative balance'**
-  String get loanNegativeNote;
-
-  /// No description provided for @receivableAmount.
-  ///
-  /// In en, this message translates to:
-  /// **'Receivable Amount'**
-  String get receivableAmount;
-
-  /// No description provided for @receivableCollected.
-  ///
-  /// In en, this message translates to:
-  /// **'Collected'**
-  String get receivableCollected;
-
-  /// No description provided for @receivableRemaining.
-  ///
-  /// In en, this message translates to:
-  /// **'Pending'**
-  String get receivableRemaining;
-
-  /// No description provided for @receivableInitialBalanceLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Receivable Amount'**
-  String get receivableInitialBalanceLabel;
-
-  /// No description provided for @investmentInitialBalanceLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Initial Investment'**
-  String get investmentInitialBalanceLabel;
 
   /// No description provided for @adjustmentTransaction.
   ///
@@ -11118,29 +10752,11 @@ abstract class AppLocalizations {
   /// **'Payment due today'**
   String get creditCardPaymentDueToday;
 
-  /// No description provided for @creditCardPaymentOverdue.
-  ///
-  /// In en, this message translates to:
-  /// **'{days} days past due'**
-  String creditCardPaymentOverdue(int days);
-
   /// No description provided for @creditCardQuickRepay.
   ///
   /// In en, this message translates to:
   /// **'Record Repayment'**
   String get creditCardQuickRepay;
-
-  /// No description provided for @loanQuickRepay.
-  ///
-  /// In en, this message translates to:
-  /// **'Record Repayment'**
-  String get loanQuickRepay;
-
-  /// No description provided for @receivableQuickCollect.
-  ///
-  /// In en, this message translates to:
-  /// **'Record Collection'**
-  String get receivableQuickCollect;
 
   /// No description provided for @budgetManagement.
   ///
