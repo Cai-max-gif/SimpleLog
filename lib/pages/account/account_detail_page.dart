@@ -202,19 +202,19 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
               controller: _scrollController,
               padding: EdgeInsets.symmetric(
                 horizontal: 0,
-                vertical: 12.0.scaled(context, ref),
+                vertical: 8.0.scaled(context, ref),
               ),
               children: [
                 // 0. 余额/收入/支出统计卡片
                 _buildStatsCard(context, ref, account, statsAsync, currencyCode, l10n),
-                SizedBox(height: 12.0.scaled(context, ref)),
+                SizedBox(height: 4.0.scaled(context, ref)),
                 // 1. 账户概览卡片（合并 metadata + 类型统计）
                 _buildOverviewCard(
                   context, ref, account, statsAsync,
                   currencyCode, primaryColor, typeColor, l10n,
                 ),
 
-                SizedBox(height: 12.0.scaled(context, ref)),
+                SizedBox(height: 8.0.scaled(context, ref)),
 
                 // 2. 图表区域（支出分布/收入分布 切换）
                 _buildDetailChartSection(
@@ -909,6 +909,14 @@ class _DetailStatCell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            color: BeeTokens.textTertiary(context),
+          ),
+        ),
+        SizedBox(height: 4.0.scaled(context, ref)),
         AmountText(
           value: value,
           signed: false,
@@ -919,14 +927,6 @@ class _DetailStatCell extends ConsumerWidget {
             fontSize: 16,
             fontWeight: FontWeight.bold,
             color: BeeTokens.textPrimary(context),
-          ),
-        ),
-        SizedBox(height: 4.0.scaled(context, ref)),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 11,
-            color: BeeTokens.textTertiary(context),
           ),
         ),
       ],
