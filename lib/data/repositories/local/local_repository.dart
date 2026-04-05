@@ -768,6 +768,10 @@ class LocalRepository extends BaseRepository {
   Future<List<({String type, double totalBalance})>> getAssetCompositionByType() =>
       _accountRepo.getAssetCompositionByType();
 
+  @override
+  Future<void> updateAccountValuation(int accountId, double newValue) =>
+      _accountRepo.updateAccountValuation(accountId, newValue);
+
   // ============================================
   // StatisticsRepository 接口实现 - 委托给 LocalStatisticsRepository
   // ============================================

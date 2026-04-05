@@ -107,9 +107,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                   child: Text(
                     l10n.calendarToday,
                     style: TextStyle(
-                      color: BeeTokens.isDark(context)
-                          ? primaryColor
-                          : Colors.white,
+                      color: BeeTokens.textPrimary(context),
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),

@@ -1045,6 +1045,9 @@ class _AccountCard extends ConsumerWidget {
                     // 信用卡：进度条 + 额度信息
                     if (account.type == 'credit_card' && account.creditLimit != null && stats != null)
                       _buildCreditCardStats(context, ref, l10n, isDark)
+                    // 估值账户：仅显示当前估值
+                    else if (isValuationOnlyType(account.type) && stats != null)
+                      _buildValuationStats(context, ref, l10n, isDark)
                     // 普通账户：余额/收入/支出
                     else if (stats != null)
                       _buildNormalStats(context, ref, l10n, isDark)
@@ -1115,6 +1118,65 @@ class _AccountCard extends ConsumerWidget {
             ref: ref,
           ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildValuationStats(BuildContext context, WidgetRef ref, AppLocalizations l10n, bool isDark) {
+    final textColor = isDark ? Colors.white.withValues(alpha: 0.9) : Colors.white;
+    final labelColor = isDark ? Colors.white.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.8);
+    final isLiability = isLiabilityType(account.type);
+    final displayValue = isLiability ? stats!.balance.abs() : stats!.balance;
+    final label = isLiability ? l10n.valuationCurrentDebt : l10n.valuationCurrentValue;
+
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: labelColor,
+                ),
+              ),
+              SizedBox(height: 2.0.scaled(context, ref)),
+              AmountText(
+                value: displayValue,
+                signed: false,
+                showCurrency: false,
+                useCompactFormat: ref.watch(compactAmountProvider),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (account.updatedAt != null)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Icon(
+                Icons.update,
+                size: 14.0.scaled(context, ref),
+                color: labelColor,
+              ),
+              SizedBox(height: 2.0.scaled(context, ref)),
+              Text(
+                '${account.updatedAt!.month.toString().padLeft(2, '0')}-${account.updatedAt!.day.toString().padLeft(2, '0')}',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: labelColor,
+                ),
+              ),
+            ],
+          ),
       ],
     );
   }

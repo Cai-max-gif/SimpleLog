@@ -17,19 +17,43 @@ bool isAssetType(String type) => !isLiabilityType(type);
 
 /// 是否为负债类型
 bool isLiabilityType(String type) {
-  return type == 'credit_card';
+  return type == 'credit_card' || type == 'loan';
 }
+
+/// 估值账户类型（资产类）
+const valuationOnlyAssetTypes = [
+  'real_estate', 'vehicle', 'investment', 'insurance', 'social_fund',
+];
+
+/// 估值账户类型（负债类）
+const valuationOnlyLiabilityTypes = ['loan'];
+
+/// 所有估值账户类型
+const valuationOnlyTypes = [
+  ...valuationOnlyAssetTypes,
+  ...valuationOnlyLiabilityTypes,
+];
+
+/// 是否为估值账户类型（不参与日常记账）
+bool isValuationOnlyType(String type) => valuationOnlyTypes.contains(type);
+
+/// 是否为可交易账户类型（参与日常记账）
+bool isTradableType(String type) => !isValuationOnlyType(type);
 
 /// 账户类型常量（完整排序）
 const accountTypeOrder = [
   'cash', 'bank_card', 'credit_card', 'alipay', 'wechat', 'other',
+  'real_estate', 'vehicle', 'investment', 'insurance', 'social_fund', 'loan',
 ];
 
 /// 资产类型排序
-const assetTypeOrder = ['cash', 'bank_card', 'alipay', 'wechat', 'other'];
+const assetTypeOrder = [
+  'cash', 'bank_card', 'alipay', 'wechat', 'other',
+  'real_estate', 'vehicle', 'investment', 'insurance', 'social_fund',
+];
 
 /// 负债类型排序
-const liabilityTypeOrder = ['credit_card'];
+const liabilityTypeOrder = ['credit_card', 'loan'];
 
 /// 获取账户类型的 Material 图标（备用，用于无 SVG 的场景）
 IconData getIconForAccountType(String type) {
@@ -50,6 +74,14 @@ IconData getIconForAccountType(String type) {
       return Icons.house_outlined;
     case 'receivable':
       return Icons.call_received;
+    case 'real_estate':
+      return Icons.home_outlined;
+    case 'vehicle':
+      return Icons.directions_car_outlined;
+    case 'insurance':
+      return Icons.health_and_safety_outlined;
+    case 'social_fund':
+      return Icons.account_balance_outlined;
     case 'other':
       return Icons.account_balance_outlined;
     default:
@@ -77,6 +109,14 @@ String getAccountTypeLabel(BuildContext context, String type) {
       return l10n.accountTypeLoan;
     case 'receivable':
       return l10n.accountTypeReceivable;
+    case 'real_estate':
+      return l10n.accountTypeRealEstate;
+    case 'vehicle':
+      return l10n.accountTypeVehicle;
+    case 'insurance':
+      return l10n.accountTypeInsurance;
+    case 'social_fund':
+      return l10n.accountTypeSocialFund;
     case 'other':
       return l10n.accountTypeOther;
     default:
@@ -103,6 +143,14 @@ Color getColorForAccountType(String type, Color primaryColor) {
       return const Color(0xFFE91E63);
     case 'receivable':
       return const Color(0xFF009688);
+    case 'real_estate':
+      return const Color(0xFF795548);
+    case 'vehicle':
+      return const Color(0xFF607D8B);
+    case 'insurance':
+      return const Color(0xFF4CAF50);
+    case 'social_fund':
+      return const Color(0xFF3F51B5);
     default:
       return primaryColor;
   }
@@ -127,6 +175,14 @@ String _getSvgPath(String type) {
       return 'assets/icons/loan.svg';
     case 'receivable':
       return 'assets/icons/receivable.svg';
+    case 'real_estate':
+      return 'assets/icons/real_estate.svg';
+    case 'vehicle':
+      return 'assets/icons/vehicle.svg';
+    case 'insurance':
+      return 'assets/icons/insurance.svg';
+    case 'social_fund':
+      return 'assets/icons/social_fund.svg';
     case 'other':
       return 'assets/icons/other_account.svg';
     default:

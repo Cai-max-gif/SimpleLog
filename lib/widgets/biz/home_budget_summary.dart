@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/budget_repository.dart';
 import '../../providers/budget_providers.dart';
 import '../../styles/tokens.dart';
+import '../../l10n/app_localizations.dart';
 import '../../pages/budget/budget_page.dart';
 
 /// 首页 Header 底部预算进度条
@@ -83,7 +84,7 @@ class _BudgetProgressBar extends ConsumerWidget {
             // 百分比居中
             Center(
               child: Text(
-                '$displayRate%',
+                '${AppLocalizations.of(context).budgetUsed} $displayRate%',
                 style: TextStyle(
                   fontSize: 9,
                   fontWeight: FontWeight.w600,

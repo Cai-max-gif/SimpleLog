@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../widgets/biz/bee_icon.dart';
 import 'dart:io';
 import '../../l10n/app_localizations.dart';
 import '../../utils/file_picker_helper.dart';
@@ -192,11 +192,10 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               color: Colors.white.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: SvgPicture.asset(
-                'assets/logo.svg',
-                fit: BoxFit.contain,
+            child: Center(
+              child: BeeIcon(
+                color: Colors.white,
+                size: 72,
               ),
             ),
           ),

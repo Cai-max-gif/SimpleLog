@@ -190,7 +190,14 @@ class LocalAccountRepository implements AccountRepository {
           ..where((a) => a.id.equals(accountId)))
         .getSingleOrNull();
 
-    double balance = account?.initialBalance ?? 0.0;
+    if (account == null) return 0.0;
+
+    // 估值账户直接返回 initialBalance 作为当前估值
+    if (isValuationOnlyType(account.type)) {
+      return account.initialBalance;
+    }
+
+    double balance = account.initialBalance;
 
     // 收入和支出
     final normalTxs = await (db.select(db.transactions)
@@ -227,6 +234,11 @@ class LocalAccountRepository implements AccountRepository {
     final account = await (db.select(db.accounts)
           ..where((a) => a.id.equals(accountId)))
         .getSingle();
+
+    // 估值账户直接返回 initialBalance
+    if (isValuationOnlyType(account.type)) {
+      return account.initialBalance;
+    }
 
     // 获取所有交易
     final transactions = await (db.select(db.transactions)
@@ -584,6 +596,18 @@ class LocalAccountRepository implements AccountRepository {
     final account = await getAccount(accountId);
     if (account == null) return [];
 
+    // 估值账户：每天返回固定估值
+    if (isValuationOnlyType(account.type)) {
+      final result = <({DateTime date, double balance})>[];
+      var currentDate = DateTime(startDate.year, startDate.month, startDate.day);
+      final end = DateTime(endDate.year, endDate.month, endDate.day);
+      while (!currentDate.isAfter(end)) {
+        result.add((date: currentDate, balance: account.initialBalance));
+        currentDate = currentDate.add(const Duration(days: 1));
+      }
+      return result;
+    }
+
     // 获取 endDate 之前的所有交易（按日期升序）
     final allTxs = await (db.select(db.transactions)
           ..where((t) => t.accountId.equals(accountId) | t.toAccountId.equals(accountId))
@@ -782,5 +806,15 @@ class LocalAccountRepository implements AccountRepository {
     return typeBalances.entries
         .map((e) => (type: e.key, totalBalance: e.value))
         .toList();
+  }
+
+  @override
+  Future<void> updateAccountValuation(int accountId, double newValue) async {
+    await (db.update(db.accounts)..where((a) => a.id.equals(accountId))).write(
+      AccountsCompanion(
+        initialBalance: d.Value(newValue),
+        updatedAt: d.Value(DateTime.now()),
+      ),
+    );
   }
 }

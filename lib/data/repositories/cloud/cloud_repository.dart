@@ -979,6 +979,10 @@ class CloudRepository extends BaseRepository {
       _account.getAssetCompositionByType();
 
   @override
+  Future<void> updateAccountValuation(int accountId, double newValue) =>
+      _account.updateAccountValuation(accountId, newValue);
+
+  @override
   Future<void> batchInsertCategories(List<CategoriesCompanion> categories) =>
       _category.batchInsertCategories(categories);
 

@@ -2960,6 +2960,66 @@ class AppLocalizationsEn extends AppLocalizations {
   String get currencyMXN => 'Mexican Peso';
 
   @override
+  String get currencyTRY => 'Turkish Lira';
+
+  @override
+  String get currencyZAR => 'South African Rand';
+
+  @override
+  String get currencyAED => 'UAE Dirham';
+
+  @override
+  String get currencySAR => 'Saudi Riyal';
+
+  @override
+  String get currencyPLN => 'Polish Zloty';
+
+  @override
+  String get currencyCZK => 'Czech Koruna';
+
+  @override
+  String get currencyHUF => 'Hungarian Forint';
+
+  @override
+  String get currencyARS => 'Argentine Peso';
+
+  @override
+  String get currencyCLP => 'Chilean Peso';
+
+  @override
+  String get currencyCOP => 'Colombian Peso';
+
+  @override
+  String get currencyPEN => 'Peruvian Sol';
+
+  @override
+  String get currencyEGP => 'Egyptian Pound';
+
+  @override
+  String get currencyNGN => 'Nigerian Naira';
+
+  @override
+  String get currencyKZT => 'Kazakhstani Tenge';
+
+  @override
+  String get currencyUAH => 'Ukrainian Hryvnia';
+
+  @override
+  String get currencyILS => 'Israeli New Shekel';
+
+  @override
+  String get currencyPKR => 'Pakistani Rupee';
+
+  @override
+  String get currencyBDT => 'Bangladeshi Taka';
+
+  @override
+  String get currencyLKR => 'Sri Lankan Rupee';
+
+  @override
+  String get currencyMMK => 'Myanmar Kyat';
+
+  @override
   String get webdavConfiguredTitle => 'WebDAV Cloud Service Configured';
 
   @override
@@ -3950,7 +4010,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutSupportDevelopmentSubtitle => 'Buy me a coffee';
 
   @override
-  String get aboutRelatedProducts => 'Bee Family';
+  String get aboutDeveloperStoryTitle => 'From the Developer';
+
+  @override
+  String get aboutDeveloperStory => 'I started tracking my expenses in 2015 as an intern, and I\'ve kept the habit for over a decade. Concerned about ads, paywalls, privacy risks, and apps shutting down, I decided to build my own — first as a small tool for myself and my family.\n\nIn September 2025, BeeCount launched its first version. Honestly, I had no idea if anyone would use it. But gradually, feedback started coming in — someone said they finally found a clean budgeting app, others offered great suggestions, and some quietly left five-star reviews. Every single message reminded me this was worth continuing.\n\nBeeCount is ad-free, subscription-free, and fully open source. All your data stays on your device and is never uploaded to any third-party server. But publishing and maintaining an app isn\'t free — developer accounts, servers, and other costs are currently covered by community donations, and every system update, bug fix, and new feature is built outside of my day job.\n\nIf BeeCount has been helpful to you, a rating, a share, or a donation would help this little project go further. Thank you for your trust.';
+
+  @override
+  String get aboutRelatedProducts => 'More Products';
 
   @override
   String get aboutBeeDNS => 'BeeDNS';
@@ -5615,6 +5681,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountTypeReceivable => 'Receivable';
+
+  @override
+  String get accountTypeRealEstate => 'Real Estate';
+
+  @override
+  String get accountTypeVehicle => 'Vehicle';
+
+  @override
+  String get accountTypeInsurance => 'Insurance';
+
+  @override
+  String get accountTypeSocialFund => 'Social Fund';
+
+  @override
+  String get valuationCurrentValue => 'Current Valuation';
+
+  @override
+  String get valuationCurrentDebt => 'Current Debt';
+
+  @override
+  String get valuationUpdateValue => 'Update Valuation';
+
+  @override
+  String get valuationUpdateDebt => 'Update Debt';
+
+  @override
+  String valuationLastUpdated(String date) {
+    return 'Last updated: $date';
+  }
+
+  @override
+  String get valuationAccountHint => 'Enter current valuation';
+
+  @override
+  String get valuationDebtHint => 'Enter current debt amount';
+
+  @override
+  String get accountGroupTradable => 'Daily Accounts';
+
+  @override
+  String get accountGroupValuation => 'Assets/Liabilities';
 
   @override
   String get adjustmentTransaction => 'Valuation Adjustment';

@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import '../../data/db.dart';
 import '../../styles/tokens.dart';
 import '../../utils/lru_cache.dart';
+import '../../utils/account_type_utils.dart';
 import '../../providers.dart';
 import '../../services/system/logger_service.dart';
 
@@ -57,9 +58,11 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
         return;
       }
 
-      // 获取所有账户，然后过滤与当前账本币种相同的账户
+      // 获取所有账户，然后过滤与当前账本币种相同的可交易账户
       final allAccounts = await repo.getAllAccounts();
-      final accounts = allAccounts.where((a) => a.currency == ledger.currency).toList();
+      final accounts = allAccounts
+          .where((a) => a.currency == ledger.currency && isTradableType(a.type))
+          .toList();
 
       // 获取 LRU 排序
       final lruOrder = await _lruCache.getOrderedIds();

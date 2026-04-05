@@ -46,14 +46,24 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
   bool _isNameDuplicate = false;
   String? _nameErrorText;
 
-  // 预设账户类型
-  static const List<String> accountTypes = [
+  // 可交易账户类型
+  static const List<String> tradableAccountTypes = [
     'cash',
     'bank_card',
     'credit_card',
     'alipay',
     'wechat',
     'other',
+  ];
+
+  // 估值账户类型
+  static const List<String> valuationAccountTypes = [
+    'real_estate',
+    'vehicle',
+    'investment',
+    'insurance',
+    'social_fund',
+    'loan',
   ];
 
   @override
@@ -63,7 +73,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
     _initialBalanceController = TextEditingController(
       text: widget.account?.initialBalance != null &&
               widget.account!.initialBalance != 0.0
-          ? widget.account!.initialBalance.toStringAsFixed(2)
+          ? widget.account!.initialBalance.abs().toStringAsFixed(2)
           : '',
     );
     _creditLimitController = TextEditingController(
@@ -109,10 +119,20 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
   bool get isEditing => widget.account != null;
 
   String _getInitialBalanceLabel(AppLocalizations l10n) {
+    if (isValuationOnlyType(_selectedType)) {
+      return isLiabilityType(_selectedType)
+          ? l10n.valuationCurrentDebt
+          : l10n.valuationCurrentValue;
+    }
     return l10n.accountInitialBalance;
   }
 
   String _getInitialBalanceHint(AppLocalizations l10n) {
+    if (isValuationOnlyType(_selectedType)) {
+      return isLiabilityType(_selectedType)
+          ? l10n.valuationDebtHint
+          : l10n.valuationAccountHint;
+    }
     switch (_selectedType) {
       case 'credit_card':
         return l10n.creditCardInitialBalanceHint;
@@ -250,7 +270,7 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            l10n.accountTypeLabel,
+                            l10n.accountGroupTradable,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
@@ -265,14 +285,17 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                             mainAxisSpacing: 12.0.scaled(context, ref),
                             crossAxisSpacing: 12.0.scaled(context, ref),
                             childAspectRatio: 1.2,
-                            children: accountTypes.map((type) {
+                            children: tradableAccountTypes.map((type) {
                               final isSelected = _selectedType == type;
+                              // 编辑模式下，如果当前是估值账户则禁止选择可交易类型
+                              final disabled = isEditing && isValuationOnlyType(widget.account!.type);
                               return _AccountTypeCard(
                                 type: type,
                                 label: getAccountTypeLabel(context, type),
                                 isSelected: isSelected,
                                 primaryColor: primaryColor,
-                                onTap: () {
+                                disabled: disabled,
+                                onTap: disabled ? () {} : () {
                                   setState(() {
                                     final oldType = _selectedType;
                                     _selectedType = type;
@@ -290,6 +313,48 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
                                       _bankNameController.clear();
                                       _cardLastFourController.clear();
                                     }
+                                  });
+                                },
+                              );
+                            }).toList(),
+                          ),
+                          SizedBox(height: 20.0.scaled(context, ref)),
+                          Text(
+                            l10n.accountGroupValuation,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: BeeTokens.textPrimary(context),
+                            ),
+                          ),
+                          SizedBox(height: 16.0.scaled(context, ref)),
+                          GridView.count(
+                            crossAxisCount: 3,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            mainAxisSpacing: 12.0.scaled(context, ref),
+                            crossAxisSpacing: 12.0.scaled(context, ref),
+                            childAspectRatio: 1.2,
+                            children: valuationAccountTypes.map((type) {
+                              final isSelected = _selectedType == type;
+                              // 编辑模式下，如果当前是可交易账户则禁止选择估值类型
+                              final disabled = isEditing && isTradableType(widget.account!.type);
+                              return _AccountTypeCard(
+                                type: type,
+                                label: getAccountTypeLabel(context, type),
+                                isSelected: isSelected,
+                                primaryColor: primaryColor,
+                                disabled: disabled,
+                                onTap: disabled ? () {} : () {
+                                  setState(() {
+                                    _selectedType = type;
+                                    // 清空不相关字段
+                                    _creditLimitController.clear();
+                                    _billingDay = null;
+                                    _paymentDueDay = null;
+                                    _reminderEnabled = false;
+                                    _bankNameController.clear();
+                                    _cardLastFourController.clear();
                                   });
                                 },
                               );
@@ -728,6 +793,11 @@ class _AccountEditPageState extends ConsumerState<AccountEditPage> {
       var initialBalance =
           initialBalanceText.isEmpty ? 0.0 : double.parse(initialBalanceText);
 
+      // 贷款类型：用户输入正数，存储为负数
+      if (_selectedType == 'loan' && initialBalance > 0) {
+        initialBalance = -initialBalance;
+      }
+
       // 信用卡字段
       final isCreditCard = _selectedType == 'credit_card';
       final creditLimitText = _creditLimitController.text.trim();
@@ -1134,6 +1204,7 @@ class _AccountTypeCard extends ConsumerWidget {
   final bool isSelected;
   final Color primaryColor;
   final VoidCallback onTap;
+  final bool disabled;
 
   const _AccountTypeCard({
     required this.type,
@@ -1141,41 +1212,46 @@ class _AccountTypeCard extends ConsumerWidget {
     required this.isSelected,
     required this.primaryColor,
     required this.onTap,
+    this.disabled = false,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8.0.scaled(context, ref)),
-      child: Container(
-        decoration: BoxDecoration(
-          color:
-              isSelected ? primaryColor.withValues(alpha: 0.12) : BeeTokens.surfaceElevated(context),
-          border: Border.all(
-            color: isSelected ? primaryColor : BeeTokens.border(context),
-            width: isSelected ? 2 : 1,
+    final effectiveOpacity = disabled ? 0.4 : 1.0;
+    return Opacity(
+      opacity: effectiveOpacity,
+      child: InkWell(
+        onTap: disabled ? null : onTap,
+        borderRadius: BorderRadius.circular(8.0.scaled(context, ref)),
+        child: Container(
+          decoration: BoxDecoration(
+            color:
+                isSelected ? primaryColor.withValues(alpha: 0.12) : BeeTokens.surfaceElevated(context),
+            border: Border.all(
+              color: isSelected ? primaryColor : BeeTokens.border(context),
+              width: isSelected ? 2 : 1,
+            ),
+            borderRadius: BorderRadius.circular(8.0.scaled(context, ref)),
           ),
-          borderRadius: BorderRadius.circular(8.0.scaled(context, ref)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AccountTypeIcon(
-              type: type,
-              size: 28.0.scaled(context, ref),
-            ),
-            SizedBox(height: 8.0.scaled(context, ref)),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                color: isSelected ? primaryColor : BeeTokens.textSecondary(context),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AccountTypeIcon(
+                type: type,
+                size: 28.0.scaled(context, ref),
               ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+              SizedBox(height: 8.0.scaled(context, ref)),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                  color: isSelected ? primaryColor : BeeTokens.textSecondary(context),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

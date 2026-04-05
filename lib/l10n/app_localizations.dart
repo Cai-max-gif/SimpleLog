@@ -5598,6 +5598,126 @@ abstract class AppLocalizations {
   /// **'Mexican Peso'**
   String get currencyMXN;
 
+  /// No description provided for @currencyTRY.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkish Lira'**
+  String get currencyTRY;
+
+  /// No description provided for @currencyZAR.
+  ///
+  /// In en, this message translates to:
+  /// **'South African Rand'**
+  String get currencyZAR;
+
+  /// No description provided for @currencyAED.
+  ///
+  /// In en, this message translates to:
+  /// **'UAE Dirham'**
+  String get currencyAED;
+
+  /// No description provided for @currencySAR.
+  ///
+  /// In en, this message translates to:
+  /// **'Saudi Riyal'**
+  String get currencySAR;
+
+  /// No description provided for @currencyPLN.
+  ///
+  /// In en, this message translates to:
+  /// **'Polish Zloty'**
+  String get currencyPLN;
+
+  /// No description provided for @currencyCZK.
+  ///
+  /// In en, this message translates to:
+  /// **'Czech Koruna'**
+  String get currencyCZK;
+
+  /// No description provided for @currencyHUF.
+  ///
+  /// In en, this message translates to:
+  /// **'Hungarian Forint'**
+  String get currencyHUF;
+
+  /// No description provided for @currencyARS.
+  ///
+  /// In en, this message translates to:
+  /// **'Argentine Peso'**
+  String get currencyARS;
+
+  /// No description provided for @currencyCLP.
+  ///
+  /// In en, this message translates to:
+  /// **'Chilean Peso'**
+  String get currencyCLP;
+
+  /// No description provided for @currencyCOP.
+  ///
+  /// In en, this message translates to:
+  /// **'Colombian Peso'**
+  String get currencyCOP;
+
+  /// No description provided for @currencyPEN.
+  ///
+  /// In en, this message translates to:
+  /// **'Peruvian Sol'**
+  String get currencyPEN;
+
+  /// No description provided for @currencyEGP.
+  ///
+  /// In en, this message translates to:
+  /// **'Egyptian Pound'**
+  String get currencyEGP;
+
+  /// No description provided for @currencyNGN.
+  ///
+  /// In en, this message translates to:
+  /// **'Nigerian Naira'**
+  String get currencyNGN;
+
+  /// No description provided for @currencyKZT.
+  ///
+  /// In en, this message translates to:
+  /// **'Kazakhstani Tenge'**
+  String get currencyKZT;
+
+  /// No description provided for @currencyUAH.
+  ///
+  /// In en, this message translates to:
+  /// **'Ukrainian Hryvnia'**
+  String get currencyUAH;
+
+  /// No description provided for @currencyILS.
+  ///
+  /// In en, this message translates to:
+  /// **'Israeli New Shekel'**
+  String get currencyILS;
+
+  /// No description provided for @currencyPKR.
+  ///
+  /// In en, this message translates to:
+  /// **'Pakistani Rupee'**
+  String get currencyPKR;
+
+  /// No description provided for @currencyBDT.
+  ///
+  /// In en, this message translates to:
+  /// **'Bangladeshi Taka'**
+  String get currencyBDT;
+
+  /// No description provided for @currencyLKR.
+  ///
+  /// In en, this message translates to:
+  /// **'Sri Lankan Rupee'**
+  String get currencyLKR;
+
+  /// No description provided for @currencyMMK.
+  ///
+  /// In en, this message translates to:
+  /// **'Myanmar Kyat'**
+  String get currencyMMK;
+
   /// No description provided for @webdavConfiguredTitle.
   ///
   /// In en, this message translates to:
@@ -7530,10 +7650,22 @@ abstract class AppLocalizations {
   /// **'Buy me a coffee'**
   String get aboutSupportDevelopmentSubtitle;
 
+  /// No description provided for @aboutDeveloperStoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'From the Developer'**
+  String get aboutDeveloperStoryTitle;
+
+  /// No description provided for @aboutDeveloperStory.
+  ///
+  /// In en, this message translates to:
+  /// **'I started tracking my expenses in 2015 as an intern, and I\'ve kept the habit for over a decade. Concerned about ads, paywalls, privacy risks, and apps shutting down, I decided to build my own — first as a small tool for myself and my family.\n\nIn September 2025, BeeCount launched its first version. Honestly, I had no idea if anyone would use it. But gradually, feedback started coming in — someone said they finally found a clean budgeting app, others offered great suggestions, and some quietly left five-star reviews. Every single message reminded me this was worth continuing.\n\nBeeCount is ad-free, subscription-free, and fully open source. All your data stays on your device and is never uploaded to any third-party server. But publishing and maintaining an app isn\'t free — developer accounts, servers, and other costs are currently covered by community donations, and every system update, bug fix, and new feature is built outside of my day job.\n\nIf BeeCount has been helpful to you, a rating, a share, or a donation would help this little project go further. Thank you for your trust.'**
+  String get aboutDeveloperStory;
+
   /// No description provided for @aboutRelatedProducts.
   ///
   /// In en, this message translates to:
-  /// **'Bee Family'**
+  /// **'More Products'**
   String get aboutRelatedProducts;
 
   /// No description provided for @aboutBeeDNS.
@@ -10715,6 +10847,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Receivable'**
   String get accountTypeReceivable;
+
+  /// No description provided for @accountTypeRealEstate.
+  ///
+  /// In en, this message translates to:
+  /// **'Real Estate'**
+  String get accountTypeRealEstate;
+
+  /// No description provided for @accountTypeVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle'**
+  String get accountTypeVehicle;
+
+  /// No description provided for @accountTypeInsurance.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance'**
+  String get accountTypeInsurance;
+
+  /// No description provided for @accountTypeSocialFund.
+  ///
+  /// In en, this message translates to:
+  /// **'Social Fund'**
+  String get accountTypeSocialFund;
+
+  /// No description provided for @valuationCurrentValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Valuation'**
+  String get valuationCurrentValue;
+
+  /// No description provided for @valuationCurrentDebt.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Debt'**
+  String get valuationCurrentDebt;
+
+  /// No description provided for @valuationUpdateValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Valuation'**
+  String get valuationUpdateValue;
+
+  /// No description provided for @valuationUpdateDebt.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Debt'**
+  String get valuationUpdateDebt;
+
+  /// No description provided for @valuationLastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated: {date}'**
+  String valuationLastUpdated(String date);
+
+  /// No description provided for @valuationAccountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter current valuation'**
+  String get valuationAccountHint;
+
+  /// No description provided for @valuationDebtHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter current debt amount'**
+  String get valuationDebtHint;
+
+  /// No description provided for @accountGroupTradable.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Accounts'**
+  String get accountGroupTradable;
+
+  /// No description provided for @accountGroupValuation.
+  ///
+  /// In en, this message translates to:
+  /// **'Assets/Liabilities'**
+  String get accountGroupValuation;
 
   /// No description provided for @adjustmentTransaction.
   ///

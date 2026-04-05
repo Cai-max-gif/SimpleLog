@@ -689,19 +689,21 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    ConstrainedBox(
-                                      constraints:
-                                          const BoxConstraints(maxWidth: 80),
-                                      child: Text(
-                                        ledger?.name ?? '',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge
-                                              ?.color,
+                                    Flexible(
+                                      child: ConstrainedBox(
+                                        constraints:
+                                            const BoxConstraints(maxWidth: 120),
+                                        child: Text(
+                                          ledger?.name ?? '',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.color,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -728,6 +730,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                         if (aiEnabled)
                           IconButton(
                             tooltip: AppLocalizations.of(context).aiChatTitle,
+                            padding: const EdgeInsets.all(8),
+                            style: IconButton.styleFrom(
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              minimumSize: Size.zero,
+                            ),
                             onPressed: () {
                               _transactionListKey.currentState
                                   ?.switchToStreamMode();
@@ -738,13 +745,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                               );
                             },
                             icon: Icon(
-                              Icons.chat_bubble_outline,
+                              Icons.auto_awesome_outlined,
                               size: 20,
                               color: Theme.of(context).iconTheme.color,
                             ),
                           ),
                         IconButton(
                           tooltip: AppLocalizations.of(context).calendarTitle,
+                          padding: const EdgeInsets.all(6),
+                          style: IconButton.styleFrom(
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            minimumSize: Size.zero,
+                          ),
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -761,6 +773,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                         IconButton(
                           tooltip: AppLocalizations.of(context).homeSearch,
+                          padding: const EdgeInsets.all(6),
+                          style: IconButton.styleFrom(
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            minimumSize: Size.zero,
+                          ),
                           onPressed: () {
                             _transactionListKey.currentState
                                 ?.switchToStreamMode();

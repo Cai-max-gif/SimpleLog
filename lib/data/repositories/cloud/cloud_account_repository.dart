@@ -6,6 +6,7 @@ import 'package:flutter_cloud_sync/flutter_cloud_sync.dart';
 import '../../db.dart';
 import '../account_repository.dart';
 import '../../../services/system/logger_service.dart';
+import '../../../utils/account_type_utils.dart';
 
 /// 云端账户Repository实现
 /// 基于 Supabase 实现
@@ -293,6 +294,11 @@ class CloudAccountRepository implements AccountRepository {
   Future<double> getAccountBalance(int accountId) async {
     final account = await getAccount(accountId);
     if (account == null) return 0.0;
+
+    // 估值账户直接返回 initialBalance
+    if (isValuationOnlyType(account.type)) {
+      return account.initialBalance;
+    }
 
     // 获取该账户的所有交易
     final transactions = await supabase.databaseService!.query(
@@ -760,5 +766,17 @@ class CloudAccountRepository implements AccountRepository {
   Future<List<({String type, double totalBalance})>> getAssetCompositionByType() async {
     logger.warning('CloudAccount', '云端模式暂不支持资产构成');
     return [];
+  }
+
+  @override
+  Future<void> updateAccountValuation(int accountId, double newValue) async {
+    await supabase.databaseService!.update(
+      table: 'accounts',
+      id: accountId.toString(),
+      data: {
+        'initial_balance': newValue,
+        'updated_at': DateTime.now().toIso8601String(),
+      },
+    );
   }
 }

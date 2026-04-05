@@ -9,10 +9,12 @@ import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/ui_scale_extensions.dart';
 import '../../utils/transaction_edit_utils.dart';
+import '../../utils/currencies.dart';
 import '../../widgets/category_icon.dart';
 import '../../utils/account_type_utils.dart';
 import '../../widgets/charts/account_category_pie_chart.dart';
 import '../transaction/transaction_editor_page.dart';
+import 'account_edit_page.dart';
 
 // ============================================
 // Providers
@@ -185,6 +187,7 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
     final account = widget.account;
     final isDark = BeeTokens.isDark(context);
     final typeColor = getColorForAccountType(account.type, primaryColor);
+    final isValuation = isValuationOnlyType(account.type);
 
     return Scaffold(
       backgroundColor: BeeTokens.scaffoldBackground(context),
@@ -196,6 +199,31 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
             subtitle: getAccountTypeLabel(context, account.type),
             showBack: true,
             compact: true,
+            actions: [
+              IconButton(
+                icon: Icon(
+                  Icons.edit_outlined,
+                  color: BeeTokens.iconPrimary(context),
+                  size: 20,
+                ),
+                onPressed: () async {
+                  final currentLedger = ref.read(currentLedgerProvider).asData?.value;
+                  if (currentLedger == null) return;
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AccountEditPage(
+                        account: account,
+                        ledgerId: currentLedger.id,
+                      ),
+                    ),
+                  );
+                  if (result == true && mounted) {
+                    Navigator.pop(context, true);
+                  }
+                },
+              ),
+            ],
           ),
           Expanded(
             child: ListView(
@@ -205,35 +233,40 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
                 vertical: 8.0.scaled(context, ref),
               ),
               children: [
-                // 0. 余额/收入/支出统计卡片
-                _buildStatsCard(context, ref, account, statsAsync, currencyCode, l10n),
-                SizedBox(height: 4.0.scaled(context, ref)),
-                // 1. 账户概览卡片（合并 metadata + 类型统计）
-                _buildOverviewCard(
-                  context, ref, account, statsAsync,
-                  currencyCode, primaryColor, typeColor, l10n,
-                ),
+                if (isValuation) ...[
+                  // 估值账户：显示估值卡片
+                  _buildValuationCard(context, ref, account, statsAsync, currencyCode, primaryColor, l10n),
+                ] else ...[
+                  // 可交易账户：余额/收入/支出统计卡片
+                  _buildStatsCard(context, ref, account, statsAsync, currencyCode, l10n),
+                  SizedBox(height: 4.0.scaled(context, ref)),
+                  // 账户概览卡片（合并 metadata + 类型统计）
+                  _buildOverviewCard(
+                    context, ref, account, statsAsync,
+                    currencyCode, primaryColor, typeColor, l10n,
+                  ),
 
-                SizedBox(height: 8.0.scaled(context, ref)),
+                  SizedBox(height: 8.0.scaled(context, ref)),
 
-                // 2. 图表区域（支出分布/收入分布 切换）
-                _buildDetailChartSection(
-                  context, ref, l10n, primaryColor,
-                  expenseStatsAsync, incomeStatsAsync, typeColor,
-                ),
+                  // 图表区域（支出分布/收入分布 切换）
+                  _buildDetailChartSection(
+                    context, ref, l10n, primaryColor,
+                    expenseStatsAsync, incomeStatsAsync, typeColor,
+                  ),
 
-                SizedBox(height: 12.0.scaled(context, ref)),
+                  SizedBox(height: 12.0.scaled(context, ref)),
 
-                // 3. 交易列表（分页）
-                _buildTransactionList(
-                  context,
-                  paginationState,
-                  currencyCode,
-                  primaryColor,
-                  categoriesAsync.asData?.value ?? [],
-                  l10n,
-                  typeColor,
-                ),
+                  // 交易列表（分页）
+                  _buildTransactionList(
+                    context,
+                    paginationState,
+                    currencyCode,
+                    primaryColor,
+                    categoriesAsync.asData?.value ?? [],
+                    l10n,
+                    typeColor,
+                  ),
+                ],
               ],
             ),
           ),
@@ -298,6 +331,183 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
         error: (_, __) => const SizedBox.shrink(),
       ),
     );
+  }
+
+  /// 估值账户专属卡片
+  Widget _buildValuationCard(
+    BuildContext context,
+    WidgetRef ref,
+    db.Account account,
+    AsyncValue<({double balance, double income, double expense})> statsAsync,
+    String currencyCode,
+    Color primaryColor,
+    AppLocalizations l10n,
+  ) {
+    final isLiability = isLiabilityType(account.type);
+    final valueLabel = isLiability ? l10n.valuationCurrentDebt : l10n.valuationCurrentValue;
+    final updateLabel = isLiability ? l10n.valuationUpdateDebt : l10n.valuationUpdateValue;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.0.scaled(context, ref)),
+      child: SectionCard(
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: EdgeInsets.all(20.0.scaled(context, ref)),
+          child: Column(
+            children: [
+              // 类型图标
+              AccountTypeIcon(
+                type: account.type,
+                size: 48.0.scaled(context, ref),
+              ),
+              SizedBox(height: 12.0.scaled(context, ref)),
+              // 标签
+              Text(
+                valueLabel,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: BeeTokens.textSecondary(context),
+                ),
+              ),
+              SizedBox(height: 6.0.scaled(context, ref)),
+              // 金额
+              statsAsync.when(
+                data: (stats) => AmountText(
+                  value: isLiability ? stats.balance.abs() : stats.balance,
+                  signed: false,
+                  showCurrency: true,
+                  useCompactFormat: ref.watch(compactAmountProvider),
+                  currencyCode: currencyCode,
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: BeeTokens.textPrimary(context),
+                  ),
+                ),
+                loading: () => SizedBox(
+                  height: 36.0.scaled(context, ref),
+                  child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                ),
+                error: (_, __) => const Text('-'),
+              ),
+              SizedBox(height: 8.0.scaled(context, ref)),
+              // 上次更新时间
+              if (account.updatedAt != null)
+                Text(
+                  l10n.valuationLastUpdated(
+                    '${account.updatedAt!.year}-${account.updatedAt!.month.toString().padLeft(2, '0')}-${account.updatedAt!.day.toString().padLeft(2, '0')}',
+                  ),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: BeeTokens.textTertiary(context),
+                  ),
+                ),
+              // 备注
+              if (account.note != null && account.note!.isNotEmpty) ...[
+                SizedBox(height: 8.0.scaled(context, ref)),
+                Text(
+                  account.note!,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: BeeTokens.textSecondary(context),
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+              SizedBox(height: 16.0.scaled(context, ref)),
+              // 更新估值按钮
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () => _showUpdateValuationDialog(
+                    context, ref, account, isLiability, currencyCode, l10n,
+                  ),
+                  icon: Icon(Icons.edit_outlined, size: 16, color: Colors.white),
+                  label: Text(updateLabel),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    padding: EdgeInsets.symmetric(vertical: 12.0.scaled(context, ref)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0.scaled(context, ref)),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 更新估值弹窗
+  Future<void> _showUpdateValuationDialog(
+    BuildContext context,
+    WidgetRef ref,
+    db.Account account,
+    bool isLiability,
+    String currencyCode,
+    AppLocalizations l10n,
+  ) async {
+    final controller = TextEditingController(
+      text: account.initialBalance.abs().toStringAsFixed(2),
+    );
+
+    final result = await showDialog<double>(
+      context: context,
+      builder: (ctx) {
+        final primaryColor = ref.watch(primaryColorProvider);
+        return AlertDialog(
+          title: Text(isLiability ? l10n.valuationUpdateDebt : l10n.valuationUpdateValue),
+          content: TextField(
+            controller: controller,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            autofocus: true,
+            decoration: InputDecoration(
+              prefixText: '${getCurrencySymbol(currencyCode)} ',
+              hintText: isLiability ? l10n.valuationDebtHint : l10n.valuationAccountHint,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(l10n.commonCancel),
+            ),
+            TextButton(
+              onPressed: () {
+                final value = double.tryParse(controller.text.trim());
+                if (value != null) {
+                  Navigator.pop(ctx, value);
+                }
+              },
+              style: TextButton.styleFrom(foregroundColor: primaryColor),
+              child: Text(l10n.commonOk),
+            ),
+          ],
+        );
+      },
+    );
+
+    controller.dispose();
+
+    if (result != null) {
+      final repo = ref.read(repositoryProvider);
+      // 贷款存储为负数
+      final storedValue = isLiability ? -result.abs() : result;
+      await repo.updateAccountValuation(account.id, storedValue);
+
+      if (mounted) {
+        // 刷新数据
+        ref.invalidate(accountStatsProvider(account.id));
+        showToast(context, l10n.commonSave);
+        // 返回上一页刷新数据
+        Navigator.pop(context, true);
+      }
+    }
   }
 
   /// 账户概览卡片（合并 metadata + 类型统计信息）

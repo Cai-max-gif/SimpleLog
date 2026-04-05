@@ -2960,6 +2960,66 @@ class AppLocalizationsZh extends AppLocalizations {
   String get currencyMXN => '墨西哥比索';
 
   @override
+  String get currencyTRY => '土耳其里拉';
+
+  @override
+  String get currencyZAR => '南非兰特';
+
+  @override
+  String get currencyAED => '阿联酋迪拉姆';
+
+  @override
+  String get currencySAR => '沙特里亚尔';
+
+  @override
+  String get currencyPLN => '波兰兹罗提';
+
+  @override
+  String get currencyCZK => '捷克克朗';
+
+  @override
+  String get currencyHUF => '匈牙利福林';
+
+  @override
+  String get currencyARS => '阿根廷比索';
+
+  @override
+  String get currencyCLP => '智利比索';
+
+  @override
+  String get currencyCOP => '哥伦比亚比索';
+
+  @override
+  String get currencyPEN => '秘鲁索尔';
+
+  @override
+  String get currencyEGP => '埃及镑';
+
+  @override
+  String get currencyNGN => '尼日利亚奈拉';
+
+  @override
+  String get currencyKZT => '哈萨克斯坦坚戈';
+
+  @override
+  String get currencyUAH => '乌克兰格里夫纳';
+
+  @override
+  String get currencyILS => '以色列新谢克尔';
+
+  @override
+  String get currencyPKR => '巴基斯坦卢比';
+
+  @override
+  String get currencyBDT => '孟加拉塔卡';
+
+  @override
+  String get currencyLKR => '斯里兰卡卢比';
+
+  @override
+  String get currencyMMK => '缅甸元';
+
+  @override
   String get webdavConfiguredTitle => 'WebDAV 云服务已配置';
 
   @override
@@ -3950,7 +4010,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutSupportDevelopmentSubtitle => '请开发者喝杯咖啡';
 
   @override
-  String get aboutRelatedProducts => '蜜蜂家族';
+  String get aboutDeveloperStoryTitle => '开发者的话';
+
+  @override
+  String get aboutDeveloperStory => '从 2015 年实习起，我坚持记账至今已超过十年。因为担心记账软件的广告、付费、隐私泄露和停运跑路，我决定自己做一个——最初只是给自己和家人用的小工具。\n\n2025 年 9 月，蜜蜂记账发布了第一个版本。说实话，那时候心里没什么底，不知道会不会有人用。但慢慢地，开始收到用户的反馈——有人说终于找到了一款干净的记账软件，有人提了很好的建议，也有人默默给了五星好评。每一条反馈都让我觉得，这件事值得继续做下去。\n\n蜜蜂记账没有广告、没有会员、完全免费开源。你的每一笔数据都只存在你自己的手机里，不会被上传到任何第三方服务器。但上架和维护一款 App 并非零成本——开发者账号、服务器等开支目前靠社区捐赠勉强支撑，每一次适配新系统、修复 Bug、开发新功能，也都是工作之余一点点完成的。\n\n如果你觉得蜜蜂记账对你有帮助，一个好评、一次分享或一笔捐赠，都能让这个小项目走得更远。谢谢你的信任。';
+
+  @override
+  String get aboutRelatedProducts => '更多产品';
 
   @override
   String get aboutBeeDNS => '蜜蜂域名 BeeDNS';
@@ -5615,6 +5681,47 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get accountTypeReceivable => '应收款';
+
+  @override
+  String get accountTypeRealEstate => '不动产';
+
+  @override
+  String get accountTypeVehicle => '车辆';
+
+  @override
+  String get accountTypeInsurance => '保险';
+
+  @override
+  String get accountTypeSocialFund => '公积金/社保';
+
+  @override
+  String get valuationCurrentValue => '当前估值';
+
+  @override
+  String get valuationCurrentDebt => '当前欠款';
+
+  @override
+  String get valuationUpdateValue => '更新估值';
+
+  @override
+  String get valuationUpdateDebt => '更新欠款';
+
+  @override
+  String valuationLastUpdated(String date) {
+    return '上次更新: $date';
+  }
+
+  @override
+  String get valuationAccountHint => '请输入当前估值';
+
+  @override
+  String get valuationDebtHint => '请输入当前欠款金额';
+
+  @override
+  String get accountGroupTradable => '日常账户';
+
+  @override
+  String get accountGroupValuation => '资产/负债';
 
   @override
   String get adjustmentTransaction => '估值调整';
@@ -8603,6 +8710,66 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get currencyMXN => '墨西哥披索';
 
   @override
+  String get currencyTRY => '土耳其里拉';
+
+  @override
+  String get currencyZAR => '南非蘭特';
+
+  @override
+  String get currencyAED => '阿聯酋迪拉姆';
+
+  @override
+  String get currencySAR => '沙烏地里亞爾';
+
+  @override
+  String get currencyPLN => '波蘭茲羅提';
+
+  @override
+  String get currencyCZK => '捷克克朗';
+
+  @override
+  String get currencyHUF => '匈牙利福林';
+
+  @override
+  String get currencyARS => '阿根廷披索';
+
+  @override
+  String get currencyCLP => '智利披索';
+
+  @override
+  String get currencyCOP => '哥倫比亞披索';
+
+  @override
+  String get currencyPEN => '秘魯索爾';
+
+  @override
+  String get currencyEGP => '埃及鎊';
+
+  @override
+  String get currencyNGN => '奈及利亞奈拉';
+
+  @override
+  String get currencyKZT => '哈薩克坦吉';
+
+  @override
+  String get currencyUAH => '烏克蘭格里夫納';
+
+  @override
+  String get currencyILS => '以色列新謝克爾';
+
+  @override
+  String get currencyPKR => '巴基斯坦盧比';
+
+  @override
+  String get currencyBDT => '孟加拉塔卡';
+
+  @override
+  String get currencyLKR => '斯里蘭卡盧比';
+
+  @override
+  String get currencyMMK => '緬甸元';
+
+  @override
   String get webdavConfiguredTitle => 'WebDAV 雲服務已設定';
 
   @override
@@ -9593,7 +9760,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get aboutSupportDevelopmentSubtitle => '請開發者喝杯咖啡';
 
   @override
-  String get aboutRelatedProducts => '蜜蜂家族';
+  String get aboutDeveloperStoryTitle => '開發者的話';
+
+  @override
+  String get aboutDeveloperStory => '從 2015 年實習起，我堅持記帳至今已超過十年。因為擔心記帳軟體的廣告、付費、隱私洩露和停運跑路，我決定自己做一個——最初只是給自己和家人用的小工具。\n\n2025 年 9 月，蜜蜂記帳發佈了第一個版本。說實話，那時候心裡沒什麼底，不知道會不會有人用。但慢慢地，開始收到用戶的回饋——有人說終於找到了一款乾淨的記帳軟體，有人提了很好的建議，也有人默默給了五星好評。每一條回饋都讓我覺得，這件事值得繼續做下去。\n\n蜜蜂記帳沒有廣告、沒有會員、完全免費開源。你的每一筆資料都只存在你自己的手機裡，不會被上傳到任何第三方伺服器。但上架和維護一款 App 並非零成本——開發者帳號、伺服器等開支目前靠社群捐贈勉強支撐，每一次適配新系統、修復 Bug、開發新功能，也都是工作之餘一點點完成的。\n\n如果你覺得蜜蜂記帳對你有幫助，一個好評、一次分享或一筆捐贈，都能讓這個小專案走得更遠。謝謝你的信任。';
+
+  @override
+  String get aboutRelatedProducts => '更多產品';
 
   @override
   String get aboutBeeDNS => '蜜蜂域名 BeeDNS';
@@ -11228,6 +11401,56 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get accountNoMoreData => '沒有更多資料了';
+
+  @override
+  String get accountTypeInvestment => '投資理財';
+
+  @override
+  String get accountTypeLoan => '貸款';
+
+  @override
+  String get accountTypeReceivable => '應收款';
+
+  @override
+  String get accountTypeRealEstate => '不動產';
+
+  @override
+  String get accountTypeVehicle => '車輛';
+
+  @override
+  String get accountTypeInsurance => '保險';
+
+  @override
+  String get accountTypeSocialFund => '公積金/社保';
+
+  @override
+  String get valuationCurrentValue => '當前估值';
+
+  @override
+  String get valuationCurrentDebt => '當前欠款';
+
+  @override
+  String get valuationUpdateValue => '更新估值';
+
+  @override
+  String get valuationUpdateDebt => '更新欠款';
+
+  @override
+  String valuationLastUpdated(String date) {
+    return '上次更新: $date';
+  }
+
+  @override
+  String get valuationAccountHint => '請輸入當前估值';
+
+  @override
+  String get valuationDebtHint => '請輸入當前欠款金額';
+
+  @override
+  String get accountGroupTradable => '日常帳戶';
+
+  @override
+  String get accountGroupValuation => '資產/負債';
 
   @override
   String creditCardBillingInfo(int billingDay, int paymentDueDay) {

@@ -117,9 +117,9 @@ class _AccountPickerState extends ConsumerState<AccountPicker> {
 
     return allAccountsAsync.when(
       data: (allAccounts) {
-        // v1.15.0: 只显示与当前账本同币种的账户
+        // 只显示与当前账本同币种的可交易账户
         final accounts = allAccounts.where((account) =>
-          account.currency == currentCurrency
+          account.currency == currentCurrency && isTradableType(account.type)
         ).toList();
 
         _buildOptions(accounts);
