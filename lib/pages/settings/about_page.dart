@@ -49,6 +49,31 @@ class _AboutPageState extends ConsumerState<AboutPage> {
     });
   }
 
+  void _showDeveloperStory(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.aboutDeveloperStoryTitle),
+        content: SingleChildScrollView(
+          child: Text(
+            l10n.aboutDeveloperStory,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: BeeTokens.textSecondary(context),
+                  height: 1.7,
+                ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.commonConfirm),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,12 +101,26 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                         size: 80.0.scaled(context, ref),
                       ),
                       SizedBox(height: 16.0.scaled(context, ref)),
-                      Text(
-                        AppLocalizations.of(context).appName,
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: BeeTokens.textPrimary(context),
+                      GestureDetector(
+                        onTap: () => _showDeveloperStory(context),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context).appName,
+                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: BeeTokens.textPrimary(context),
+                                  ),
                             ),
+                            SizedBox(width: 4.0.scaled(context, ref)),
+                            Icon(
+                              Icons.help_outline_rounded,
+                              size: 18.0.scaled(context, ref),
+                              color: BeeTokens.textTertiary(context),
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(height: 8.0.scaled(context, ref)),
                       Text(
@@ -95,7 +134,6 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 8.0.scaled(context, ref)),
                 // 联系方式
                 SectionCard(
                   margin: EdgeInsets.zero,

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'database_providers.dart';
 import 'theme_providers.dart';
 import 'statistics_providers.dart';
+import 'budget_providers.dart';
 import 'font_scale_provider.dart';
 import 'update_providers.dart';
 import 'cloud_mode_providers.dart';
@@ -219,6 +220,8 @@ final appSplashInitProvider = FutureProvider<void>((ref) async {
       timed('月度统计', ref.read(monthlyTotalsProvider(monthlyParams).future)),
       // 只查询前 N 条，而非全部
       timed('交易列表(前$preloadLimit条)', repo.getRecentTransactionsWithCategory(ledgerId: ledgerId, limit: preloadLimit)),
+      // 预加载预算概览，避免首页进度条闪现
+      timed('预算概览', ref.read(budgetOverviewProvider.future)),
     ]);
 
     final monthlyResult = results[0] as (double, double);
