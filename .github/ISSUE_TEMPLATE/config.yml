@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 使用文档 / Documentation
+    url: https://beecount-website.pages.dev/docs/intro
+    about: 查看详细的使用文档和常见问题 / View detailed documentation and FAQ
+  - name: 💬 讨论区 / Discussions
+    url: https://github.com/TNT-Likely/BeeCount/discussions
+    about: 在讨论区分享使用经验或参与讨论 / Share experiences or participate in discussions

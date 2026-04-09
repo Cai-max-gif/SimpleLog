@@ -1,0 +1,53 @@
+name: 💝 捐赠者信息 / Donor Information
+description: 提交您的捐赠者信息以展示在 README 中 / Submit your donor info to be featured in README
+title: "[Donation] "
+labels: ["donation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您对蜜蜂记账的支持！提交以下信息后，我们会将您添加到 README 的感谢支持者列表中。
+
+        Thank you for supporting BeeCount! After submitting the following info, we'll add you to the supporters list in README.
+
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 捐赠截图 / Donation Screenshot
+      description: 请上传捐赠截图用于验证（可打码敏感信息）/ Please upload a screenshot for verification (you can blur sensitive info)
+      placeholder: 拖拽图片到此处或粘贴 / Drag image here or paste
+    validations:
+      required: true
+
+  - type: input
+    id: avatar
+    attributes:
+      label: 头像链接 / Avatar URL
+      description: 您的头像图片链接（推荐使用 GitHub 头像 https://github.com/用户名.png）/ URL to your avatar (recommend GitHub avatar)
+      placeholder: https://github.com/username.png
+    validations:
+      required: true
+
+  - type: input
+    id: link
+    attributes:
+      label: 个人主页链接 / Profile Link
+      description: 点击头像跳转的链接，可以是任意网站（GitHub、微博、个人博客等）/ Link when clicking your avatar, can be any website (GitHub, Weibo, personal blog, etc.)
+      placeholder: https://github.com/username
+    validations:
+      required: true
+
+  - type: input
+    id: name
+    attributes:
+      label: 显示名称 / Display Name (可选/Optional)
+      description: 不填则使用头像展示 / Leave empty to show avatar only
+      placeholder: 例如：张三 / e.g. John
+
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: 确认 / Confirmation
+      options:
+        - label: 我同意将上述信息展示在项目 README 中 / I agree to display the above information in the project README
+          required: true

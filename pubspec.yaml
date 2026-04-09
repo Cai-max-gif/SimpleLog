@@ -1,0 +1,129 @@
+name: simplelog
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ^3.6.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^2.5.1
+  collection: ^1.18.0
+  drift: ^2.20.2
+  sqlite3_flutter_libs: ^0.5.24
+  path_provider: ^2.1.4
+  path: ^1.9.0
+  intl: ^0.20.2
+  fl_chart: ^0.68.0
+  shared_preferences: ^2.3.2
+  csv: ^5.0.2
+  file_picker: ^8.1.2
+  supabase_flutter: ^2.5.6
+  crypto: ^3.0.5
+  uuid: ^4.5.1
+  flutter_svg: ^2.0.10+1
+  package_info_plus: ^8.0.2
+  url_launcher: ^6.3.0
+  in_app_review: ^2.0.9
+  http: ^1.2.2
+  share_plus: ^12.0.1
+  permission_handler: ^11.3.1
+  dio: ^5.4.3+1
+  open_filex: ^4.4.0
+  flutter_local_notifications: ^17.2.2
+  timezone: ^0.9.4
+  flutter_list_view: ^1.1.29
+  visibility_detector: ^0.4.0+2
+  reorderable_grid_view: ^2.2.8
+  excel: ^4.0.6
+  home_widget: ^0.7.0
+  google_mlkit_text_recognition: ^0.15.0
+  image_picker: ^1.1.2
+  flutter_image_compress: ^2.3.0
+  image_cropper: 8.0.2
+  gbk_codec: ^0.4.0
+  app_links: ^6.4.1
+  record: ^5.1.2
+  yaml: ^3.1.2
+  qr_flutter: ^4.1.0
+  gal: ^2.3.0
+  archive: ^3.6.1
+  in_app_purchase: ^3.1.0
+  in_app_purchase_storekit: ^0.3.6
+  flutter_ai_kit:
+    path: packages/flutter_ai_kit
+  flutter_ai_kit_zhipu:
+    path: packages/flutter_ai_kit_zhipu
+  flutter_ai_kit_tflite:
+    path: packages/flutter_ai_kit_tflite
+  flutter_ai_kit_openai:
+    path: packages/flutter_ai_kit_openai
+  flutter_cloud_sync:
+    path: packages/flutter_cloud_sync
+  flutter_cloud_sync_supabase:
+    path: packages/flutter_cloud_sync_supabase
+  flutter_cloud_sync_webdav:
+    path: packages/flutter_cloud_sync_webdav
+  flutter_cloud_sync_icloud:
+    path: packages/flutter_cloud_sync_icloud
+  flutter_cloud_sync_s3:
+    path: packages/flutter_cloud_sync_s3
+  quick_actions: ^1.1.0
+  table_calendar: ^3.1.0
+  local_auth: ^2.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.10
+  drift_dev: ^2.20.2
+  flutter_launcher_icons: ^0.13.1
+  # Testing framework enhancements
+  mocktail: ^1.0.4
+  integration_test:
+    sdk: flutter
+
+dependency_overrides:
+  # Fix record_linux compatibility issue (we target iOS/Android only)
+  record_platform_interface: 1.2.0
+  # Fix image_cropper compatibility with Flutter 3.27.3
+  image_cropper_platform_interface: 7.1.0
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/logo2.png
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/logo2.png
+    - assets/app_launcher.svg
+    - assets/icons/
+    - assets/images/
+  # 字体已移动到可选依赖，使用系统字体以减少应用体积
+  # fonts:
+  #   - family: Inter
+  #     fonts:
+  #       - asset: assets/fonts/Inter-Regular.ttf
+  #       - asset: assets/fonts/Inter-Medium.ttf
+  #         weight: 500
+  #       - asset: assets/fonts/Inter-SemiBold.ttf
+  #         weight: 600
+  #       - asset: assets/fonts/Inter-Bold.ttf
+  #         weight: 700
+  #   - family: NotoSansSC
+  #     fonts:
+  #       - asset: assets/fonts/NotoSansSC-Regular.ttf
+  #       - asset: assets/fonts/NotoSansSC-Medium.ttf
+  #         weight: 500
+  #       - asset: assets/fonts/NotoSansSC-SemiBold.ttf
+  #         weight: 600
+  #       - asset: assets/fonts/NotoSansSC-Bold.ttf
+  #         weight: 700

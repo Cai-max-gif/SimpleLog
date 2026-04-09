@@ -1,0 +1,120 @@
+name: 🐛 Bug 报告 / Bug Report
+description: 报告应用中的问题或错误 / Report issues or errors in the app
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您花时间填写此错误报告！
+        Thank you for taking the time to fill out this bug report!
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: 提交前确认 / Pre-submission Checklist
+      description: 请确认以下事项 / Please confirm the following
+      options:
+        - label: 我已查阅 [官方文档](https://beecount-website.pages.dev/docs/intro)，确认这不是使用方式问题 / I have checked the [official docs](https://beecount-website.pages.dev/docs/intro) and confirmed this is not a usage issue
+          required: true
+        - label: 我已在 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) 搜索过，没有找到相同的 Bug 报告 / I have searched [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) and found no similar bug report
+          required: true
+        - label: 我已升级到最新版本，问题仍然存在 / I have updated to the latest version and the issue persists
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述 / Problem Description
+      description: 清晰简洁地描述遇到的问题 / A clear and concise description of the problem
+      placeholder: 告诉我们发生了什么... / Tell us what happened...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤 / Steps to Reproduce
+      description: 如何复现此问题？ / How can we reproduce this issue?
+      placeholder: |
+        1. 打开 '...' / Go to '...'
+        2. 点击 '...' / Click on '...'
+        3. 滚动到 '...' / Scroll down to '...'
+        4. 看到错误 / See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为 / Expected Behavior
+      description: 您期望发生什么？ / What did you expect to happen?
+      placeholder: 应该... / It should...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为 / Actual Behavior
+      description: 实际发生了什么？ / What actually happened?
+      placeholder: 但实际上... / But instead...
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截图 / Screenshots
+      description: 如果适用，请添加截图以帮助解释您的问题 / If applicable, add screenshots to help explain your problem
+      placeholder: 拖拽图片到此处... / Drag images here...
+
+  - type: input
+    id: version
+    attributes:
+      label: 应用版本 / App Version
+      description: 您使用的 BeeCount 版本？ / What version of BeeCount are you using?
+      placeholder: 例如 / e.g., 0.1.9
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 平台 / Platform
+      description: 您在哪个平台上遇到此问题？ / On which platform did you encounter this issue?
+      options:
+        - iOS
+        - Android
+        - 两者都有 / Both
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: 系统版本 / OS Version
+      description: 您的设备系统版本？ / What is your device's OS version?
+      placeholder: 例如 / e.g., iOS 17.5 or Android 14
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: 设备型号 / Device Model
+      description: 您使用的设备型号？ / What device are you using?
+      placeholder: 例如 / e.g., iPhone 15 Pro or Samsung Galaxy S24
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 错误日志 / Error Logs
+      description: 如果有崩溃日志或错误信息，请粘贴在此处 / If you have crash logs or error messages, please paste them here
+      render: shell
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 补充信息 / Additional Information
+      description: 还有其他需要补充的信息吗？ / Any other information you'd like to add?

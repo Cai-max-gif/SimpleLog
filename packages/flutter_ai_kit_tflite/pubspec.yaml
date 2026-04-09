@@ -1,0 +1,23 @@
+name: flutter_ai_kit_tflite
+description: TensorFlow Lite provider for Flutter AI Kit
+version: 1.0.0
+homepage: https://github.com/TNT-Likely/BeeCount
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_ai_kit:
+    path: ../flutter_ai_kit
+  tflite_flutter: ^0.11.0
+  dio: ^5.0.0
+  path_provider: ^2.1.4
+  crypto: ^3.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0

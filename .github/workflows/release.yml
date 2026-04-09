@@ -1,0 +1,889 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Release tag (手动运行可自定义，留空则使用 manual-<short_sha>)"
+        required: false
+        default: ""
+      release_name:
+        description: "Release 名称（可选，默认与 tag 相同）"
+        required: false
+        default: ""
+      prerelease:
+        description: "是否标记为 Pre-release（手动运行默认 true）"
+        required: false
+        default: "false"
+      create_release:
+        description: "是否创建 GitHub Release（手动运行可设为 false，仅构建与产出 Actions Artifacts）"
+        required: false
+        default: "true"
+
+# 允许取消正在运行的workflow
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  FLUTTER_VERSION: "3.27.3"
+
+jobs:
+  check-branch:
+    name: Check if main branch
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Check branch
+        run: |
+          if [ "${{ github.ref_name }}" != "main" ]; then
+            echo "❌ Release workflow can only be triggered from main branch"
+            echo "Current branch: ${{ github.ref_name }}"
+            exit 1
+          fi
+          echo "✅ Branch check passed: ${{ github.ref_name }}"
+
+  android:
+    name: Android (APK + AAB)
+    runs-on: ubuntu-latest
+    needs: [check-branch]
+    if: always() && (needs.check-branch.result == 'success' || github.event_name == 'push')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Prepare release metadata
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          IS_TAG="false"
+          TAG_NAME=""
+          if [[ "${GITHUB_REF:-}" == refs/tags/* ]]; then
+            IS_TAG="true"
+            TAG_NAME="${GITHUB_REF#refs/tags/}"
+          fi
+          if [[ -z "$TAG_NAME" ]]; then
+            INPUT_TAG="${{ github.event.inputs.tag_name || '' }}"
+            if [[ -n "$INPUT_TAG" ]]; then
+              TAG_NAME="$INPUT_TAG"
+            else
+              SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
+              TAG_NAME="manual-${SHORT_SHA}"
+            fi
+          fi
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android build-tools and platforms
+        run: |
+          sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Setup Android signing from secrets (optional)
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -n "${ANDROID_KEYSTORE_BASE64:-}" ]; then
+            echo "Writing Android keystore from secret..."
+            mkdir -p android/app
+            echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/app/ci-release.keystore
+            printf '%s\n' \
+              'storeFile=ci-release.keystore' \
+              "storePassword=${ANDROID_KEYSTORE_PASSWORD}" \
+              "keyAlias=${ANDROID_KEY_ALIAS}" \
+              "keyPassword=${ANDROID_KEY_PASSWORD}" \
+              > android/key.properties
+            echo "key.properties created."
+          else
+            echo "No Android signing secrets provided; will use fallback CI keystore in Gradle."
+          fi
+
+      - name: Update pubspec.yaml version
+        run: |
+          VERSION='${{ steps.meta.outputs.tag_name }}'
+          echo "Updating pubspec.yaml version to: $VERSION"
+          # 备份原始 pubspec.yaml
+          cp pubspec.yaml pubspec.yaml.backup
+          # 更新版本号，保持构建号递增
+          # 从标签中提取版本号（去掉 v 前缀）
+          CLEAN_VERSION=${VERSION#v}
+          # 生成构建号（使用 GitHub run number）
+          BUILD_NUMBER=${{ github.run_number }}
+          # 更新 pubspec.yaml
+          sed -i "s/^version: .*/version: ${CLEAN_VERSION}+${BUILD_NUMBER}/" pubspec.yaml
+          echo "Updated version in pubspec.yaml:"
+          grep "^version:" pubspec.yaml
+
+      - name: Build APK (release)
+        run: |
+          export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
+          export GIT_COMMIT='${{ github.sha }}'
+          export BUILD_TIME='${{ github.run_id }}'
+          echo "Debug: CI_VERSION=$CI_VERSION"
+          echo "Debug: TAG_NAME=${{ steps.meta.outputs.tag_name }}"
+          flutter build apk --release --flavor prod \
+            --dart-define=CI_VERSION="$CI_VERSION" \
+            --dart-define=GIT_COMMIT="$GIT_COMMIT" \
+            --dart-define=BUILD_TIME="$BUILD_TIME"
+
+      - name: Build App Bundle (AAB)
+        run: |
+          export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
+          export GIT_COMMIT='${{ github.sha }}'
+          export BUILD_TIME='${{ github.run_id }}'
+
+          # For Google Play: remove REQUEST_INSTALL_PACKAGES permission
+          # Google Play handles updates automatically, so in-app APK installation is not needed
+          mkdir -p android/app/src/prod
+          cat > android/app/src/prod/AndroidManifest.xml << 'MANIFEST_EOF'
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools">
+              <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"
+                  tools:node="remove" />
+          </manifest>
+          MANIFEST_EOF
+
+          flutter build appbundle --release --flavor prod \
+            --dart-define=CI_VERSION="$CI_VERSION" \
+            --dart-define=GIT_COMMIT="$GIT_COMMIT" \
+            --dart-define=BUILD_TIME="$BUILD_TIME" \
+            --dart-define=GOOGLE_PLAY=true
+
+          # Cleanup: remove the temporary manifest so it doesn't affect other builds
+          rm -rf android/app/src/prod
+
+      - name: List Android outputs (debug)
+        run: |
+          echo "== build/app/outputs =="
+          ls -R build/app/outputs || true
+          echo "== flutter-apk =="
+          ls -la build/app/outputs/flutter-apk || true
+          echo "== bundle =="
+          ls -R build/app/outputs/bundle || true
+
+      - name: Rename Android artifacts with version
+        run: |
+          VERSION="${{ steps.meta.outputs.tag_name }}"
+          cd build/app/outputs
+          # 重命名 APK
+          if [ -f flutter-apk/app-prod-release.apk ]; then
+            mv flutter-apk/app-prod-release.apk flutter-apk/beecount-${VERSION}.apk
+            echo "Renamed APK to: beecount-${VERSION}.apk"
+          fi
+          # 重命名 AAB
+          if [ -f bundle/prodRelease/app-prod-release.aab ]; then
+            mv bundle/prodRelease/app-prod-release.aab bundle/prodRelease/beecount-${VERSION}.aab
+            echo "Renamed AAB to: beecount-${VERSION}.aab"
+          fi
+          echo "=== Final Android artifacts ==="
+          find . -name "*.apk" -o -name "*.aab"
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android
+          if-no-files-found: error
+          path: |
+            build/app/outputs/flutter-apk/beecount-*.apk
+            build/app/outputs/bundle/prodRelease/beecount-*.aab
+
+      - name: Upload AAB to Google Play Console
+        if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) || github.event_name == 'workflow_dispatch'
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          VERSION="${{ steps.meta.outputs.tag_name }}"
+          AAB_FILE="build/app/outputs/bundle/prodRelease/beecount-${VERSION}.aab"
+
+          if [ -z "${GOOGLE_PLAY_SERVICE_ACCOUNT_JSON:-}" ]; then
+            echo "⚠️  GOOGLE_PLAY_SERVICE_ACCOUNT_JSON not set, skipping Google Play upload"
+            exit 0
+          fi
+
+          if [ ! -f "$AAB_FILE" ]; then
+            echo "❌ AAB file not found: $AAB_FILE"
+            exit 1
+          fi
+
+          echo "📤 Uploading $AAB_FILE to Google Play Console..."
+
+          # 保存服务账户 JSON 到临时文件
+          echo "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" > /tmp/service-account.json
+
+          # 使用 Google Play Developer API 上传
+          # 安装 google-play CLI 工具
+          pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+
+          # 创建上传脚本
+          cat > /tmp/upload_to_play.py << 'UPLOAD_SCRIPT'
+          import sys
+          import json
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+
+          # 配置
+          PACKAGE_NAME = 'com.tntlikely.beecount'
+          AAB_FILE = sys.argv[1]
+          TRACK = 'production'  # internal, alpha, beta, production
+
+          # 认证
+          credentials = service_account.Credentials.from_service_account_file(
+              '/tmp/service-account.json',
+              scopes=['https://www.googleapis.com/auth/androidpublisher']
+          )
+
+          # 创建 API 客户端
+          service = build('androidpublisher', 'v3', credentials=credentials)
+
+          try:
+              # 创建编辑
+              edit = service.edits().insert(body={}, packageName=PACKAGE_NAME).execute()
+              edit_id = edit['id']
+              print(f"✅ Created edit: {edit_id}")
+
+              # 上传 AAB
+              media = MediaFileUpload(AAB_FILE, mimetype='application/octet-stream', resumable=True)
+              bundle = service.edits().bundles().upload(
+                  packageName=PACKAGE_NAME,
+                  editId=edit_id,
+                  media_body=media
+              ).execute()
+              version_code = bundle['versionCode']
+              print(f"✅ Uploaded AAB, version code: {version_code}")
+
+              # 分配到轨道
+              track_body = {
+                  'releases': [{
+                      'versionCodes': [version_code],
+                      'status': 'completed'
+                  }]
+              }
+              service.edits().tracks().update(
+                  packageName=PACKAGE_NAME,
+                  editId=edit_id,
+                  track=TRACK,
+                  body=track_body
+              ).execute()
+              print(f"✅ Assigned to {TRACK} track")
+
+              # 提交编辑
+              service.edits().commit(packageName=PACKAGE_NAME, editId=edit_id).execute()
+              print("✅ Changes committed to Google Play Console!")
+
+          except Exception as e:
+              print(f"❌ Upload failed: {e}")
+              sys.exit(1)
+          UPLOAD_SCRIPT
+
+          python /tmp/upload_to_play.py "$AAB_FILE"
+
+          # 清理
+          rm -f /tmp/service-account.json /tmp/upload_to_play.py
+
+          echo "✅ Successfully uploaded to Google Play Console (alpha track)!"
+
+  ios:
+    name: iOS (app.zip + unsigned .ipa)
+    runs-on: macos-latest
+    needs: [check-branch]
+    if: always() && (needs.check-branch.result == 'success' || github.event_name == 'push')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Prepare release metadata
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          IS_TAG="false"
+          TAG_NAME=""
+          if [[ "${GITHUB_REF:-}" == refs/tags/* ]]; then
+            IS_TAG="true"
+            TAG_NAME="${GITHUB_REF#refs/tags/}"
+          fi
+          if [[ -z "$TAG_NAME" ]]; then
+            INPUT_TAG="${{ github.event.inputs.tag_name || '' }}"
+            if [[ -n "$INPUT_TAG" ]]; then
+              TAG_NAME="$INPUT_TAG"
+            else
+              SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
+              TAG_NAME="manual-${SHORT_SHA}"
+            fi
+          fi
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Select latest Xcode
+        run: |
+          echo "📱 Available Xcode versions:"
+          ls -la /Applications/ | grep Xcode || true
+
+          # 选择最新的 Xcode 版本 (包含 iOS 26 SDK)
+          LATEST_XCODE=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1)
+          if [ -n "$LATEST_XCODE" ]; then
+            echo "🔧 Selecting Xcode: $LATEST_XCODE"
+            sudo xcode-select -s "$LATEST_XCODE"
+          fi
+
+          echo ""
+          echo "📋 Current Xcode version:"
+          xcodebuild -version
+
+          echo ""
+          echo "📋 Available iOS SDKs:"
+          xcodebuild -showsdks | grep -i ios || true
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: false
+
+      # 手动缓存 pub 依赖
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ env.FLUTTER_VERSION }}-${{ github.sha }}
+          restore-keys: |
+            pub-${{ runner.os }}-${{ env.FLUTTER_VERSION }}-
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Update pubspec.yaml version (iOS)
+        run: |
+          VERSION='${{ steps.meta.outputs.tag_name }}'
+          echo "Updating pubspec.yaml version to: $VERSION"
+          # 备份原始 pubspec.yaml
+          cp pubspec.yaml pubspec.yaml.backup
+          # 更新版本号，保持构建号递增
+          # 从标签中提取版本号（去掉 v 前缀）
+          CLEAN_VERSION=${VERSION#v}
+          # 生成构建号（使用 GitHub run number）
+          BUILD_NUMBER=${{ github.run_number }}
+          # 更新 pubspec.yaml
+          sed -i "" "s/^version: .*/version: ${CLEAN_VERSION}+${BUILD_NUMBER}/" pubspec.yaml
+          echo "Updated version in pubspec.yaml:"
+          grep "^version:" pubspec.yaml
+
+      - name: Setup iOS signing (optional)
+        env:
+          IOS_P12_BASE64: ${{ secrets.APPLE_CERTIFICATE_P12 }}
+          IOS_P12_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          IOS_PROVISION_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
+          IOS_WIDGET_PROVISION_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_WIDGET }}
+          IOS_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          if [ -n "${IOS_P12_BASE64:-}" ]; then
+            echo "📱 Setting up iOS code signing from secrets..."
+
+            # 创建临时keychain
+            KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+            KEYCHAIN_PASSWORD=$(openssl rand -base64 32)
+
+            security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+            security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+            security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+            # 导入证书
+            CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+            echo "$IOS_P12_BASE64" | base64 -d > $CERTIFICATE_PATH
+            security import $CERTIFICATE_PATH -P "$IOS_P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+            security list-keychain -d user -s $KEYCHAIN_PATH
+
+            # 安装provisioning profile
+            PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+            echo "$IOS_PROVISION_PROFILE_BASE64" | base64 -d > $PP_PATH
+
+            # 从 provisioning profile 中提取 UUID
+            PP_UUID=$(security cms -D -i $PP_PATH | plutil -extract UUID raw -)
+            echo "Provisioning Profile UUID: $PP_UUID"
+
+            # 使用 UUID 作为文件名安装到正确位置
+            mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+            cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/${PP_UUID}.mobileprovision
+            echo "✅ Installed provisioning profile: ${PP_UUID}.mobileprovision"
+
+            # 安装Widget Extension provisioning profile
+            if [ -n "${IOS_WIDGET_PROVISION_PROFILE_BASE64:-}" ]; then
+              WIDGET_PP_PATH=$RUNNER_TEMP/build_widget_pp.mobileprovision
+              echo "$IOS_WIDGET_PROVISION_PROFILE_BASE64" | base64 -d > $WIDGET_PP_PATH
+              WIDGET_PP_UUID=$(security cms -D -i $WIDGET_PP_PATH | plutil -extract UUID raw -)
+              echo "Widget Provisioning Profile UUID: $WIDGET_PP_UUID"
+              cp $WIDGET_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/${WIDGET_PP_UUID}.mobileprovision
+              echo "✅ Installed widget provisioning profile: ${WIDGET_PP_UUID}.mobileprovision"
+
+              # 调试：显示 widget provisioning profile 详细信息
+              echo "📋 Widget Provisioning Profile details:"
+              security cms -D -i $WIDGET_PP_PATH | plutil -p - | grep -A 5 -E "(Name|UUID|TeamIdentifier|AppIDName)"
+            else
+              echo "⚠️  No Widget Extension provisioning profile provided"
+            fi
+
+            # 调试：显示主应用 provisioning profile 详细信息
+            echo "📋 Main App Provisioning Profile details:"
+            security cms -D -i $PP_PATH | plutil -p - | grep -A 5 -E "(Name|UUID|TeamIdentifier|AppIDName)"
+
+            # 设置 codesign 权限
+            security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+            # 调试：列出所有可用的签名身份
+            echo "📋 Available signing identities in keychain:"
+            security find-identity -v -p codesigning $KEYCHAIN_PATH
+
+            echo ""
+            echo "📋 All signing identities on system:"
+            security find-identity -v -p codesigning
+
+            # 动态生成 ExportOptions.plist（使用 printf 避免 heredoc YAML 冲突）
+            printf '%s\n' \
+              '<?xml version="1.0" encoding="UTF-8"?>' \
+              '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' \
+              '<plist version="1.0">' \
+              '<dict>' \
+              '    <key>method</key>' \
+              '    <string>app-store</string>' \
+              '    <key>teamID</key>' \
+              "    <string>${IOS_TEAM_ID}</string>" \
+              '    <key>uploadBitcode</key>' \
+              '    <false/>' \
+              '    <key>uploadSymbols</key>' \
+              '    <true/>' \
+              '    <key>signingStyle</key>' \
+              '    <string>manual</string>' \
+              '    <key>signingCertificate</key>' \
+              '    <string>Apple Distribution</string>' \
+              '    <key>provisioningProfiles</key>' \
+              '    <dict>' \
+              '        <key>com.tntlikely.beecount</key>' \
+              '        <string>BeeCount_AppStore</string>' \
+              '        <key>com.tntlikely.beecount.BeeCountWidgetExtension</key>' \
+              '        <string>BeeCount_Widget_AppStore</string>' \
+              '    </dict>' \
+              '</dict>' \
+              '</plist>' \
+              > ios/ExportOptions.plist
+
+            echo "✅ iOS signing configured"
+            echo "IOS_SIGNING_ENABLED=true" >> $GITHUB_ENV
+          else
+            echo "⚠️  No iOS signing secrets provided; will build unsigned only"
+            echo "IOS_SIGNING_ENABLED=false" >> $GITHUB_ENV
+          fi
+
+      - name: Build iOS (no codesign)
+        run: |
+          export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
+          export GIT_COMMIT='${{ github.sha }}'
+          export BUILD_TIME='${{ github.run_id }}'
+          flutter build ios --release --no-codesign \
+            --dart-define=CI_VERSION="$CI_VERSION" \
+            --dart-define=GIT_COMMIT="$GIT_COMMIT" \
+            --dart-define=BUILD_TIME="$BUILD_TIME"
+
+      - name: Configure Xcode project for signing
+        if: env.IOS_SIGNING_ENABLED == 'true'
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          PROJECT_FILE="ios/Runner.xcodeproj/project.pbxproj"
+
+          echo "🔧 Configuring manual signing for iOS..."
+
+          # 1. 配置手动签名
+          sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' "$PROJECT_FILE"
+
+          # 2. 修改签名身份为发布证书
+          sed -i '' 's/"CODE_SIGN_IDENTITY\[sdk=iphoneos\*\]" = "iPhone Developer";/"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";/g' "$PROJECT_FILE"
+
+          # 3. 为主应用和Widget Extension配置Team ID和Provisioning Profile
+          # 先清除所有现有的DEVELOPMENT_TEAM和PROVISIONING_PROFILE_SPECIFIER配置
+          sed -i '' '/DEVELOPMENT_TEAM = /d' "$PROJECT_FILE"
+          sed -i '' '/PROVISIONING_PROFILE_SPECIFIER = /d' "$PROJECT_FILE"
+
+          # 4. 使用perl为所有buildSettings添加Team ID（包括主应用和Widget Extension）
+          perl -i -pe "s/(buildSettings = \\{)/\$1\n\t\t\t\tDEVELOPMENT_TEAM = ${APPLE_TEAM_ID};/g" "$PROJECT_FILE"
+
+          # 5. 为Widget Extension和主应用添加Provisioning Profile配置
+          # 使用perl进行精确匹配和插入
+          perl -i -pe '
+            # Widget Extension: 在其Bundle ID行前插入Profile配置
+            if (/^\s+PRODUCT_BUNDLE_IDENTIFIER = com\.tntlikely\.beecount\.BeeCountWidgetExtension;/) {
+              print "\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"BeeCount_Widget_AppStore\";\n";
+            }
+            # 主应用: 主应用使用变量形式的Bundle ID,通过CODE_SIGN_ENTITLEMENTS识别
+            elsif (/^\s+CODE_SIGN_ENTITLEMENTS = Runner\/Runner\.entitlements;/) {
+              print "\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"BeeCount_AppStore\";\n";
+            }
+          ' "$PROJECT_FILE"
+
+          echo "✅ Configured manual signing for Xcode project"
+
+      - name: Build iOS archive with xcodebuild
+        if: env.IOS_SIGNING_ENABLED == 'true'
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          echo "📦 Building iOS archive..."
+
+          # Archive the app (只显示错误和警告,减少日志噪音)
+          # 完全依赖project.pbxproj中的配置
+          if xcodebuild archive \
+            -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -archivePath build/ios/Runner.xcarchive \
+            -quiet \
+            2>&1 | grep -E "error:|warning:|note:|failed|succeeded" | tee xcodebuild-archive.log; then
+
+            echo "✅ Archive created successfully"
+            ls -lh build/ios/Runner.xcarchive/Products/Applications/ 2>/dev/null || true
+          else
+            echo "❌ Archive failed! Full log:"
+            cat xcodebuild-archive.log
+            exit 1
+          fi
+
+      - name: Export IPA from archive
+        if: env.IOS_SIGNING_ENABLED == 'true'
+        run: |
+          echo "📤 Exporting IPA..."
+
+          # Export IPA (只显示关键信息)
+          if xcodebuild -exportArchive \
+            -archivePath build/ios/Runner.xcarchive \
+            -exportPath build/ios/ipa \
+            -exportOptionsPlist ios/ExportOptions.plist \
+            -quiet \
+            2>&1 | grep -E "error:|warning:|Exported|succeeded" | tee xcodebuild-export.log; then
+
+            echo "✅ IPA exported successfully"
+            ls -lh build/ios/ipa/
+
+            # 验证IPA文件
+            if [ -f build/ios/ipa/*.ipa ]; then
+              echo ""
+              echo "IPA file details:"
+              ls -lh build/ios/ipa/*.ipa
+
+              # 显示IPA签名信息
+              echo ""
+              echo "IPA signing info:"
+              unzip -l build/ios/ipa/*.ipa | grep -E "Payload|PlugIns|\.app" | head -20
+            else
+              echo "❌ Error: IPA file not found in build/ios/ipa/"
+              exit 1
+            fi
+          else
+            echo ""
+            echo "❌ Export failed. Check xcodebuild-export.log for details"
+            echo "Last 50 lines of export log:"
+            tail -50 xcodebuild-export.log
+            exit 1
+          fi
+
+      - name: Copy signed IPA to release directory
+        if: env.IOS_SIGNING_ENABLED == 'true'
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.meta.outputs.tag_name }}"
+
+          # flutter build ipa 会在 build/ios/ipa 目录生成 IPA
+          if [ -f build/ios/ipa/*.ipa ]; then
+            cp build/ios/ipa/*.ipa beecount-${VERSION}-signed.ipa
+            echo "✅ Copied signed IPA: beecount-${VERSION}-signed.ipa"
+            ls -lh beecount-${VERSION}-signed.ipa
+          else
+            echo "❌ Signed IPA not found in build/ios/ipa/"
+            ls -la build/ios/ipa/ || true
+            exit 1
+          fi
+
+      - name: Cleanup iOS keychain
+        if: always() && env.IOS_SIGNING_ENABLED == 'true'
+        run: |
+          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db || true
+
+      - name: Build iOS (debug simulator, unsigned)
+        run: |
+          export CI_VERSION='${{ steps.meta.outputs.tag_name }}'
+          export GIT_COMMIT='${{ github.sha }}'
+          export BUILD_TIME='${{ github.run_id }}'
+          flutter build ios --debug --simulator \
+            --dart-define=CI_VERSION="$CI_VERSION" \
+            --dart-define=GIT_COMMIT="$GIT_COMMIT" \
+            --dart-define=BUILD_TIME="$BUILD_TIME"
+
+      - name: Package iOS Runner.app (unsigned)
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.meta.outputs.tag_name }}"
+          APP_PATH="build/ios/iphoneos/Runner.app"
+          if [ ! -d "$APP_PATH" ]; then
+            echo "Runner.app not found at $APP_PATH" >&2
+            ls -la build/ios/iphoneos || true
+            exit 1
+          fi
+          # 生成包含版本号的文件名
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" beecount-${VERSION}-iphoneos.app.zip
+          mkdir -p Payload
+          cp -R "$APP_PATH" Payload/
+          /usr/bin/zip -qry beecount-${VERSION}-unsigned.ipa Payload
+          echo "Generated iOS artifacts:"
+          ls -la beecount-${VERSION}-*
+
+      - name: Package iOS Simulator Runner.app (debug, unsigned)
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.meta.outputs.tag_name }}"
+          SIM_APP_PATH="build/ios/iphonesimulator/Runner.app"
+          if [ -d "$SIM_APP_PATH" ]; then
+            ditto -c -k --sequesterRsrc --keepParent "$SIM_APP_PATH" beecount-${VERSION}-iphonesimulator.app.zip
+            echo "Generated iOS Simulator artifact: beecount-${VERSION}-iphonesimulator.app.zip"
+          else
+            echo "Simulator Runner.app not found at $SIM_APP_PATH" >&2
+            ls -la build/ios/iphonesimulator || true
+          fi
+
+      - name: Upload to TestFlight
+        if: env.IOS_SIGNING_ENABLED == 'true'
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.meta.outputs.tag_name }}"
+          IPA_FILE="beecount-${VERSION}-signed.ipa"
+
+          if [ -z "${APPLE_ID:-}" ] || [ -z "${APPLE_APP_SPECIFIC_PASSWORD:-}" ]; then
+            echo "⚠️  APPLE_ID or APPLE_APP_SPECIFIC_PASSWORD not set, skipping TestFlight upload"
+            exit 0
+          fi
+
+          if [ ! -f "$IPA_FILE" ]; then
+            echo "❌ Signed IPA not found: $IPA_FILE"
+            exit 1
+          fi
+
+          echo "📤 Uploading $IPA_FILE to TestFlight..."
+          xcrun altool --upload-app \
+            --type ios \
+            --file "$IPA_FILE" \
+            --username "$APPLE_ID" \
+            --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+            --verbose
+
+          echo "✅ Successfully uploaded to TestFlight!"
+
+      - name: Upload iOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios
+          path: |
+            beecount-*-iphoneos.app.zip
+            beecount-*-unsigned.ipa
+            beecount-*-signed.ipa
+            beecount-*-iphonesimulator.app.zip
+
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs:
+      - check-branch
+      - android
+      - ios
+    if: always() && (needs.check-branch.result == 'success' || github.event_name == 'push') && needs.android.result == 'success' && needs.ios.result == 'success'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Ensure tags are fetched
+        run: |
+          git fetch --tags --force || true
+
+      - name: Prepare release metadata
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          IS_TAG="false"
+          TAG_NAME=""
+          if [[ "${GITHUB_REF:-}" == refs/tags/* ]]; then
+            IS_TAG="true"
+            TAG_NAME="${GITHUB_REF#refs/tags/}"
+          fi
+          if [[ -z "$TAG_NAME" ]]; then
+            INPUT_TAG="${{ github.event.inputs.tag_name || '' }}"
+            if [[ -n "$INPUT_TAG" ]]; then
+              TAG_NAME="$INPUT_TAG"
+            else
+              SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
+              TAG_NAME="manual-${SHORT_SHA}"
+            fi
+          fi
+          # 手动触发默认 prerelease=true；tag 触发默认 false
+          INPUT_PRERELEASE="${{ github.event.inputs.prerelease || '' }}"
+          if [[ "$IS_TAG" == "true" ]]; then
+            PRERELEASE="false"
+          else
+            PRERELEASE=${INPUT_PRERELEASE:-true}
+          fi
+          # 是否创建 Release
+          INPUT_CREATE="${{ github.event.inputs.create_release || '' }}"
+          if [[ "$IS_TAG" == "true" ]]; then
+            CREATE_RELEASE="true"
+          else
+            CREATE_RELEASE=${INPUT_CREATE:-false}
+          fi
+          RELEASE_NAME_INPUT="${{ github.event.inputs.release_name || '' }}"
+          if [[ -n "$RELEASE_NAME_INPUT" ]]; then
+            RELEASE_NAME="$RELEASE_NAME_INPUT"
+          else
+            RELEASE_NAME="$TAG_NAME"
+          fi
+          echo "is_tag=$IS_TAG" >> $GITHUB_OUTPUT
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "prerelease=$PRERELEASE" >> $GITHUB_OUTPUT
+          echo "create_release=$CREATE_RELEASE" >> $GITHUB_OUTPUT
+          echo "release_name=$RELEASE_NAME" >> $GITHUB_OUTPUT
+      - name: Download Android artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: android
+          path: ./dist/android
+
+      - name: List downloaded artifacts (debug)
+        run: |
+          echo "== dist tree =="
+          ls -R ./dist || true
+
+      - name: Download iOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ios
+          path: ./dist/ios
+
+      - name: Generate release notes
+        id: notes
+        run: |
+          TAG="${{ steps.meta.outputs.tag_name }}"
+          # 获取上一个 tag（不含当前 tag）
+          PREV_TAG=$(git tag --list --sort=-version:refname | grep -v "^${TAG}$" | head -n1)
+          echo "Current tag: $TAG"
+          echo "Previous tag: $PREV_TAG"
+          # 生成 commit 列表（排除 merge commit）
+          if [ -n "$PREV_TAG" ]; then
+            echo "Generating commit log from $PREV_TAG to HEAD"
+            COMMITS=$(git log --no-merges --pretty=format:"- %s ([%h](https://github.com/${GITHUB_REPOSITORY}/commit/%H))" "$PREV_TAG"..HEAD)
+          else
+            echo "No previous tag found, showing all commits"
+            COMMITS=$(git log --no-merges --pretty=format:"- %s ([%h](https://github.com/${GITHUB_REPOSITORY}/commit/%H))")
+          fi
+          cat > RELEASE_NOTES.md <<EOF
+
+          ## 变更记录
+          $COMMITS
+
+          EOF
+          echo "notes_file=RELEASE_NOTES.md" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        if: ${{ steps.meta.outputs.create_release == 'true' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag_name }}
+          name: ${{ steps.meta.outputs.release_name }}
+          prerelease: ${{ steps.meta.outputs.prerelease == 'true' }}
+          body_path: ${{ steps.notes.outputs.notes_file }}
+          files: |
+            dist/android/**/*.apk
+            dist/android/**/*.aab
+            dist/ios/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Send Telegram notification
+        if: ${{ steps.meta.outputs.create_release == 'true' }}
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          TAG="${{ steps.meta.outputs.tag_name }}"
+          RELEASE_URL="https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}"
+          IS_PRERELEASE="${{ steps.meta.outputs.prerelease }}"
+
+          # 获取 commit 变更列表（与 release notes 相同）
+          PREV_TAG=$(git tag --list --sort=-version:refname | grep -v "^${TAG}$" | head -n1)
+          if [ -n "$PREV_TAG" ]; then
+            COMMITS=$(git log --no-merges --pretty=format:"- %s" "$PREV_TAG"..HEAD)
+          else
+            COMMITS=$(git log --no-merges --pretty=format:"- %s")
+          fi
+
+          # 转义 Markdown 特殊字符，然后进行 URL 编码
+          COMMITS_ESCAPED=$(echo "$COMMITS" | sed 's/\*/\\*/g; s/_/\\_/g; s/\[/\\[/g; s/\]/\\]/g; s/`/\\`/g')
+          # URL 编码变更内容（换行符转为 %0A）
+          COMMITS_ENCODED=$(echo "$COMMITS_ESCAPED" | sed 's/$/%0A/g' | tr -d '\n')
+
+          # 构建消息
+          if [ "$IS_PRERELEASE" == "true" ]; then
+            MESSAGE="🐝 *BeeCount ${TAG}* 发布（预览版）%0A%0A"
+          else
+            MESSAGE="🐝 *BeeCount ${TAG}* 发布%0A%0A"
+          fi
+
+          MESSAGE="${MESSAGE}🔗 [查看完整说明](${RELEASE_URL})%0A%0A"
+          MESSAGE="${MESSAGE}*变更内容*:%0A${COMMITS_ENCODED}"
+
+          # 发送到 Telegram
+          if [ -n "${TELEGRAM_BOT_TOKEN:-}" ] && [ -n "${TELEGRAM_CHAT_ID:-}" ]; then
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+              -d "chat_id=${TELEGRAM_CHAT_ID}" \
+              -d "text=${MESSAGE}" \
+              -d "parse_mode=Markdown" \
+              -d "disable_web_page_preview=true"
+            echo "✅ Telegram notification sent successfully!"
+          else
+            echo "⚠️  Telegram credentials not configured, skipping notification"
+          fi

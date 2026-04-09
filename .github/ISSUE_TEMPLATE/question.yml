@@ -1,0 +1,60 @@
+name: ❓ 问题咨询 / Question
+description: 使用过程中的疑问或需要帮助 / Questions or need help while using the app
+title: "[Question] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        有任何疑问都可以在这里提出！
+        Feel free to ask any questions here!
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: 提交前确认 / Pre-submission Checklist
+      description: 请确认以下事项 / Please confirm the following
+      options:
+        - label: 我已查阅 [官方文档](https://beecount-website.pages.dev/docs/intro)，没有找到相关答案 / I have checked the [official docs](https://beecount-website.pages.dev/docs/intro) and couldn't find the answer
+          required: true
+        - label: 我已在 [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) 搜索过，没有找到相同的问题 / I have searched [GitHub Issues](https://github.com/TNT-Likely/BeeCount/issues) and found no similar question
+          required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: 您的问题 / Your Question
+      description: 详细描述您的疑问 / Describe your question in detail
+      placeholder: 我想了解... / I want to know about...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 问题分类 / Question Category
+      description: 这个问题属于哪个类别？ / Which category does this question belong to?
+      options:
+        - 账本管理 / Ledger Management
+        - 账单记录 / Transaction Recording
+        - 数据统计 / Data Statistics
+        - 数据导入导出 / Data Import/Export
+        - 云同步 / Cloud Sync
+        - 自动记账 / Auto-Billing
+        - 其他功能 / Other Features
+        - 使用建议 / Usage Suggestions
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: 已尝试的方法 / What Have You Tried
+      description: 您已经尝试过哪些方法？ / What methods have you already tried?
+      placeholder: 我试过...但是... / I tried... but...
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 补充信息 / Additional Information
+      description: 还有其他需要补充的信息吗？ / Any other information you'd like to add?
