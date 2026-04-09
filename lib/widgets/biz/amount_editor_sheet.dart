@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:beecount/widgets/ui/wheel_date_picker.dart';
+import 'package:simplelog/widgets/ui/wheel_date_picker.dart';
 import '../../data/db.dart';
 import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';

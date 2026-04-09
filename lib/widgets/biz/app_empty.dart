@@ -1,4 +1,4 @@
-import 'package:beecount/widgets/biz/bee_icon.dart';
+import 'package:simplelog/widgets/biz/bee_icon.dart';
 import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
 

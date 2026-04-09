@@ -1,4 +1,4 @@
-package com.tntlikely.beecount
+package com.SimpleLog.app
 
 import android.app.AlarmManager
 import android.app.NotificationChannel

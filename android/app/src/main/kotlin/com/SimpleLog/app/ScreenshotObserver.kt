@@ -1,4 +1,4 @@
-package com.tntlikely.beecount
+package com.SimpleLog.app
 
 import android.content.Context
 import android.content.SharedPreferences

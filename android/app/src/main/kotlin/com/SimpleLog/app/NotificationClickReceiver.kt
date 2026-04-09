@@ -1,4 +1,4 @@
-package com.tntlikely.beecount
+package com.SimpleLog.app
 
 import android.content.BroadcastReceiver
 import android.content.Context

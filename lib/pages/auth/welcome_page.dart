@@ -54,13 +54,12 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       _buildAttachmentImportPage(context, theme, l10n),
     ];
 
-    // 新用户流程：5页
+    // 新用户流程：4页（移除了第5页）
     final newUserPages = [
       _buildWelcomePage(context, theme, l10n), // 第1屏：语言选择
       _buildCurrencyPage(context, theme, l10n), // 第2屏：货币选择
       _buildCategoryModePage(context, theme, l10n), // 第3屏：分类模式
       _buildCloudSyncPage(context, theme, l10n), // 第4屏：云同步
-      _buildPrivacyAndOpenSourcePage(context, theme, l10n), // 第5屏：隐私保护+开源透明
     ];
 
     final pages = _isExistingUserFlow ? existingUserPages : newUserPages;
@@ -97,7 +96,9 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             Expanded(
               child: PageView(
                 controller: _pageController,
-                physics: _isExistingUserFlow ? const NeverScrollableScrollPhysics() : null,
+                physics: _isExistingUserFlow
+                    ? const NeverScrollableScrollPhysics()
+                    : null,
                 onPageChanged: (index) {
                   setState(() {
                     _currentPage = index;
@@ -127,7 +128,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                         child: Text(l10n.commonPrevious),
                       ),
                     const Spacer(),
-                    if (_currentPage < 4)
+                    if (_currentPage < 3)
                       FilledButton(
                         onPressed: () {
                           _pageController.nextPage(
@@ -143,7 +144,9 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                       )
                     else
                       FilledButton(
-                        onPressed: _isInitializing ? null : () => _finishWelcome(context),
+                        onPressed: _isInitializing
+                            ? null
+                            : () => _finishWelcome(context),
                         style: FilledButton.styleFrom(
                           backgroundColor: Colors.white,
                           foregroundColor: theme.primaryColor,
@@ -152,13 +155,14 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                             ? const SizedBox(
                                 width: 20,
                                 height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
                               )
                             : Text(l10n.commonFinish),
                       ),
-                ],
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -250,14 +254,16 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               itemBuilder: (context, index) {
                 final locale = availableLocales[index];
                 final isSelected = currentLocale == locale;
-                final displayName = languageNotifier.getLanguageDisplayName(context, locale);
+                final displayName =
+                    languageNotifier.getLanguageDisplayName(context, locale);
 
                 return InkWell(
                   onTap: () {
                     languageNotifier.setLanguage(locale);
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
                     child: Row(
                       children: [
                         Expanded(
@@ -265,7 +271,9 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                             displayName,
                             style: theme.textTheme.bodyLarge?.copyWith(
                               color: Colors.white,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
                             ),
                           ),
                         ),
@@ -280,43 +288,6 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                   ),
                 );
               },
-            ),
-          ),
-
-          // 老用户导入配置（紧凑样式）
-          const SizedBox(height: 24),
-          TextButton(
-            onPressed: _isImporting ? null : () => _importConfig(context),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (_isImporting)
-                  const SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white70,
-                    ),
-                  )
-                else
-                  Icon(
-                    Icons.file_upload_outlined,
-                    size: 16,
-                    color: Colors.white.withValues(alpha: 0.7),
-                  ),
-                const SizedBox(width: 6),
-                Text(
-                  _isImporting
-                      ? l10n.welcomeImportingConfig
-                      : '${l10n.welcomeExistingUserTitle} ${l10n.welcomeExistingUserButton}',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.7),
-                    decoration: TextDecoration.underline,
-                    decorationColor: Colors.white.withValues(alpha: 0.5),
-                  ),
-                ),
-              ],
             ),
           ),
         ],
@@ -436,8 +407,9 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
-                              fontWeight:
-                                  isSelected ? FontWeight.w600 : FontWeight.normal,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
                             ),
                           ),
                         ),
@@ -446,95 +418,6 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                   ),
                 );
               },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// 第5页：开源透明与社群驱动
-  Widget _buildPrivacyAndOpenSourcePage(
-      BuildContext context, ThemeData theme, AppLocalizations l10n) {
-    return Padding(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // 开源与社群图标
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.favorite_outline,
-              size: 64,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 32),
-
-          // 标题
-          Text(
-            l10n.welcomePrivacyTitle,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-
-          // 特性列表
-          Center(
-            child: IntrinsicWidth(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 开源代码
-                  _buildFeatureItem(
-                    context,
-                    Icons.code_outlined,
-                    Colors.white,
-                    l10n.welcomePrivacyFeature1,
-                  ),
-                  const SizedBox(height: 12),
-                  // 隐私保护
-                  _buildFeatureItem(
-                    context,
-                    Icons.shield_outlined,
-                    Colors.white,
-                    l10n.welcomePrivacyFeature2,
-                  ),
-                  const SizedBox(height: 12),
-                  // 社群驱动
-                  _buildFeatureItem(
-                    context,
-                    Icons.groups_outlined,
-                    Colors.white,
-                    l10n.welcomeOpenSourceFeature1,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // GitHub链接按钮
-          OutlinedButton.icon(
-            onPressed: () => _launchGitHub(context),
-            icon: const Icon(Icons.open_in_new, size: 18, color: Colors.white),
-            label: Text(l10n.welcomeViewGitHub,
-                style: const TextStyle(color: Colors.white)),
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: Colors.white),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 12,
-              ),
             ),
           ),
         ],
@@ -654,12 +537,14 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
         await launchUrl(url, mode: LaunchMode.externalApplication);
       } else {
         if (context.mounted) {
-          showToast(context, AppLocalizations.of(context).privacyOpenSourceUrlError);
+          showToast(
+              context, AppLocalizations.of(context).privacyOpenSourceUrlError);
         }
       }
     } catch (e) {
       if (context.mounted) {
-        showToast(context, AppLocalizations.of(context).privacyOpenSourceUrlError);
+        showToast(
+            context, AppLocalizations.of(context).privacyOpenSourceUrlError);
       }
     }
   }
@@ -864,7 +749,9 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
 
           // 导入按钮
           FilledButton.icon(
-            onPressed: _isImportingAttachment ? null : () => _importAttachments(context),
+            onPressed: _isImportingAttachment
+                ? null
+                : () => _importAttachments(context),
             icon: _isImportingAttachment
                 ? const SizedBox(
                     width: 18,
@@ -944,11 +831,13 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       if (!context.mounted) return;
 
       if (importResult.success) {
-        showToast(context, l10n.welcomeImportAttachmentSuccess(importResult.imported));
+        showToast(context,
+            l10n.welcomeImportAttachmentSuccess(importResult.imported));
         // 导入成功，完成流程
         _finishExistingUserFlow();
       } else {
-        showToast(context, l10n.welcomeImportAttachmentFailed(importResult.message ?? ''));
+        showToast(context,
+            l10n.welcomeImportAttachmentFailed(importResult.message ?? ''));
       }
     } catch (e, st) {
       logger.error('welcome', '导入附件失败', e, st);
@@ -1088,7 +977,8 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               : Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.3),
+            color:
+                isSelected ? Colors.white : Colors.white.withValues(alpha: 0.3),
             width: 2,
           ),
         ),
@@ -1098,7 +988,9 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             Row(
               children: [
                 Icon(
-                  isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                  isSelected
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_unchecked,
                   color: Colors.white,
                   size: 24,
                 ),
@@ -1128,27 +1020,27 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             ),
             const SizedBox(height: 12),
             ...features.map((feature) => Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.check_circle_outline,
-                    color: Colors.white.withValues(alpha: 0.8),
-                    size: 16,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      feature,
-                      style: theme.textTheme.bodySmall?.copyWith(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.check_circle_outline,
                         color: Colors.white.withValues(alpha: 0.8),
+                        size: 16,
                       ),
-                    ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          feature,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: Colors.white.withValues(alpha: 0.8),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )),
+                )),
           ],
         ),
       ),

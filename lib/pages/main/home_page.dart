@@ -17,7 +17,7 @@ import '../transaction/search_page.dart';
 import '../ai/ai_chat_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/system/logger_service.dart';
-import '../../services/export/share_poster_service.dart';
+
 import '../report/annual_report_page.dart';
 import '../calendar/calendar_page.dart';
 import '../../widgets/biz/ledger_picker_sheet.dart';
@@ -346,11 +346,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                   // 查看按钮（查看后本次隐藏，下次打开app还会显示）
                   GestureDetector(
                     onTap: () {
-                      SharePosterService.showPosterCarouselPreview(
-                        context,
-                        year: lastMonth.year,
-                        month: lastMonth.month,
-                      );
                       // 只临时隐藏，不保存到 prefs
                       setState(() {
                         _showLastMonthReminder = false;
@@ -561,8 +556,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (_) => const BudgetPage()),
+                        MaterialPageRoute(builder: (_) => const BudgetPage()),
                       );
                     },
                     child: Text(

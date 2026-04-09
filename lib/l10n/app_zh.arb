@@ -1,6 +1,6 @@
 {
   "@@locale": "zh",
-  "appTitle": "蜜蜂记账",
+  "appTitle": "简单记账",
   "tabHome": "明细",
   "tabInsights": "洞察",
   "tabAssets": "资产",
@@ -102,7 +102,7 @@
   "homeBalance": "结余",
   "homeNoRecords": "还没有记账",
   "homeSelectDate": "选择日期",
-  "homeAppTitle": "蜜蜂记账",
+  "homeAppTitle": "简单记账",
   "homeSearch": "搜索",
   "homeYear": "{year}年",
   "homeMonth": "{month}月",
@@ -135,10 +135,10 @@
   "@searchBatchModeWithCount": {
     "placeholders": {
       "selected": {
-        "type": "int"
+        "type": "Object"
       },
       "total": {
-        "type": "int"
+        "type": "Object"
       }
     }
   },
@@ -149,7 +149,7 @@
   "@searchSelectedCount": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "Object"
       }
     }
   },
@@ -160,7 +160,7 @@
   "@searchBatchDeleteConfirmMessage": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "Object"
       }
     }
   },
@@ -169,7 +169,7 @@
   "@searchBatchSetNoteMessage": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "Object"
       }
     }
   },
@@ -178,7 +178,7 @@
   "@searchBatchDeleteSuccess": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "Object"
       }
     }
   },
@@ -186,7 +186,7 @@
   "@searchBatchDeleteFailed": {
     "placeholders": {
       "error": {
-        "type": "String"
+        "type": "Object"
       }
     }
   },
@@ -194,7 +194,7 @@
   "@searchBatchSetNoteSuccess": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "Object"
       }
     }
   },
@@ -202,7 +202,7 @@
   "@searchBatchSetNoteFailed": {
     "placeholders": {
       "error": {
-        "type": "String"
+        "type": "Object"
       }
     }
   },
@@ -210,7 +210,7 @@
   "@searchBatchChangeCategorySuccess": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "Object"
       }
     }
   },
@@ -218,7 +218,7 @@
   "@searchBatchChangeCategoryFailed": {
     "placeholders": {
       "error": {
-        "type": "String"
+        "type": "Object"
       }
     }
   },
@@ -226,7 +226,7 @@
   "@searchResultsCount": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "Object"
       }
     }
   },
@@ -253,7 +253,7 @@
   "analyticsSwipeToSwitch": "横滑切换",
   "analyticsAllYears": "全部年份",
   "analyticsToday": "今天",
-  "splashAppName": "蜜蜂记账",
+  "splashAppName": "简单记账",
   "splashSlogan": "一笔一蜜",
   "splashSecurityTitle": "开源数据安全",
   "splashSecurityFeature1": "• 数据本地存储，隐私完全自控",
@@ -275,7 +275,7 @@
   "@ledgersClearMessage": {
     "placeholders": {
       "name": {
-        "type": "String"
+        "type": "Object"
       }
     }
   },
@@ -286,7 +286,7 @@
   "@ledgersDeleteLocalMessage": {
     "placeholders": {
       "name": {
-        "type": "String"
+        "type": "Object"
       }
     }
   },
@@ -344,7 +344,7 @@
   "languageSystemDefault": "跟随系统",
   "deleteConfirmTitle": "删除确认",
   "deleteConfirmMessage": "确定要删除这条记账吗？",
-  "mineSlogan": "蜜蜂记账，一笔一蜜",
+  "mineSlogan": "简单记账，一笔一蜜",
   "mineAvatarTitle": "头像设置",
   "mineAvatarFromGallery": "从相册选择",
   "mineAvatarFromCamera": "拍照",
@@ -418,11 +418,11 @@
   "annualReportGenerating": "正在生成年度报告...",
   "annualReportSaveSuccess": "年度报告海报已保存",
   "mineShareApp": "分享应用",
-  "mineShareWithFriends": "和好友分享蜜蜂记账",
+  "mineShareWithFriends": "和好友分享简单记账",
   "mineCopyPromoText": "复制推广文案",
   "mineCopyPromoSubtitle": "一键复制分享给好友",
   "mineShareGenerating": "正在生成分享海报...",
-  "sharePosterAppName": "蜜蜂记账",
+  "sharePosterAppName": "简单记账",
   "sharePosterSlogan": "一笔一蜜，记录美好生活",
   "sharePosterFeature1": "数据安全·你做主",
   "sharePosterFeature2": "完全开源·可审计",
@@ -454,7 +454,7 @@
   "sharePosterHideIncome": "隐藏收入",
   "sharePosterShowIncome": "显示收入",
   "sharePosterSaveSuccess": "已保存到相册",
-  "shareGuidanceCopyText": "用蜜蜂记账记录生活，开源免费无广告！🐝 下载地址：https://github.com/TNT-Likely/BeeCount",
+  "shareGuidanceCopyText": "用简单记账记录生活，开源免费无广告！🐝 下载地址：https://github.com/TNT-Likely/BeeCount",
   "shareGuidanceCopied": "文案已复制",
   "sharePosterSaveFailed": "保存失败",
   "sharePosterPermissionDenied": "相册权限被拒绝，请在设置中开启",
@@ -564,7 +564,7 @@
   "minePersonalize": "个性装扮",
   "mineDisplayScale": "显示缩放",
   "mineDisplayScaleSubtitle": "调整文字和界面元素大小",
-  "mineCheckUpdate": "检测更新",
+  "mineCheckUpdate": "检查更新",
   "mineCheckUpdateSubtitle": "正在检查最新版本",
   "mineUpdateDownload": "下载更新",
   "mineFeedback": "问题反馈",
@@ -630,7 +630,7 @@
   "@categoryClearUnusedMessage": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "Object"
       }
     }
   },
@@ -640,7 +640,7 @@
   "@categoryClearUnusedSuccess": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "Object"
       }
     }
   },
@@ -653,7 +653,7 @@
   "@categoryShareSuccess": {
     "placeholders": {
       "path": {
-        "type": "String"
+        "type": "Object"
       }
     }
   },
@@ -889,7 +889,7 @@
   "importSkippedNonTransactionTypes": "跳过 {count} 条非收支记录（债务等）",
   "importTransactionFailed": "导入失败，已回滚所有更改：{error}",
   "mineImportCompleteAllSuccess": "全部成功",
-  "mineCheckUpdateDetecting": "检测更新中...",
+  "mineCheckUpdateDetecting": "检查更新中...",
   "mineCheckUpdateSubtitleDetecting": "正在检查最新版本",
   "mineUpdateDownloadTitle": "下载更新",
   "cloudTest": "测试",
@@ -1111,7 +1111,7 @@
   "updateDownloadFailed": "下载失败",
   "updateInstallNow": "立即安装",
   "updateNotificationPermissionTitle": "通知权限被拒绝",
-  "updateCheckFailedTitle": "检测更新失败",
+  "updateCheckFailedTitle": "检查更新失败",
   "updateDownloadFailedTitle": "下载失败",
   "updateGoToGitHub": "前往GitHub",
   "updateCannotOpenLink": "无法打开链接",

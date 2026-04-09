@@ -2,7 +2,8 @@ import 'dart:io' show Platform, File;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:beecount/widgets/biz/bee_icon.dart';
+import 'package:simplelog/widgets/biz/bee_icon.dart';
+import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 
 import '../data/import_page.dart';
 import '../data/export_page.dart';
@@ -12,13 +13,11 @@ import '../../providers/theme_providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
-import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 import '../../cloud/sync_service.dart';
 import '../cloud/cloud_service_page.dart';
 import '../../services/system/logger_service.dart';
 import '../../services/ui/avatar_service.dart';
 import '../../providers/avatar_providers.dart';
-import '../../services/export/share_poster_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../category/category_manage_page.dart';
 import '../category/category_migration_page.dart';
@@ -30,20 +29,16 @@ import '../settings/widget_management_page.dart';
 import '../automation/auto_billing_settings_page.dart';
 import '../ai/ai_settings_page.dart';
 import '../cloud/cloud_sync_page.dart';
-import '../../utils/website_urls.dart';
-import '../../providers/github_star_provider.dart';
-import '../settings/data_management_page.dart';
-import '../settings/appearance_settings_page.dart';
-import '../settings/smart_billing_page.dart';
-import '../settings/automation_page.dart';
-import '../settings/about_page.dart';
-import '../report/annual_report_page.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:in_app_review/in_app_review.dart';
+import '../../pages/settings/data_management_page.dart';
+import '../../pages/settings/appearance_settings_page.dart';
+import '../../pages/settings/smart_billing_page.dart';
+import '../../pages/settings/automation_page.dart';
 import '../../services/system/update_service.dart';
 import '../../utils/ui_scale_extensions.dart';
-import '../donation/donation_page.dart';
+
+/// 是否为 Google Play 版本（通过 CI 构建时 --dart-define=GOOGLE_PLAY=true 注入）
+const _isGooglePlayBuild =
+    bool.fromEnvironment('GOOGLE_PLAY', defaultValue: false);
 
 class MinePage extends ConsumerWidget {
   const MinePage({super.key});
@@ -364,159 +359,93 @@ class MinePage extends ConsumerWidget {
                       12.0.scaled(context, ref), 0),
                   child: Column(
                     children: [
-                      AppListTile(
-                        leading: Icons.info_outline,
-                        title: AppLocalizations.of(context).about,
-                        subtitle: AppLocalizations.of(context).aboutDesc,
-                        trailing: Icon(Icons.chevron_right,
-                            color: BeeTokens.iconTertiary(context), size: 20),
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const AboutPage()),
-                          );
-                        },
-                      ),
-                      BeeTokens.cardDivider(context),
-                      // 使用帮助
-                      AppListTile(
-                        leading: Icons.help_outline,
-                        title: AppLocalizations.of(context).mineHelp,
-                        subtitle: AppLocalizations.of(context).mineHelpSubtitle,
-                        onTap: () async {
-                          final locale = Localizations.localeOf(context);
-                          final url = Uri.parse(WebsiteUrls.docs(locale));
-                          await _tryOpenUrl(url);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                // 支持我们
-                SizedBox(height: 8.0.scaled(context, ref)),
-                SectionCard(
-                  margin: EdgeInsets.fromLTRB(12.0.scaled(context, ref), 0,
-                      12.0.scaled(context, ref), 0),
-                  child: Column(
-                    children: [
-                      // 仅在iOS显示打赏入口
-                      if (Platform.isIOS) ...[
-                        Consumer(
-                          builder: (context, ref, _) {
-                            final primaryColor =
-                                ref.watch(primaryColorProvider);
-                            return AppListTile(
-                              leading: Icons.favorite,
-                              leadingWidget: Container(
-                                width: 36,
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  color: primaryColor.withValues(alpha: 0.12),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.favorite_border,
-                                  color: primaryColor,
-                                ),
-                              ),
-                              title: AppLocalizations.of(context).donationTitle,
-                              subtitle: AppLocalizations.of(context)
-                                  .donationEntrySubtitle,
-                              trailing: Icon(Icons.chevron_right,
-                                  color: BeeTokens.iconTertiary(context),
-                                  size: 20),
-                              onTap: () async {
-                                await Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) => const DonationPage()),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                        BeeTokens.cardDivider(context),
-                      ],
-                      // GitHub Star
-                      Consumer(
-                        builder: (context, ref, _) {
-                          final starCountAsync =
-                              ref.watch(githubStarCountProvider);
-                          final starCount = starCountAsync.valueOrNull ?? 999;
-                          return AppListTile(
-                            leading: Icons.star_outline,
-                            title:
-                                AppLocalizations.of(context).mineSupportAuthor,
-                            subtitle: AppLocalizations.of(context)
-                                .mineSupportAuthorSubtitle(
-                                    starCount.toString()),
-                            onTap: () => _showGitHubStarGuide(context),
-                          );
-                        },
-                      ),
-                      BeeTokens.cardDivider(context),
-                      // 年度账单
-                      AppListTile(
-                        leading: Icons.auto_graph_rounded,
-                        title: AppLocalizations.of(context).annualReportTitle,
-                        subtitle: AppLocalizations.of(context)
-                            .annualReportEntrySubtitle,
-                        trailing: Icon(Icons.chevron_right,
-                            color: BeeTokens.iconTertiary(context), size: 20),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const AnnualReportPage()),
-                          );
-                        },
-                      ),
-                      BeeTokens.cardDivider(context),
-                      // 分享海报
-                      AppListTile(
-                        leading: Icons.ios_share_rounded,
-                        title: AppLocalizations.of(context).mineShareApp,
-                        subtitle:
-                            AppLocalizations.of(context).mineShareWithFriends,
-                        trailing: Icon(Icons.chevron_right,
-                            color: BeeTokens.iconTertiary(context), size: 20),
-                        onTap: () {
-                          // 打开海报轮播预览对话框（支持年度、月度、总览3种海报）
-                          SharePosterService.showPosterCarouselPreview(context);
-                        },
-                      ),
-                      BeeTokens.cardDivider(context),
-                      // 复制推广文案
-                      AppListTile(
-                        leading: Icons.content_copy_rounded,
-                        title: AppLocalizations.of(context).mineCopyPromoText,
-                        subtitle:
-                            AppLocalizations.of(context).mineCopyPromoSubtitle,
-                        onTap: () async {
-                          final l10n = AppLocalizations.of(context);
-                          await Clipboard.setData(
-                            ClipboardData(text: l10n.shareGuidanceCopyText),
-                          );
-                          if (context.mounted) {
-                            showToast(context, l10n.shareGuidanceCopied);
+                      // 检查更新
+                      if (!Platform.isIOS && !_isGooglePlayBuild) ...[
+                        Consumer(builder: (context, ref2, child) {
+                          final isLoading =
+                              ref2.watch(checkUpdateLoadingProvider);
+                          final downloadProgress =
+                              ref2.watch(updateProgressProvider);
+
+                          // 确定显示状态
+                          bool showProgress = false;
+                          String title =
+                              AppLocalizations.of(context).mineCheckUpdate;
+                          String? subtitle;
+                          IconData icon = Icons.system_update_alt_outlined;
+                          Widget? trailing;
+
+                          if (isLoading) {
+                            title = AppLocalizations.of(context)
+                                .mineCheckUpdateDetecting;
+                            subtitle = AppLocalizations.of(context)
+                                .mineCheckUpdateSubtitleDetecting;
+                            icon = Icons.hourglass_empty;
+                            trailing = const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2));
+                          } else if (downloadProgress.isActive) {
+                            showProgress = true;
+                            title = AppLocalizations.of(context)
+                                .mineUpdateDownloadTitle;
+                            icon = Icons.download_outlined;
+                            trailing = SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  value: downloadProgress.progress,
+                                ));
                           }
-                        },
-                      ),
-                      // 只在iOS上显示评分入口（Android还未上架）
-                      if (Platform.isIOS) ...[
-                        BeeTokens.cardDivider(context),
-                        AppListTile(
-                          leading: Icons.star_border_rounded,
-                          title: AppLocalizations.of(context).mineRateApp,
-                          subtitle:
-                              AppLocalizations.of(context).mineRateAppSubtitle,
-                          onTap: () => _rateApp(context),
-                        ),
+
+                          return AppListTile(
+                            leading: icon,
+                            title: title,
+                            subtitle: showProgress
+                                ? downloadProgress.status
+                                : subtitle,
+                            trailing: trailing,
+                            onTap: (isLoading || showProgress)
+                                ? null
+                                : () async {
+                                    await UpdateService.checkUpdateWithUI(
+                                      context,
+                                      setLoading: (loading) => ref2
+                                          .read(checkUpdateLoadingProvider
+                                              .notifier)
+                                          .state = loading,
+                                      setProgress: (progress, status) {
+                                        if (status.isEmpty) {
+                                          ref2
+                                              .read(updateProgressProvider
+                                                  .notifier)
+                                              .state = UpdateProgress.idle();
+                                        } else {
+                                          ref2
+                                                  .read(updateProgressProvider
+                                                      .notifier)
+                                                  .state =
+                                              UpdateProgress.active(
+                                                  progress, status);
+                                        }
+                                      },
+                                    );
+                                  },
+                          );
+                        }),
                       ],
                     ],
                   ),
                 ),
                 SizedBox(height: BeeDimens.p16.scaled(context, ref)),
                 // 底部留白，避免被悬浮 Tab 栏遮挡
-                SizedBox(height: 56 + 12 + MediaQuery.of(context).viewPadding.bottom + 16),
+                SizedBox(
+                    height: 56 +
+                        12 +
+                        MediaQuery.of(context).viewPadding.bottom +
+                        16),
               ],
             ),
           ),
@@ -606,114 +535,6 @@ class _ImportSuccessTile extends StatelessWidget {
   }
 }
 
-/// 尝试使用多种方式打开URL，提供更好的兼容性
-Future<bool> _tryOpenUrl(Uri url) async {
-  try {
-    // 方式1: 默认外部应用打开
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-      return true;
-    }
-
-    // 方式2: 浏览器内打开
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalNonBrowserApplication);
-      return true;
-    }
-
-    // 方式3: 平台默认方式
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.platformDefault);
-      return true;
-    }
-
-    logger.error('MinePage', '无法打开URL: $url');
-    return false;
-  } catch (e) {
-    logger.error('MinePage', '打开URL失败: $url', e);
-    return false;
-  }
-}
-
-/// 显示 GitHub Star 引导弹窗
-void _showGitHubStarGuide(BuildContext context) {
-  final l10n = AppLocalizations.of(context);
-  final screenHeight = MediaQuery.of(context).size.height;
-
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text(l10n.githubStarGuideTitle),
-      content: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight: screenHeight * 0.5,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                l10n.githubStarGuideContent,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 16),
-              // 引导图片
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  'assets/images/github_star_guide.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      actions: [
-        FilledButton(
-          onPressed: () {
-            Navigator.pop(context);
-            _tryOpenUrl(Uri.parse('https://github.com/TNT-Likely/BeeCount'));
-          },
-          child: Text(l10n.githubStarGuideButton),
-        ),
-      ],
-    ),
-  );
-}
-
-/// 请求应用评分
-///
-/// iOS系统对原生评分弹窗有限制：
-/// 1. 每365天最多弹出3次
-/// 2. 模拟器上不显示
-/// 3. 用户可在系统设置中禁用
-///
-/// 因此直接打开App Store评分页面更可靠
-Future<void> _rateApp(BuildContext context) async {
-  try {
-    final InAppReview inAppReview = InAppReview.instance;
-
-    // 直接打开应用商店评分页面（更可靠，不受系统限制）
-    if (Platform.isIOS) {
-      await inAppReview.openStoreListing(
-        appStoreId: '6754611670', // BeeCount的App Store ID
-      );
-      logger.info('MinePage', '已打开App Store评分页面');
-    } else {
-      // Android会自动打开Google Play（如果已上架）
-      await inAppReview.openStoreListing();
-      logger.info('MinePage', '已打开Google Play评分页面');
-    }
-  } catch (e) {
-    logger.error('MinePage', '打开评分失败', e);
-    // 失败时不显示错误提示，静默失败
-  }
-}
-
 /// 我的页面头部
 class _MinePageHeader extends ConsumerStatefulWidget {
   const _MinePageHeader();
@@ -742,64 +563,12 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
     }
   }
 
-  Future<void> _showAvatarOptions() async {
-    final l10n = AppLocalizations.of(context);
-    final result = await showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.mineAvatarTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: Text(l10n.mineAvatarFromGallery),
-              onTap: () => Navigator.pop(context, 'gallery'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: Text(l10n.mineAvatarFromCamera),
-              onTap: () => Navigator.pop(context, 'camera'),
-            ),
-            if (_avatarPath != null)
-              ListTile(
-                leading: const Icon(Icons.delete, color: Colors.red),
-                title: Text(l10n.mineAvatarDelete,
-                    style: const TextStyle(color: Colors.red)),
-                onTap: () => Navigator.pop(context, 'delete'),
-              ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.commonCancel),
-          ),
-        ],
-      ),
-    );
-
-    if (result == null || !mounted) return;
-
+  Future<void> _pickAvatarFromGallery() async {
     try {
-      if (result == 'gallery') {
-        final path = await AvatarService.pickAndSaveAvatar();
-        if (mounted && path != null) {
-          setState(() => _avatarPath = path);
-          ref.invalidate(avatarPathProvider);
-        }
-      } else if (result == 'camera') {
-        final path = await AvatarService.takePhotoAndSaveAvatar();
-        if (mounted && path != null) {
-          setState(() => _avatarPath = path);
-          ref.invalidate(avatarPathProvider);
-        }
-      } else if (result == 'delete') {
-        await AvatarService.deleteAvatar();
-        if (mounted) {
-          setState(() => _avatarPath = null);
-          ref.invalidate(avatarPathProvider);
-        }
+      final path = await AvatarService.pickAndSaveAvatar();
+      if (mounted && path != null) {
+        setState(() => _avatarPath = path);
+        ref.invalidate(avatarPathProvider);
       }
     } catch (e) {
       if (!mounted) return;
@@ -845,7 +614,7 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
             children: [
               // 头像/Logo
               GestureDetector(
-                onTap: canEditAvatar ? _showAvatarOptions : null,
+                onTap: canEditAvatar ? _pickAvatarFromGallery : null,
                 child: Stack(
                   children: [
                     Container(
@@ -920,45 +689,7 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
                   ],
                 ),
               ),
-              SizedBox(height: 12.0.scaled(context, ref)),
-              // Slogan with eye icon - 手动偏移让文字视觉居中
-              Padding(
-                padding: EdgeInsets.only(
-                    left: 26.0.scaled(context, ref)), // 偏移量 = 图标(18) + 间距(8)
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center, // 垂直居中对齐
-                  children: [
-                    Text(
-                      AppLocalizations.of(context).mineSlogan,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: BeeTokens.textPrimary(context), // ⭐ 使用 Token
-                            fontWeight: FontWeight.w600,
-                          ),
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(width: 8.0.scaled(context, ref)),
-                    GestureDetector(
-                      onTap: () {
-                        final cur = ref.read(hideAmountsProvider);
-                        ref.read(hideAmountsProvider.notifier).state = !cur;
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 2.0.scaled(context, ref)),
-                        child: Icon(
-                          hide
-                              ? Icons.visibility_off_outlined
-                              : Icons.visibility_outlined,
-                          size: 18,
-                          color: BeeTokens.textPrimary(context),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16.0.scaled(context, ref)),
+
               // 统计数据
               Row(
                 children: [
@@ -981,18 +712,24 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
                     ),
                   ),
                   Expanded(
-                    child: _StatCell(
-                      label: AppLocalizations.of(context).mineCurrentBalance,
-                      value: balance,
-                      isAmount: true,
-                      currencyCode: currencyCode,
-                      labelStyle: labelStyle,
-                      numStyle: numStyle.copyWith(
-                        color: balance >= 0
-                            ? BeeTokens.textPrimary(context)
-                            : BeeTokens.error(context),
+                    child: GestureDetector(
+                      onTap: () {
+                        final cur = ref.read(hideAmountsProvider);
+                        ref.read(hideAmountsProvider.notifier).state = !cur;
+                      },
+                      child: _StatCell(
+                        label: AppLocalizations.of(context).mineCurrentBalance,
+                        value: balance,
+                        isAmount: true,
+                        currencyCode: currencyCode,
+                        labelStyle: labelStyle,
+                        numStyle: numStyle.copyWith(
+                          color: balance >= 0
+                              ? BeeTokens.textPrimary(context)
+                              : BeeTokens.error(context),
+                        ),
+                        centered: true,
                       ),
-                      centered: true,
                     ),
                   ),
                 ],

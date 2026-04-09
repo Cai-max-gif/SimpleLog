@@ -45,7 +45,7 @@ Future<void> main() async {
   // 配置iOS App Group（widget和主app共享数据必需）
   try {
     if (Platform.isIOS) {
-      await HomeWidget.setAppGroupId('group.com.tntlikely.beecount');
+      await HomeWidget.setAppGroupId('group.com.SimpleLog.app');
     }
   } catch (e) {
     print('⚠️  HomeWidget 插件初始化失败（可能在不支持的平台上运行）: $e');
@@ -278,15 +278,15 @@ void _setupImageShareHandler(ProviderContainer container) {
 
 /// 设置 URL 监听（用于 AppLink）
 ///
-/// 监听 beecount:// URL Scheme 调用
+/// 监听 simplelog:// URL Scheme 调用
 /// 支持的URL格式:
-/// - beecount://voice - 语音记账
-/// - beecount://image - 图片记账（从相册）
-/// - beecount://camera - 拍照记账
-/// - beecount://ai-chat - AI 小助手
-/// - beecount://add?amount=100&type=expense - 自动记账
-/// - beecount://auto-billing?text=... - 文本自动记账（兼容旧版）
-/// - beecount://quick-billing - 快速记账（兼容旧版）
+/// - simplelog://voice - 语音记账
+/// - simplelog://image - 图片记账（从相册）
+/// - simplelog://camera - 拍照记账
+/// - simplelog://ai-chat - AI 小助手
+/// - simplelog://add?amount=100&type=expense - 自动记账
+/// - simplelog://auto-billing?text=... - 文本自动记账（兼容旧版）
+/// - simplelog://quick-billing - 快速记账（兼容旧版）
 void _setupUrlListener(ProviderContainer container) {
   try {
     logger.info('AppLink', '初始化URL监听...');

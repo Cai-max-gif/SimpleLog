@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:beecount/widgets/biz/bee_icon.dart';
+import 'package:simplelog/widgets/biz/bee_icon.dart';
 
 import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
@@ -190,73 +190,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                   margin: EdgeInsets.zero,
                   child: Column(
                     children: [
-                      // iOS 平台和 Google Play 版本隐藏检查更新功能（使用应用商店分发）
-                      if (!Platform.isIOS && !_isGooglePlayBuild) ...[
-                        Consumer(builder: (context, ref2, child) {
-                          final isLoading = ref2.watch(checkUpdateLoadingProvider);
-                          final downloadProgress = ref2.watch(updateProgressProvider);
 
-                          // 确定显示状态
-                          bool showProgress = false;
-                          String title = AppLocalizations.of(context).mineCheckUpdate;
-                          String? subtitle;
-                          IconData icon = Icons.system_update_alt_outlined;
-                          Widget? trailing;
-
-                          if (isLoading) {
-                            title = AppLocalizations.of(context).mineCheckUpdateDetecting;
-                            subtitle =
-                                AppLocalizations.of(context).mineCheckUpdateSubtitleDetecting;
-                            icon = Icons.hourglass_empty;
-                            trailing = const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2));
-                          } else if (downloadProgress.isActive) {
-                            showProgress = true;
-                            title = AppLocalizations.of(context).mineUpdateDownloadTitle;
-                            icon = Icons.download_outlined;
-                            trailing = SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  value: downloadProgress.progress,
-                                ));
-                          }
-
-                          return Column(
-                            children: [
-                              AppListTile(
-                                leading: icon,
-                                title: title,
-                                subtitle: showProgress ? downloadProgress.status : subtitle,
-                                trailing: trailing,
-                                onTap: (isLoading || showProgress)
-                                    ? null
-                                    : () async {
-                                        await UpdateService.checkUpdateWithUI(
-                                          context,
-                                          setLoading: (loading) => ref2
-                                              .read(checkUpdateLoadingProvider.notifier)
-                                              .state = loading,
-                                          setProgress: (progress, status) {
-                                            if (status.isEmpty) {
-                                              ref2.read(updateProgressProvider.notifier).state =
-                                                  UpdateProgress.idle();
-                                            } else {
-                                              ref2.read(updateProgressProvider.notifier).state =
-                                                  UpdateProgress.active(progress, status);
-                                            }
-                                          },
-                                        );
-                                      },
-                              ),
-                              const Divider(height: 1, thickness: 0.5),
-                            ],
-                          );
-                        }),
-                      ],
                       AppListTile(
                         leading: Icons.favorite_border,
                         title: AppLocalizations.of(context).aboutSupportDevelopment,

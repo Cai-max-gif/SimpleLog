@@ -11,7 +11,6 @@ import '../../widgets/analytics/analytics_summary.dart';
 import '../../widgets/analytics/category_rank_row.dart';
 import '../../widgets/ui/capsule_switcher.dart';
 import '../../l10n/app_localizations.dart';
-import '../../services/export/share_poster_service.dart';
 import '../../data/db.dart' as db;
 
 class AnalyticsPage extends ConsumerStatefulWidget {
@@ -409,92 +408,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                       ],
                     ),
                   ),
-                  const Spacer(),
-                  // 分享按钮
-                  IconButton(
-                    icon: Icon(Icons.share,
-                        color: BeeTokens.textPrimary(context)),
-                    onPressed: () async {
-                      final ledgerId = ref.read(currentLedgerIdProvider);
-                      if (ledgerId == 0) {
-                        showToast(context, AppLocalizations.of(context).sharePosterNoLedger);
-                        return;
-                      }
 
-                      // 显示加载对话框（与轮播海报预览样式统一）
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        barrierColor: Colors.black.withValues(alpha: 0.3),
-                        builder: (ctx) => PopScope(
-                          canPop: false,
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(
-                                  width: 50,
-                                  height: 50,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 3,
-                                    valueColor: AlwaysStoppedAnimation(Colors.white),
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
-                                Text(
-                                  AppLocalizations.of(context).mineShareGenerating,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-
-                      try {
-                        if (context.mounted) {
-                          Navigator.of(context).pop(); // 关闭加载对话框
-
-                          // 使用动态预览对话框（支持隐藏收入）
-                          if (_scope == 'month') {
-                            await SharePosterService.showDynamicPosterPreview(
-                              context,
-                              ref,
-                              type: 'month',
-                              ledgerId: ledgerId,
-                              year: selMonth.year,
-                              month: selMonth.month,
-                            );
-                          } else if (_scope == 'year') {
-                            await SharePosterService.showDynamicPosterPreview(
-                              context,
-                              ref,
-                              type: 'year',
-                              ledgerId: ledgerId,
-                              year: selMonth.year,
-                            );
-                          } else {
-                            await SharePosterService.showDynamicPosterPreview(
-                              context,
-                              ref,
-                              type: 'ledger',
-                              ledgerId: ledgerId,
-                            );
-                          }
-                        }
-                      } catch (e) {
-                        if (context.mounted) {
-                          Navigator.of(context).pop(); // 关闭加载对话框
-                          showToast(context,
-                              '${AppLocalizations.of(context).commonError}: $e');
-                        }
-                      }
-                    },
-                  ),
                 ],
               ),
             ),

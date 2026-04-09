@@ -121,16 +121,16 @@ class AppLinkResult {
 
 /// AppLink 服务
 ///
-/// 处理所有 beecount:// 开头的链接
+/// 处理所有 simplelog:// 开头的链接
 ///
 /// 支持的链接格式:
-/// - beecount://voice - 语音记账
-/// - beecount://image - 图片记账（从相册）
-/// - beecount://camera - 拍照记账
-/// - beecount://ai-chat - AI 小助手
-/// - beecount://add?amount=100&type=expense&category=餐饮 - 自动记账
-/// - beecount://auto-billing?text=... - 文本自动记账（兼容旧版）
-/// - beecount://quick-billing - 快速记账（兼容旧版）
+/// - simplelog://voice - 语音记账
+/// - simplelog://image - 图片记账（从相册）
+/// - simplelog://camera - 拍照记账
+/// - simplelog://ai-chat - AI 小助手
+/// - simplelog://add?amount=100&type=expense&category=餐饮 - 自动记账
+/// - simplelog://auto-billing?text=... - 文本自动记账（兼容旧版）
+/// - simplelog://quick-billing - 快速记账（兼容旧版）
 ///
 /// 同时监听 iOS AppIntents EventChannel 处理快捷指令传入的图片
 class AppLinkService {
@@ -452,7 +452,7 @@ class AppLinkService {
 
 /// 生成 AppLink URL
 class AppLinkBuilder {
-  static const String scheme = 'beecount';
+  static const String scheme = 'simplelog';
 
   /// 语音记账链接
   static String voice() => '$scheme://voice';

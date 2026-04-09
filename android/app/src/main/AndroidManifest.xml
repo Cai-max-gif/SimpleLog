@@ -66,12 +66,12 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="image/*"/>
             </intent-filter>
-            <!-- URL Scheme: beecount:// -->
+            <!-- URL Scheme: simplelog:// -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="beecount"/>
+                <data android:scheme="simplelog"/>
             </intent-filter>
         </activity>
 
@@ -122,7 +122,7 @@
         </receiver>
 
         <!-- 桌面小组件 -->
-        <receiver android:name="com.tntlikely.beecount.BeeCountWidgetProvider"
+        <receiver android:name="com.SimpleLog.app.BeeCountWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

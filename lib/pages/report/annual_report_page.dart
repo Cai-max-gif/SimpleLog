@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,9 +11,9 @@ import '../../providers.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/posters/annual_report_poster.dart';
 import '../../data/db.dart';
-import '../../services/export/share_poster_types.dart';
-import '../../services/export/share_poster_service.dart';
 import '../../services/data/category_service.dart';
+import '../../services/export/share_poster_service.dart';
+import '../../services/export/share_poster_types.dart';
 
 /// 年度账单数据
 class AnnualReportData {
@@ -371,9 +372,7 @@ class _AnnualReportPageState extends ConsumerState<AnnualReportPage> {
             ),
           ),
           _buildPageIndicator(7), // 7页
-          const SizedBox(height: 16),
-          _buildBottomActions(l10n),
-          const SizedBox(height: 16),
+          const SizedBox(height: 32),
         ],
       ),
     );
@@ -398,147 +397,7 @@ class _AnnualReportPageState extends ConsumerState<AnnualReportPage> {
     );
   }
 
-  Widget _buildBottomActions(AppLocalizations l10n) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton.icon(
-          onPressed: _generatePoster,
-          icon: const Icon(Icons.share),
-          label: Text(l10n.annualReportShareButton),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: ref.watch(primaryColorProvider),
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-        ),
-      ),
-    );
-  }
 
-  Future<void> _generatePoster() async {
-    final dataAsync = ref.read(annualReportDataProvider(_selectedYear));
-    final data = dataAsync.valueOrNull;
-    if (data == null) return;
-
-    final l10n = AppLocalizations.of(context);
-    final primaryColor = ref.read(primaryColorProvider);
-
-    // Show loading
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) {
-        final isDark = Theme.of(dialogContext).brightness == Brightness.dark;
-        return Center(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 3,
-                    valueColor: AlwaysStoppedAnimation(primaryColor),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.annualReportGenerating,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: isDark ? Colors.white70 : Colors.black87,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-
-    try {
-      // Precache logo image
-      await precacheImage(const AssetImage('assets/logo2.png'), context);
-
-      // Create poster widget
-      final posterKey = GlobalKey();
-      final poster = RepaintBoundary(
-        key: posterKey,
-        child: AnnualReportPoster(
-          data: data,
-          primaryColor: primaryColor,
-        ),
-      );
-
-      // Render to image using offscreen rendering
-      final pngBytes = await _renderPosterToImage(poster, posterKey);
-
-      if (!mounted) return;
-      Navigator.pop(context); // Close loading dialog
-
-      // Show preview dialog
-      if (!mounted) return;
-      await showDialog(
-        context: context,
-        builder: (dialogContext) => _AnnualReportPosterPreview(
-          initialImageBytes: pngBytes,
-          data: data,
-          primaryColor: primaryColor,
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      Navigator.pop(context);
-      showToast(context, '${l10n.commonError}: $e');
-    }
-  }
-
-  Future<Uint8List> _renderPosterToImage(Widget poster, GlobalKey key) async {
-    // Use a temporary overlay to render the widget
-    final overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        left: -10000, // Off-screen
-        child: Material(
-          color: Colors.transparent,
-          child: poster,
-        ),
-      ),
-    );
-
-    Overlay.of(context).insert(overlayEntry);
-
-    // Wait for the widget to be laid out and images to load
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    try {
-      final boundary = key.currentContext?.findRenderObject() as RenderRepaintBoundary?;
-      if (boundary == null) {
-        throw Exception('Failed to find render boundary');
-      }
-
-      final image = await boundary.toImage(pixelRatio: 2.0);
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      return byteData!.buffer.asUint8List();
-    } finally {
-      overlayEntry.remove();
-    }
-  }
 
   // ==================== Page 1: Overview ====================
   Widget _buildPage1Overview(BuildContext context, AnnualReportData data) {

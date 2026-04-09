@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 通用资源 -->
-    <string name="app_name">蜜蜂记账</string>
+    <string name="app_name">简单记账</string>
     <string name="widget_description">查看今日和本月的收支情况</string>
 
     <!-- 无障碍服务相关字符串由 flavor 特定的 strings.xml 定义 -->

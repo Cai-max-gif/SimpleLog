@@ -63,26 +63,26 @@ class BeeTheme {
       brightness: Brightness.dark,
       colorScheme: base.colorScheme.copyWith(
         brightness: Brightness.dark,
-        primary: honeyGoldDark,              // ⭐ 主色
-        onPrimary: Colors.black,             // ⭐ 主色上的前景色
-        primaryContainer: honeyGoldDark,     // ⭐ Switch thumb 等组件使用
-        onPrimaryContainer: Colors.black,    // ⭐ primaryContainer 上的前景色
-        secondary: energyOrangeDark,         // ⭐ 辅助色
-        surface: Colors.black,               // ⭐ 改为纯黑
+        primary: honeyGoldDark, // ⭐ 主色
+        onPrimary: Colors.black, // ⭐ 主色上的前景色
+        primaryContainer: honeyGoldDark, // ⭐ Switch thumb 等组件使用
+        onPrimaryContainer: Colors.black, // ⭐ primaryContainer 上的前景色
+        secondary: energyOrangeDark, // ⭐ 辅助色
+        surface: Colors.black, // ⭐ 改为纯黑
         onSurface: Colors.white,
       ),
-      primaryColor: honeyGoldDark,     // ⭐ 主题色
+      primaryColor: honeyGoldDark, // ⭐ 主题色
       scaffoldBackgroundColor: Colors.black, // ⭐ 纯黑背景（OLED 友好）
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.black,  // ⭐ 改为纯黑
+        backgroundColor: Colors.black, // ⭐ 改为纯黑
         foregroundColor: Colors.white,
         elevation: 0.0,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.white),
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: honeyGoldDark,  // ⭐ 深金色
-        foregroundColor: Colors.black,   // 黑色文字（对比度更好）
+        backgroundColor: honeyGoldDark, // ⭐ 深金色
+        foregroundColor: Colors.black, // 黑色文字（对比度更好）
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: honeyGoldDark, // ⭐ 深金色
@@ -91,13 +91,13 @@ class BeeTheme {
         backgroundColor: Colors.transparent, // 悬浮胶囊样式，外层透明
         elevation: 0,
       ),
-      cardTheme: CardTheme(
-        color: Colors.black,             // ⭐ 改为纯黑卡片
+      cardTheme: CardThemeData(
+        color: Colors.black, // ⭐ 改为纯黑卡片
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
           side: BorderSide(
-            color: Colors.white.withValues(alpha: 0.1), // ⭐ 白色边框
+            color: Colors.grey.shade800, // ⭐ 卡片边框为深灰
             width: 1,
           ),
         ),

@@ -1,4 +1,4 @@
-package com.tntlikely.beecount
+package com.SimpleLog.app
 
 import android.util.Log
 import io.flutter.plugin.common.MethodChannel
