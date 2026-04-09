@@ -1550,7 +1550,7 @@
   "privacyOpenSourceUrlError": "Cannot open link",
   "updateCorruptedFileTitle": "Corrupted Installation Package",
   "updateCorruptedFileMessage": "The previously downloaded installation package is incomplete or corrupted. Delete and re-download?",
-  "welcomeTitle": "Welcome to BeeCount",
+  "welcomeTitle": "Welcome to SimpleLog",
   "welcomeDescription": "An accounting app that truly respects your privacy",
   "welcomeCurrencyDescription": "Choose your preferred currency, you can change it anytime in settings",
   "welcomePrivacyTitle": "Open Source · Community Driven",

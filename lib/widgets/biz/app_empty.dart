@@ -1,42 +1,32 @@
-import 'package:simplelog/widgets/biz/bee_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers.dart';
+import '../../utils/ui_scale_extensions.dart';
 
-class AppEmpty extends StatelessWidget {
+class AppEmpty extends ConsumerWidget {
   final String? text;
   final String? subtext;
-  const AppEmpty({super.key, this.text, this.subtext});
+  final IconData? icon;
+  const AppEmpty({super.key, this.text, this.subtext, this.icon});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final primary = theme.colorScheme.primary;
-    final bg = primary.withValues(alpha: 0.08);
+    final primaryColor = ref.watch(primaryColorProvider);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 88,
-              height: 88,
-              decoration: BoxDecoration(
-                color: bg,
-                shape: BoxShape.circle,
+            if (icon != null)
+              Icon(
+                icon!,
+                size: 64.0.scaled(context, ref),
+                color: primaryColor.withValues(alpha: 0.4),
               ),
-              alignment: Alignment.center,
-              child: BeeIcon(
-                color: primary,
-                size: 52,
-                // child: SvgPicture.asset(
-                //   'assets/title-logo.svg',
-                //   width: 52,
-                //   height: 52,
-                //   color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            const SizedBox(height: 14),
+            if (icon != null) const SizedBox(height: 14),
             Text(text ?? AppLocalizations.of(context).commonEmpty,
                 style: theme.textTheme.bodyMedium
                     ?.copyWith(fontWeight: FontWeight.w600)),

@@ -7,7 +7,6 @@ import '../../providers/security_providers.dart';
 import '../../providers/theme_providers.dart';
 import '../../services/security/app_lock_service.dart';
 import '../../widgets/biz/pin_entry_pad.dart';
-import '../../widgets/biz/bee_icon.dart';
 import '../../l10n/app_localizations.dart';
 
 class AppLockScreen extends ConsumerStatefulWidget {
@@ -108,7 +107,8 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
           children: [
             const Spacer(flex: 2),
             // Logo
-            BeeIcon(
+            Icon(
+              Icons.account_balance_wallet,
               color: primaryColor,
               size: 64.0.scaled(context, ref),
             ),
@@ -131,14 +131,13 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
             const Spacer(flex: 1),
             // 数字键盘
             Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: 40.0.scaled(context, ref)),
+              padding:
+                  EdgeInsets.symmetric(horizontal: 40.0.scaled(context, ref)),
               child: NumberPad(
                 onNumberTap: _onNumberTap,
                 onDelete: _onDelete,
                 showBiometric: showBiometric,
-                onBiometric:
-                    showBiometric ? _authenticateWithBiometrics : null,
+                onBiometric: showBiometric ? _authenticateWithBiometrics : null,
               ),
             ),
             SizedBox(height: 32.0.scaled(context, ref)),

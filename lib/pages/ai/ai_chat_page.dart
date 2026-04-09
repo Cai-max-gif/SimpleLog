@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' hide Column;
 
 import '../../widgets/ui/ui.dart';
-import '../../widgets/biz/bee_icon.dart';
 import '../../widgets/ai/typewriter_text.dart';
 import '../../widgets/ai/bill_card_widget.dart';
 import '../../widgets/ai/ai_quick_commands_bar.dart';
@@ -469,7 +468,8 @@ class _AIChatPageState extends ConsumerState<AIChatPage>
         color: ref.watch(primaryColorProvider).withOpacity(0.1),
       ),
       child: Center(
-        child: BeeIcon(
+        child: Icon(
+          Icons.account_balance_wallet,
           color: ref.watch(primaryColorProvider),
           size: 18.0.scaled(context, ref),
         ),

@@ -6,7 +6,6 @@ import '../system/logger_service.dart';
 import '../../l10n/app_localizations.dart';
 import 'update_result.dart';
 import 'update_notifications.dart';
-import 'github_mirror_service.dart';
 
 /// 更新下载管理类
 class UpdateDownloader {
@@ -37,7 +36,8 @@ class UpdateDownloader {
     final random = (DateTime.now().millisecondsSinceEpoch % userAgents.length);
     final selectedUA = userAgents[random];
 
-    logger.info('UpdateDownloader', '使用User-Agent: ${selectedUA.substring(0, 50)}...');
+    logger.info(
+        'UpdateDownloader', '使用User-Agent: ${selectedUA.substring(0, 50)}...');
     return selectedUA;
   }
 
@@ -49,12 +49,7 @@ class UpdateDownloader {
     Function(double progress, String status)? onProgress,
   }) async {
     try {
-      // 获取选择的镜像并转换 URL
-      final mirror = await GitHubMirrorService.getSelectedMirror();
-      final downloadUrl = GitHubMirrorService.convertToMirrorUrl(url, mirror);
-      logger.info('UpdateDownloader', '使用镜像: ${mirror.name}');
-      logger.info('UpdateDownloader', '原始URL: $url');
-      logger.info('UpdateDownloader', '下载URL: $downloadUrl');
+      logger.info('UpdateDownloader', '下载URL: $url');
 
       // 获取下载目录
       Directory? downloadDir;
@@ -63,7 +58,7 @@ class UpdateDownloader {
       }
       downloadDir ??= await getApplicationDocumentsDirectory();
 
-      final filePath = '${downloadDir.path}/BeeCount_$fileName.apk';
+      final filePath = '${downloadDir.path}/SimpleLog_$fileName.apk';
       logger.info('UpdateDownloader', '下载路径: $filePath');
 
       // 只删除当前要下载的文件（如果存在），保留其他版本的缓存
@@ -77,7 +72,6 @@ class UpdateDownloader {
       double progress = 0.0;
       bool cancelled = false;
       late StateSetter dialogSetState;
-      String currentMirrorName = mirror.name;
 
       // 重置进度记录
       UpdateNotifications.resetProgress();
@@ -86,7 +80,8 @@ class UpdateDownloader {
       final cancelToken = CancelToken();
 
       // 显示初始通知 - 从确定进度0%开始
-      await UpdateNotifications.showProgressNotification(0, indeterminate: false);
+      await UpdateNotifications.showProgressNotification(0,
+          indeterminate: false);
 
       if (context.mounted) {
         showDialog(
@@ -100,17 +95,14 @@ class UpdateDownloader {
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(AppLocalizations.of(context).updateDownloading((progress * 100).toStringAsFixed(1))),
+                    Text(AppLocalizations.of(context).updateDownloading(
+                        (progress * 100).toStringAsFixed(1))),
                     const SizedBox(height: 16),
                     LinearProgressIndicator(value: progress),
                     const SizedBox(height: 8),
-                    // 显示当前使用的镜像
                     Text(
-                      AppLocalizations.of(context).updateDownloadMirror(currentMirrorName),
-                      style: TextStyle(fontSize: 11, color: Colors.grey[600]),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(AppLocalizations.of(context).updateDownloadBackgroundHint,
+                        AppLocalizations.of(context)
+                            .updateDownloadBackgroundHint,
                         style: TextStyle(fontSize: 12, color: Colors.grey)),
                   ],
                 ),
@@ -121,13 +113,15 @@ class UpdateDownloader {
                       cancelToken.cancel('User cancelled download');
                       Navigator.of(context).pop();
                     },
-                    child: Text(AppLocalizations.of(context).updateCancelButton),
+                    child:
+                        Text(AppLocalizations.of(context).updateCancelButton),
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text(AppLocalizations.of(context).updateBackgroundDownload),
+                    child: Text(
+                        AppLocalizations.of(context).updateBackgroundDownload),
                   ),
                 ],
               );
@@ -136,9 +130,9 @@ class UpdateDownloader {
         );
       }
 
-      // 开始下载（使用镜像 URL）
+      // 开始下载
       await _dio.download(
-        downloadUrl,
+        url,
         filePath,
         options: Options(
           headers: {
@@ -148,7 +142,7 @@ class UpdateDownloader {
             'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache',
-            'Referer': 'https://github.com/TNT-Likely/BeeCount/releases',
+            'Referer': 'https://github.com/Cai-max-gif/SimpleLog/releases',
           },
         ),
         onReceiveProgress: (received, total) {
@@ -158,7 +152,12 @@ class UpdateDownloader {
             final progressPercent = (progress * 100).round();
 
             // 调用外部进度回调
-            onProgress?.call(newProgress, context.mounted ? AppLocalizations.of(context).updateDownloadProgress('$progressPercent') : 'Downloading: $progressPercent%');
+            onProgress?.call(
+                newProgress,
+                context.mounted
+                    ? AppLocalizations.of(context)
+                        .updateDownloadProgress('$progressPercent')
+                    : 'Downloading: $progressPercent%');
 
             // 更新UI进度（如果对话框还在显示）
             try {
@@ -173,7 +172,8 @@ class UpdateDownloader {
             if (UpdateNotifications.shouldUpdateProgress(progressPercent)) {
               UpdateNotifications.recordProgress(progressPercent);
               // 异步更新通知进度，不阻塞下载
-              UpdateNotifications.showProgressNotification(progressPercent, indeterminate: false)
+              UpdateNotifications.showProgressNotification(progressPercent,
+                      indeterminate: false)
                   .catchError((e) {
                 logger.error('UpdateDownloader', '更新通知进度失败', e);
               });

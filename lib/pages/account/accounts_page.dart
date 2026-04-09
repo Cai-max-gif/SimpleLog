@@ -126,7 +126,7 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.account_balance_wallet_outlined,
+                                Icons.account_balance_wallet,
                                 size: 64.0.scaled(context, ref),
                                 color: primaryColor.withValues(alpha: 0.4),
                               ),

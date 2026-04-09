@@ -4,7 +4,6 @@ import '../../l10n/app_localizations.dart';
 import '../../widgets/ui/ui.dart';
 import '../../styles/tokens.dart';
 import '../system/logger_service.dart';
-import 'github_mirror_service.dart';
 
 /// 更新对话框管理类
 class UpdateDialogs {
@@ -42,22 +41,27 @@ class UpdateDialogs {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context).updateNotificationPermissionTitle),
+        title: Text(
+            AppLocalizations.of(context).updateNotificationPermissionTitle),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppLocalizations.of(context).updateNotificationPermissionGuideText,
+                AppLocalizations.of(context)
+                    .updateNotificationPermissionGuideText,
                 style: TextStyle(fontSize: 14),
               ),
               const SizedBox(height: 12),
-              _buildGuideStep('1', AppLocalizations.of(context).updateNotificationGuideStep1),
+              _buildGuideStep('1',
+                  AppLocalizations.of(context).updateNotificationGuideStep1),
               const SizedBox(height: 8),
-              _buildGuideStep('2', AppLocalizations.of(context).updateNotificationGuideStep2),
+              _buildGuideStep('2',
+                  AppLocalizations.of(context).updateNotificationGuideStep2),
               const SizedBox(height: 8),
-              _buildGuideStep('3', AppLocalizations.of(context).updateNotificationGuideStep3),
+              _buildGuideStep('3',
+                  AppLocalizations.of(context).updateNotificationGuideStep3),
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(12),
@@ -75,7 +79,8 @@ class UpdateDialogs {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        AppLocalizations.of(context).updateNotificationGuideInfo,
+                        AppLocalizations.of(context)
+                            .updateNotificationGuideInfo,
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.blue[700],
@@ -240,7 +245,7 @@ class UpdateDialogs {
 
   /// 启动GitHub Releases页面
   static Future<void> launchGitHubReleases(BuildContext context) async {
-    const url = 'https://github.com/TNT-Likely/BeeCount/releases';
+    const url = 'https://github.com/Cai-max-gif/SimpleLog/releases';
     try {
       if (await canLaunchUrl(Uri.parse(url))) {
         await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
@@ -260,224 +265,10 @@ class UpdateDialogs {
       }
     }
   }
-
-  /// 显示镜像选择对话框
-  /// 返回选择的镜像，如果用户取消则返回 null
-  static Future<GitHubMirror?> showMirrorSelectDialog(
-    BuildContext context, {
-    bool showTestButton = true,
-  }) async {
-    return showDialog<GitHubMirror>(
-      context: context,
-      builder: (context) => _MirrorSelectDialog(showTestButton: showTestButton),
-    );
-  }
 }
 
-/// 镜像选择对话框
-class _MirrorSelectDialog extends StatefulWidget {
-  final bool showTestButton;
-
-  const _MirrorSelectDialog({required this.showTestButton});
-
-  @override
-  State<_MirrorSelectDialog> createState() => _MirrorSelectDialogState();
-}
-
-class _MirrorSelectDialogState extends State<_MirrorSelectDialog> {
-  String? _selectedMirrorId;
-  bool _isTesting = false;
-  Map<String, MirrorTestResult> _testResults = {};
-  int _testCompleted = 0;
-  int _testTotal = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSelectedMirror();
-  }
-
-  Future<void> _loadSelectedMirror() async {
-    final selectedId = await GitHubMirrorService.getSelectedMirrorId();
-    if (mounted) {
-      setState(() {
-        _selectedMirrorId = selectedId;
-      });
-    }
-  }
-
-  Future<void> _testAllMirrors() async {
-    setState(() {
-      _isTesting = true;
-      _testResults = {};
-      _testCompleted = 0;
-      _testTotal = GitHubMirrorService.mirrors.length;
-    });
-
-    final results = await GitHubMirrorService.testAllMirrors(
-      onProgress: (completed, total) {
-        if (mounted) {
-          setState(() {
-            _testCompleted = completed;
-            _testTotal = total;
-          });
-        }
-      },
-    );
-
-    if (mounted) {
-      setState(() {
-        _isTesting = false;
-        for (final result in results) {
-          _testResults[result.mirror.id] = result;
-        }
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final isZh = Localizations.localeOf(context).languageCode == 'zh';
-
-    return AlertDialog(
-      title: Text(l10n.updateMirrorSelectTitle),
-      content: SizedBox(
-        width: double.maxFinite,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.updateMirrorSelectHint,
-              style: TextStyle(
-                fontSize: 13,
-                color: BeeTokens.textSecondary(context),
-              ),
-            ),
-            const SizedBox(height: 12),
-            if (_isTesting)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Column(
-                  children: [
-                    LinearProgressIndicator(
-                      value: _testTotal > 0 ? _testCompleted / _testTotal : null,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      l10n.updateMirrorTesting(_testCompleted, _testTotal),
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: BeeTokens.textTertiary(context),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            const SizedBox(height: 8),
-            Flexible(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: GitHubMirrorService.mirrors.length,
-                itemBuilder: (context, index) {
-                  final mirror = GitHubMirrorService.mirrors[index];
-                  final testResult = _testResults[mirror.id];
-                  final isSelected = _selectedMirrorId == mirror.id;
-
-                  return RadioListTile<String>(
-                    value: mirror.id,
-                    groupValue: _selectedMirrorId,
-                    onChanged: _isTesting
-                        ? null
-                        : (value) {
-                            setState(() {
-                              _selectedMirrorId = value;
-                            });
-                          },
-                    title: Text(
-                      isZh ? mirror.name : mirror.nameEn,
-                      style: TextStyle(
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      ),
-                    ),
-                    subtitle: testResult != null
-                        ? Text(
-                            isZh ? testResult.latencyText : testResult.latencyTextEn,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: testResult.isAvailable
-                                  ? (testResult.latency < 300
-                                      ? Colors.green
-                                      : (testResult.latency < 800
-                                          ? Colors.orange
-                                          : Colors.red))
-                                  : Colors.red,
-                            ),
-                          )
-                        : (mirror.isDefault
-                            ? Text(
-                                l10n.updateMirrorDirectHint,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: BeeTokens.textTertiary(context),
-                                ),
-                              )
-                            : null),
-                    secondary: testResult != null
-                        ? Icon(
-                            testResult.isAvailable ? Icons.check_circle : Icons.error,
-                            color: testResult.isAvailable ? Colors.green : Colors.red,
-                            size: 20,
-                          )
-                        : null,
-                    dense: true,
-                    contentPadding: EdgeInsets.zero,
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        if (widget.showTestButton)
-          TextButton.icon(
-            onPressed: _isTesting ? null : _testAllMirrors,
-            icon: _isTesting
-                ? const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.speed, size: 18),
-            label: Text(l10n.updateMirrorTestButton),
-          ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n.commonCancel),
-        ),
-        FilledButton(
-          onPressed: _isTesting || _selectedMirrorId == null
-              ? null
-              : () async {
-                  final mirror = GitHubMirrorService.getMirrorById(_selectedMirrorId!);
-                  if (mirror != null) {
-                    await GitHubMirrorService.setSelectedMirrorId(mirror.id);
-                    if (context.mounted) {
-                      Navigator.of(context).pop(mirror);
-                    }
-                  }
-                },
-          child: Text(l10n.commonConfirm),
-        ),
-      ],
-    );
-  }
-}
-
-/// 下载确认对话框（带镜像选择）
-class _DownloadConfirmDialog extends StatefulWidget {
+/// 下载确认对话框
+class _DownloadConfirmDialog extends StatelessWidget {
   final String version;
   final String releaseNotes;
 
@@ -487,134 +278,19 @@ class _DownloadConfirmDialog extends StatefulWidget {
   });
 
   @override
-  State<_DownloadConfirmDialog> createState() => _DownloadConfirmDialogState();
-}
-
-class _DownloadConfirmDialogState extends State<_DownloadConfirmDialog> {
-  String _currentMirrorName = 'GitHub 直连';
-
-  @override
-  void initState() {
-    super.initState();
-    _loadCurrentMirror();
-  }
-
-  Future<void> _loadCurrentMirror() async {
-    final mirror = await GitHubMirrorService.getSelectedMirror();
-    if (mounted) {
-      setState(() {
-        _currentMirrorName = mirror.name;
-      });
-    }
-  }
-
-  Future<void> _openMirrorSelect() async {
-    final result = await UpdateDialogs.showMirrorSelectDialog(context);
-    if (result != null && mounted) {
-      setState(() {
-        _currentMirrorName = result.name;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
-      title: Text(l10n.updateNewVersionTitle(widget.version)),
+      title: Text(l10n.updateNewVersionTitle(version)),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(widget.releaseNotes.isEmpty ? l10n.updateConfirmDownload : widget.releaseNotes),
-            const SizedBox(height: 16),
-            // 镜像选择入口
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: _openMirrorSelect,
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Theme.of(context).colorScheme.primary.withValues(alpha: 0.08),
-                        Theme.of(context).colorScheme.primary.withValues(alpha: 0.03),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
-                      width: 1,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      // 图标容器
-                      Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Icon(
-                          Icons.rocket_launch_rounded,
-                          size: 20,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      // 文字内容
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              l10n.updateMirrorSettingTitle,
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                                color: BeeTokens.textPrimary(context),
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              _currentMirrorName,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                      // 箭头
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Icon(
-                          Icons.chevron_right_rounded,
-                          size: 18,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            Text(releaseNotes.isEmpty
+                ? l10n.updateConfirmDownload
+                : releaseNotes),
           ],
         ),
       ),

@@ -1,13 +1,9 @@
-import 'dart:io' show Platform, File;
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:simplelog/widgets/biz/bee_icon.dart';
 import 'package:flutter_cloud_sync/flutter_cloud_sync.dart' hide SyncStatus;
 
-import '../data/import_page.dart';
-import '../data/export_page.dart';
-import '../settings/personalize_page.dart';
 import '../../providers.dart';
 import '../../providers/theme_providers.dart';
 import '../../widgets/ui/ui.dart';
@@ -15,19 +11,8 @@ import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
 import '../../cloud/sync_service.dart';
 import '../cloud/cloud_service_page.dart';
-import '../../services/system/logger_service.dart';
-import '../../services/ui/avatar_service.dart';
-import '../../providers/avatar_providers.dart';
 import '../../l10n/app_localizations.dart';
-import '../category/category_manage_page.dart';
-import '../category/category_migration_page.dart';
-import '../transaction/recurring_transaction_page.dart';
-import '../settings/reminder_settings_page.dart';
-import '../settings/language_settings_page.dart';
 import '../budget/budget_page.dart';
-import '../settings/widget_management_page.dart';
-import '../automation/auto_billing_settings_page.dart';
-import '../ai/ai_settings_page.dart';
 import '../cloud/cloud_sync_page.dart';
 import '../../pages/settings/data_management_page.dart';
 import '../../pages/settings/appearance_settings_page.dart';
@@ -506,35 +491,6 @@ class _StatCell extends ConsumerWidget {
   }
 }
 
-// 导入完成后的短暂动画提示：线性进度条从 0 -> 100%
-class _ImportSuccessTile extends StatelessWidget {
-  const _ImportSuccessTile();
-
-  @override
-  Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0, end: 1),
-      duration: const Duration(milliseconds: 900),
-      curve: Curves.easeOutCubic,
-      builder: (ctx, v, child) {
-        return AppListTile(
-          leading: Icons.check_circle_outline,
-          title: AppLocalizations.of(ctx).mineImportCompleteTitle,
-          subtitle: AppLocalizations.of(ctx).mineImportCompleteAllSuccess,
-          trailing: SizedBox(
-            width: 72,
-            child: LinearProgressIndicator(
-              value: v,
-              valueColor: AlwaysStoppedAnimation(primary),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
 /// 我的页面头部
 class _MinePageHeader extends ConsumerStatefulWidget {
   const _MinePageHeader();
@@ -544,49 +500,13 @@ class _MinePageHeader extends ConsumerStatefulWidget {
 }
 
 class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
-  String? _avatarPath;
-  bool _isLoadingAvatar = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadAvatar();
-  }
-
-  Future<void> _loadAvatar() async {
-    final path = await AvatarService.getAvatarPath();
-    if (mounted) {
-      setState(() {
-        _avatarPath = path;
-        _isLoadingAvatar = false;
-      });
-    }
-  }
-
-  Future<void> _pickAvatarFromGallery() async {
-    try {
-      final path = await AvatarService.pickAndSaveAvatar();
-      if (mounted && path != null) {
-        setState(() => _avatarPath = path);
-        ref.invalidate(avatarPathProvider);
-      }
-    } catch (e) {
-      if (!mounted) return;
-      showToast(context, '${AppLocalizations.of(context).commonError}: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    // 头像功能不受云同步限制，任何时候都可以上传
-    final canEditAvatar = true;
-
     // 获取当前账本信息
     final currentLedgerId = ref.watch(currentLedgerIdProvider);
     final countsAsync = ref.watch(countsForLedgerProvider(currentLedgerId));
     final balanceAsync = ref.watch(currentBalanceProvider(currentLedgerId));
     final currentLedgerAsync = ref.watch(currentLedgerProvider);
-    final hide = ref.watch(hideAmountsProvider);
 
     final day = countsAsync.asData?.value.dayCount ?? 0;
     final tx = countsAsync.asData?.value.txCount ?? 0;
@@ -612,84 +532,6 @@ class _MinePageHeaderState extends ConsumerState<_MinePageHeader> {
         children: [
           Column(
             children: [
-              // 头像/Logo
-              GestureDetector(
-                onTap: canEditAvatar ? _pickAvatarFromGallery : null,
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 80.0.scaled(context, ref),
-                      height: 80.0.scaled(context, ref),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withValues(alpha: 0.1),
-                        border: Border.all(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withValues(alpha: 0.3),
-                          width: 2,
-                        ),
-                      ),
-                      child: ClipOval(
-                        child: _isLoadingAvatar
-                            ? Center(
-                                child: SizedBox(
-                                  width: 20.0.scaled(context, ref),
-                                  height: 20.0.scaled(context, ref),
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                              )
-                            : (_avatarPath != null
-                                ? Image.file(
-                                    File(_avatarPath!),
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return BeeIcon(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        size: 40.0.scaled(context, ref),
-                                      );
-                                    },
-                                  )
-                                : BeeIcon(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    size: 40.0.scaled(context, ref),
-                                  )),
-                      ),
-                    ),
-                    if (canEditAvatar)
-                      Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: Container(
-                          width: 24.0.scaled(context, ref),
-                          height: 24.0.scaled(context, ref),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
-                          ),
-                          child: Icon(
-                            Icons.camera_alt,
-                            size: 12.0.scaled(context, ref),
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-
               // 统计数据
               Row(
                 children: [

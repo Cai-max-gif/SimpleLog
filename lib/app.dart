@@ -580,14 +580,18 @@ class _BeeBottomBar extends StatelessWidget {
             borderRadius: BorderRadius.circular(28),
             child: Row(
               children: [
-                _buildTabItem(
-                    0, Icons.receipt_long_outlined, Icons.receipt_long, l10n.tabHome, inactiveColor),
+                _buildTabItem(0, Icons.receipt_long_outlined,
+                    Icons.receipt_long, l10n.tabHome, inactiveColor),
                 _buildTabItem(1, Icons.pie_chart_outline_rounded,
                     Icons.pie_chart_rounded, l10n.tabInsights, inactiveColor),
                 // 中间记账按钮（作为 Tab 样式）
                 _buildCenterTabItem(inactiveColor),
-                _buildTabItem(2, Icons.account_balance_wallet_outlined,
-                    Icons.account_balance_wallet, l10n.tabAssets, inactiveColor),
+                _buildTabItem(
+                    2,
+                    Icons.account_balance_wallet_outlined,
+                    Icons.account_balance_wallet,
+                    l10n.tabAssets,
+                    inactiveColor),
                 _buildAvatarTabItem(3, l10n.tabMine, inactiveColor),
               ],
             ),
@@ -597,8 +601,8 @@ class _BeeBottomBar extends StatelessWidget {
     );
   }
 
-  Widget _buildTabItem(
-      int index, IconData icon, IconData activeIcon, String label, Color inactiveColor) {
+  Widget _buildTabItem(int index, IconData icon, IconData activeIcon,
+      String label, Color inactiveColor) {
     final isActive = index == currentIndex;
     final iconColor = isActive ? primaryColor : inactiveColor;
 
@@ -688,8 +692,10 @@ class _BeeBottomBar extends StatelessWidget {
         ),
       );
     } else {
-      iconWidget = Icon(isActive ? Icons.person_rounded : Icons.person_outline_rounded,
-          color: isActive ? primaryColor : inactiveColor, size: 24);
+      iconWidget = Icon(
+          isActive ? Icons.person_rounded : Icons.person_outline_rounded,
+          color: isActive ? primaryColor : inactiveColor,
+          size: 24);
     }
 
     return Expanded(

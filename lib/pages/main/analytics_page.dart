@@ -408,7 +408,6 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -451,8 +450,20 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
 
                 // 在balance模式下，需要计算结余数据
                 dynamic seriesRaw;
-                List<({int? id, String name, db.Category? category, double total, List<({int id, db.Category category, String name, double total})> subCategories})>
-                    catData;
+                List<
+                    ({
+                      int? id,
+                      String name,
+                      db.Category? category,
+                      double total,
+                      List<
+                          ({
+                            int id,
+                            db.Category category,
+                            String name,
+                            double total
+                          })> subCategories
+                    })> catData;
                 int txCount;
                 double sum;
 
@@ -466,7 +477,19 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
 
                   // 分类数据显示支出分类（但结余模式下不显示排行榜）
                   catData = list[0] as List<
-                      ({int? id, String name, db.Category? category, double total, List<({int id, db.Category category, String name, double total})> subCategories})>;
+                      ({
+                        int? id,
+                        String name,
+                        db.Category? category,
+                        double total,
+                        List<
+                            ({
+                              int id,
+                              db.Category category,
+                              String name,
+                              double total
+                            })> subCategories
+                      })>;
 
                   // 获取收入和支出的交易数量
                   final expenseCount = list[2] as int;
@@ -479,7 +502,19 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                   sum = incomeSum - expenseSum;
                 } else {
                   catData = list[0] as List<
-                      ({int? id, String name, db.Category? category, double total, List<({int id, db.Category category, String name, double total})> subCategories})>;
+                      ({
+                        int? id,
+                        String name,
+                        db.Category? category,
+                        double total,
+                        List<
+                            ({
+                              int id,
+                              db.Category category,
+                              String name,
+                              double total
+                            })> subCategories
+                      })>;
                   seriesRaw = list[1];
                   txCount = list[2] as int;
                   sum = catData.fold<double>(0, (a, b) => a + b.total);
@@ -524,6 +559,7 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                           text: AppLocalizations.of(context).commonEmpty,
                           subtext: AppLocalizations.of(context)
                               .analyticsNoDataSubtext,
+                          icon: Icons.pie_chart_rounded,
                         ),
                         const SizedBox(height: 12),
                         Align(
@@ -741,8 +777,8 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                             // 饼图/列表切换按钮
                             if (catData.isNotEmpty && sum > 0)
                               GestureDetector(
-                                onTap: () =>
-                                    setState(() => _showPieChart = !_showPieChart),
+                                onTap: () => setState(
+                                    () => _showPieChart = !_showPieChart),
                                 child: Icon(
                                   _showPieChart
                                       ? Icons.format_list_bulleted
@@ -789,7 +825,10 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                           ],
                         ),
                       if (_type != 'balance') const SizedBox(height: 8),
-                      if (_type != 'balance' && _showPieChart && catData.isNotEmpty && sum > 0)
+                      if (_type != 'balance' &&
+                          _showPieChart &&
+                          catData.isNotEmpty &&
+                          sum > 0)
                         CategoryPieChart(
                           data: catData,
                           sum: sum,
@@ -810,7 +849,11 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
                             subCategories: item.subCategories,
                           ),
                       // 底部留白，避免被悬浮 Tab 栏遮挡
-                      SizedBox(height: 56 + 12 + MediaQuery.of(context).viewPadding.bottom + 16),
+                      SizedBox(
+                          height: 56 +
+                              12 +
+                              MediaQuery.of(context).viewPadding.bottom +
+                              16),
                     ],
                   ),
                 );
@@ -956,19 +999,32 @@ Future<List<dynamic>> _loadBalanceData(
 }
 
 // 聚合一级分类数据（将二级分类金额聚合到一级分类）
-Future<List<({int? id, String name, db.Category? category, double total, List<({int id, db.Category category, String name, double total})> subCategories})>>
-    _aggregateTopLevelCategories(
-        List<
-                ({
-                  int? id,
-                  String name,
-                  String? icon,
-                  int? parentId,
-                  int level,
-                  double total
-                })>
-            hierarchyData,
-        dynamic repo) async {
+Future<
+    List<
+        ({
+          int? id,
+          String name,
+          db.Category? category,
+          double total,
+          List<
+              ({
+                int id,
+                db.Category category,
+                String name,
+                double total
+              })> subCategories
+        })>> _aggregateTopLevelCategories(
+    List<
+            ({
+              int? id,
+              String name,
+              String? icon,
+              int? parentId,
+              int level,
+              double total
+            })>
+        hierarchyData,
+    dynamic repo) async {
   // 1. 先收集所有一级分类的完整信息
   final topLevelInfo = <int, db.Category>{};
   for (final item in hierarchyData) {
@@ -1001,7 +1057,8 @@ Future<List<({int? id, String name, db.Category? category, double total, List<({
 
   // 4. 聚合金额，同时收集子分类明细
   final topLevelMap = <int?, double>{};
-  final subCategoriesMap = <int?, List<({int id, db.Category category, String name, double total})>>{};
+  final subCategoriesMap = <int?,
+      List<({int id, db.Category category, String name, double total})>>{};
 
   for (final item in hierarchyData) {
     if (item.level == 1) {
@@ -1037,7 +1094,8 @@ Future<List<({int? id, String name, db.Category? category, double total, List<({
   final result = topLevelMap.entries.map((e) {
     final id = e.key;
     final total = e.value;
-    final subs = subCategoriesMap[id] ?? <({int id, db.Category category, String name, double total})>[];
+    final subs = subCategoriesMap[id] ??
+        <({int id, db.Category category, String name, double total})>[];
 
     // 获取一级分类信息
     if (id != null && topLevelInfo.containsKey(id)) {

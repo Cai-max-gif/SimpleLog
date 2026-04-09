@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Bee Accounting';
+  String get appTitle => 'SimpleLog';
 
   @override
   String get tabHome => 'Home';
@@ -222,7 +222,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSelectDate => 'Select date';
 
   @override
-  String get homeAppTitle => 'Bee Accounting';
+  String get homeAppTitle => 'SimpleLog';
 
   @override
   String get homeSearch => 'Search';
@@ -450,7 +450,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get analyticsToday => 'Today';
 
   @override
-  String get splashAppName => 'Bee Accounting';
+  String get splashAppName => 'SimpleLog';
 
   @override
   String get splashSlogan => 'Record Every Drop';
@@ -885,7 +885,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Are you sure you want to delete this record?';
 
   @override
-  String get mineSlogan => 'Bee Accounting, Every Penny Counts';
+  String get mineSlogan => 'SimpleLog, Every Penny Counts';
 
   @override
   String get mineAvatarTitle => 'Avatar Settings';
@@ -1014,7 +1014,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mineShareApp => 'Share App';
 
   @override
-  String get mineShareWithFriends => 'Share BeeCount with friends';
+  String get mineShareWithFriends => 'Share SimpleLog with friends';
 
   @override
   String get mineCopyPromoText => 'Copy Promo Text';
@@ -1026,7 +1026,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mineShareGenerating => 'Generating share poster...';
 
   @override
-  String get sharePosterAppName => 'BeeCount';
+  String get sharePosterAppName => 'SimpleLog';
 
   @override
   String get sharePosterSlogan => 'Smart Accounting, Beautiful Life';
@@ -1104,7 +1104,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareGuidanceCopyText =>
-      'Track my expenses with BeeCount - open source, free & ad-free! 🐝 Download: https://github.com/TNT-Likely/BeeCount';
+      'Track my expenses with SimpleLog - open source, free & ad-free! 🐝 Download: https://github.com/TNT-Likely/BeeCount';
 
   @override
   String get shareGuidanceCopied => 'Text copied';
@@ -2229,11 +2229,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderIOSInstructions =>
-      '🍎 iOS notification settings:\n• Settings > Notifications > Bee Accounting\n• Enable \"Allow Notifications\"\n• Set notification style: Banner or Alert\n• Enable sound and vibration\n\n⚠️ Important Note:\n• iOS local notifications depend on app process\n• Do not force quit app from task manager\n• Notifications work when app is in background or foreground\n• Force quitting will disable notifications\n\n💡 Usage Tips:\n• Simply press Home button to exit app\n• iOS will manage background apps automatically\n• Keep app in background to receive reminders';
+      '🍎 iOS notification settings:\n• Settings > Notifications > SimpleLog\n• Enable \"Allow Notifications\"\n• Set notification style: Banner or Alert\n• Enable sound and vibration\n\n⚠️ Important Note:\n• iOS local notifications depend on app process\n• Do not force quit app from task manager\n• Notifications work when app is in background or foreground\n• Force quitting will disable notifications\n\n💡 Usage Tips:\n• Simply press Home button to exit app\n• iOS will manage background apps automatically\n• Keep app in background to receive reminders';
 
   @override
   String get reminderAndroidInstructions =>
-      'If notifications don\'t work properly, check:\n• App is allowed to send notifications\n• Disable battery optimization/power saving for app\n• Allow app to run in background and auto-start\n• Android 12+ needs exact alarm permission\n\n📱 Xiaomi phone special settings:\n• Settings > App Management > Bee Accounting > Notification Management\n• Tap \"Recording Reminder\" channel\n• Set importance to \"Urgent\" or \"High\"\n• Enable \"Banner notifications\", \"Sound\", \"Vibration\"\n• Security Center > App Management > Permissions > Auto-start\n\n🔒 Lock background methods:\n• Find Bee Accounting in recent tasks\n• Pull down app card to show lock icon\n• Tap lock icon to prevent cleanup';
+      'If notifications don\'t work properly, check:\n• App is allowed to send notifications\n• Disable battery optimization/power saving for app\n• Allow app to run in background and auto-start\n• Android 12+ needs exact alarm permission\n\n📱 Xiaomi phone special settings:\n• Settings > App Management > SimpleLog > Notification Management\n• Tap \"Recording Reminder\" channel\n• Set importance to \"Urgent\" or \"High\"\n• Enable \"Banner notifications\", \"Sound\", \"Vibration\"\n• Security Center > App Management > Permissions > Auto-start\n\n🔒 Lock background methods:\n• Find SimpleLog in recent tasks\n• Pull down app card to show lock icon\n• Tap lock icon to prevent cleanup';
 
   @override
   String get categoryDetailLoadFailed => 'Load failed';
@@ -3716,7 +3716,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'The previously downloaded installation package is incomplete or corrupted. Delete and re-download?';
 
   @override
-  String get welcomeTitle => 'Welcome to BeeCount';
+  String get welcomeTitle => 'Welcome to SimpleLog';
 
   @override
   String get welcomeDescription =>

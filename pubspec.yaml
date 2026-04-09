@@ -103,9 +103,8 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    - assets/logo.svg
-    - assets/bee.svg
     - assets/logo2.png
+    - assets/app_launcher.svg
     - assets/icons/
     - assets/images/
   # 字体已移动到可选依赖，使用系统字体以减少应用体积

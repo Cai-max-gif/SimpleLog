@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => '蜜蜂记账';
+  String get appTitle => '简单记账';
 
   @override
   String get tabHome => '明细';
@@ -221,7 +221,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeSelectDate => '选择日期';
 
   @override
-  String get homeAppTitle => '蜜蜂记账';
+  String get homeAppTitle => '简单记账';
 
   @override
   String get homeSearch => '搜索';
@@ -443,7 +443,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get analyticsToday => '今天';
 
   @override
-  String get splashAppName => '蜜蜂记账';
+  String get splashAppName => '简单记账';
 
   @override
   String get splashSlogan => '一笔一蜜';
@@ -872,7 +872,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get deleteConfirmMessage => '确定要删除这条记账吗？';
 
   @override
-  String get mineSlogan => '蜜蜂记账，一笔一蜜';
+  String get mineSlogan => '简单记账，一笔一蜜';
 
   @override
   String get mineAvatarTitle => '头像设置';
@@ -999,7 +999,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineShareApp => '分享应用';
 
   @override
-  String get mineShareWithFriends => '和好友分享蜜蜂记账';
+  String get mineShareWithFriends => '和好友分享简单记账';
 
   @override
   String get mineCopyPromoText => '复制推广文案';
@@ -1011,7 +1011,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineShareGenerating => '正在生成分享海报...';
 
   @override
-  String get sharePosterAppName => '蜜蜂记账';
+  String get sharePosterAppName => '简单记账';
 
   @override
   String get sharePosterSlogan => '一笔一蜜，记录美好生活';
@@ -1089,7 +1089,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get shareGuidanceCopyText =>
-      '用蜜蜂记账记录生活，开源免费无广告！🐝 下载地址：https://github.com/TNT-Likely/BeeCount';
+      '用简单记账记录生活，开源免费无广告！🐝 下载地址：https://github.com/TNT-Likely/BeeCount';
 
   @override
   String get shareGuidanceCopied => '文案已复制';
@@ -1421,7 +1421,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineDisplayScaleSubtitle => '调整文字和界面元素大小';
 
   @override
-  String get mineCheckUpdate => '检测更新';
+  String get mineCheckUpdate => '检查更新';
 
   @override
   String get mineCheckUpdateSubtitle => '正在检查最新版本';
@@ -2240,7 +2240,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mineImportCompleteAllSuccess => '全部成功';
 
   @override
-  String get mineCheckUpdateDetecting => '检测更新中...';
+  String get mineCheckUpdateDetecting => '检查更新中...';
 
   @override
   String get mineCheckUpdateSubtitleDetecting => '正在检查最新版本';
@@ -2716,7 +2716,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updateNotificationPermissionTitle => '通知权限被拒绝';
 
   @override
-  String get updateCheckFailedTitle => '检测更新失败';
+  String get updateCheckFailedTitle => '检查更新失败';
 
   @override
   String get updateDownloadFailedTitle => '下载失败';
@@ -3584,7 +3584,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updateCorruptedFileMessage => '检测到之前下载的安装包不完整或已损坏，是否删除并重新下载？';
 
   @override
-  String get welcomeTitle => '欢迎使用 BeeCount';
+  String get welcomeTitle => '欢迎使用 SimpleLog';
 
   @override
   String get welcomeDescription => '一个真正尊重您隐私的记账应用';
@@ -5815,7 +5815,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   AppLocalizationsZhTw() : super('zh_TW');
 
   @override
-  String get appTitle => '蜜蜂記帳';
+  String get appTitle => '簡單記帳';
 
   @override
   String get tabHome => '明細';
@@ -5923,7 +5923,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get voiceRecordingPermissionDeniedMessage =>
-      '語音記帳功能需要使用麥克風權限。請在系統設定中允許蜜蜂記帳存取麥克風。';
+      '語音記帳功能需要使用麥克風權限。請在系統設定中允許簡單記帳存取麥克風。';
 
   @override
   String voiceRecordingStartFailed(String error) {
@@ -6024,7 +6024,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get homeSelectDate => '選擇日期';
 
   @override
-  String get homeAppTitle => '蜜蜂記帳';
+  String get homeAppTitle => '簡單記帳';
 
   @override
   String get homeSearch => '搜尋';
@@ -6246,7 +6246,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get analyticsToday => '今天';
 
   @override
-  String get splashAppName => '蜜蜂記帳';
+  String get splashAppName => '簡單記帳';
 
   @override
   String get splashSlogan => '一筆一蜜';
@@ -6675,7 +6675,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get deleteConfirmMessage => '確定要刪除這條記帳嗎？';
 
   @override
-  String get mineSlogan => '蜜蜂記帳，一筆一蜜';
+  String get mineSlogan => '簡單記帳，一筆一蜜';
 
   @override
   String get mineAvatarTitle => '頭像設定';
@@ -6802,7 +6802,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineShareApp => '分享應用程式';
 
   @override
-  String get mineShareWithFriends => '和好友分享蜜蜂記帳';
+  String get mineShareWithFriends => '和好友分享簡單記帳';
 
   @override
   String get mineCopyPromoText => '複製推廣文案';
@@ -6814,7 +6814,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mineShareGenerating => '正在生成分享海報...';
 
   @override
-  String get sharePosterAppName => '蜜蜂記帳';
+  String get sharePosterAppName => '簡單記帳';
 
   @override
   String get sharePosterSlogan => '一筆一蜜，記錄美好生活';
@@ -6892,7 +6892,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get shareGuidanceCopyText =>
-      '用蜜蜂記帳記錄生活，開源免費無廣告！🐝 下載地址：https://github.com/TNT-Likely/BeeCount';
+      '用簡單記帳記錄生活，開源免費無廣告！🐝 下載地址：https://github.com/TNT-Likely/BeeCount';
 
   @override
   String get shareGuidanceCopied => '文案已複製';
@@ -7960,11 +7960,11 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get reminderIOSInstructions =>
-      '🍎 iOS通知設定：\n• 設定 > 通知 > 蜜蜂記帳\n• 開啟\"允許通知\"\n• 設定通知樣式：橫幅或提醒\n• 開啟聲音和震動\n\n⚠️ 重要提示：\n• iOS本地通知依賴應用程序進程\n• 請勿在任務管理器中划掉應用\n• 應用在後台或前台時通知正常\n• 完全關閉應用會導致通知失效\n\n💡 使用建議：\n• 日常使用後直接按Home鍵退出\n• iOS會自動管理後台應用\n• 保持應用在後台即可收到提醒';
+      '🍎 iOS通知設定：\n• 設定 > 通知 > 簡單記帳\n• 開啟\"允許通知\"\n• 設定通知樣式：橫幅或提醒\n• 開啟聲音和震動\n\n⚠️ 重要提示：\n• iOS本地通知依賴應用程序進程\n• 請勿在任務管理器中划掉應用\n• 應用在後台或前台時通知正常\n• 完全關閉應用會導致通知失效\n\n💡 使用建議：\n• 日常使用後直接按Home鍵退出\n• iOS會自動管理後台應用\n• 保持應用在後台即可收到提醒';
 
   @override
   String get reminderAndroidInstructions =>
-      '如果通知無法正常工作，請檢查：\n• 已允許應用程式發送通知\n• 關閉應用程式的電池最佳化/省電模式\n• 允許應用程式在背景執行和自啟動\n• Android 12+需要精確鬧鐘權限\n\n📱 小米手機特殊設定：\n• 設定 > 應用程式管理 > 蜜蜂記帳 > 通知管理\n• 點擊\"記帳提醒\"頻道\n• 設定重要性為\"緊急\"或\"高\"\n• 開啟\"橫幅通知\"、\"聲音\"、\"震動\"\n• 安全中心 > 應用程式管理 > 權限 > 自啟動\n\n🔒 鎖定背景方法：\n• 最近任務中找到蜜蜂記帳\n• 向下拉動應用程式卡片顯示鎖定圖示\n• 點擊鎖定圖示防止被清理';
+      '如果通知無法正常工作，請檢查：\n• 已允許應用程式發送通知\n• 關閉應用程式的電池最佳化/省電模式\n• 允許應用程式在背景執行和自啟動\n• Android 12+需要精確鬧鐘權限\n\n📱 小米手機特殊設定：\n• 設定 > 應用程式管理 > 簡單記帳 > 通知管理\n• 點擊\"記帳提醒\"頻道\n• 設定重要性為\"緊急\"或\"高\"\n• 開啟\"橫幅通知\"、\"聲音\"、\"震動\"\n• 安全中心 > 應用程式管理 > 權限 > 自啟動\n\n🔒 鎖定背景方法：\n• 最近任務中找到簡單記帳\n• 向下拉動應用程式卡片顯示鎖定圖示\n• 點擊鎖定圖示防止被清理';
 
   @override
   String get categoryDetailLoadFailed => '載入失敗';
@@ -8701,7 +8701,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get updateNotificationGuideStep1 => '進入系統設定 > 應用程式管理';
 
   @override
-  String get updateNotificationGuideStep2 => '找到\\\"蜜蜂記帳\\\"應用程式';
+  String get updateNotificationGuideStep2 => '找到\\\"簡單記帳\\\"應用程式';
 
   @override
   String get updateNotificationGuideStep3 => '開啟通知權限';
@@ -9387,7 +9387,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get updateCorruptedFileMessage => '檢測到之前下載的安裝包不完整或已損壞，是否刪除並重新下載？';
 
   @override
-  String get welcomeTitle => '欢迎使用 BeeCount';
+  String get welcomeTitle => '欢迎使用 SimpleLog';
 
   @override
   String get welcomeDescription => '一个真正尊重您隐私的记帳應用';
@@ -9447,7 +9447,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get iosWidgetStep2 => '点击左上角的\"+\"按钮';
 
   @override
-  String get iosWidgetStep3 => '搜索并選擇\"蜜蜂记帳\"';
+  String get iosWidgetStep3 => '搜索并選擇\"簡單記帳\"';
 
   @override
   String get iosWidgetStep4 => '選擇中型小組件，添加到主屏幕';
@@ -9459,7 +9459,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get androidWidgetStep2 => '選擇\"小組件\"或\"Widgets\"';
 
   @override
-  String get androidWidgetStep3 => '找到并长按\"蜜蜂记帳\"小組件';
+  String get androidWidgetStep3 => '找到并长按\"簡單記帳\"小組件';
 
   @override
   String get androidWidgetStep4 => '拖動到主屏幕合适位置';
@@ -9472,7 +9472,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
       '小組件会自動同步顯示今日和本月的收支數據，每30分钟自動刷新一次。打開應用后会立即更新數據。';
 
   @override
-  String get appName => '蜜蜂记帳';
+  String get appName => '簡單記帳';
 
   @override
   String get monthSuffix => '月';
@@ -9560,10 +9560,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get iosAutoShortcutStep2 => '新增「截圖」操作';
 
   @override
-  String get iosAutoShortcutStep3 => '搜尋並新增「蜜蜂記帳 - 截圖自動記帳」操作';
+  String get iosAutoShortcutStep3 => '搜尋並新增「簡單記帳 - 截圖自動記帳」操作';
 
   @override
-  String get iosAutoShortcutStep4 => '將「蜜蜂記帳」的截圖參數設定為上一步的「截圖」';
+  String get iosAutoShortcutStep4 => '將「簡單記帳」的截圖參數設定為上一步的「截圖」';
 
   @override
   String get iosAutoShortcutStep5 => '（可選）在系統設定 > 輔助使用 > 觸控 > 輕點背面中，綁定此捷徑';
@@ -10378,7 +10378,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get donationDescriptionDetail =>
-      '感謝您使用蜜蜂記帳！如果這個應用對您有幫助，歡迎請開發者喝杯咖啡作為鼓勵。您的支持是我持續改進的動力。';
+      '感謝您使用簡單記帳！如果這個應用對您有幫助，歡迎請開發者喝杯咖啡作為鼓勵。您的支持是我持續改進的動力。';
 
   @override
   String get donationNoFeatures => '注：打賞不會解鎖任何功能，所有功能繼續完全免費。';
@@ -10391,7 +10391,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String donationThankYouMessage(String productName) {
-    return '感謝您購買 $productName！您的支持對我意義重大，我會繼續努力改進蜜蜂記帳，讓它變得更好用！';
+    return '感謝您購買 $productName！您的支持對我意義重大，我會繼續努力改進簡單記帳，讓它變得更好用！';
   }
 
   @override
@@ -11411,7 +11411,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get appLockBiometricDesc => '使用Face ID或指紋快速解鎖';
 
   @override
-  String get appLockBiometricReason => '請驗證身份以解鎖蜜蜂記帳';
+  String get appLockBiometricReason => '請驗證身份以解鎖簡單記帳';
 
   @override
   String get appLockTimeout => '自動鎖定時間';

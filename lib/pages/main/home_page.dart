@@ -11,7 +11,6 @@ import '../settings/personalize_page.dart' show headerStyleProvider;
 import '../../data/db.dart';
 import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
-import '../../widgets/biz/bee_icon.dart';
 import '../../styles/tokens.dart';
 import '../transaction/search_page.dart';
 import '../ai/ai_chat_page.dart';
@@ -639,16 +638,12 @@ class _HomePageState extends ConsumerState<HomePage> {
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // 头部 - 左: BeeIcon + 账本切换, 右: 操作按钮
+                  // 头部 - 左: 标题 + 账本切换, 右: 操作按钮
                   SizedBox(
                     height: 48,
                     child: Row(
                       children: [
-                        // 左侧：BeeIcon + 标题 + 账本切换胶囊
-                        BeeIcon(
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 28,
-                        ),
+                        // 左侧：标题 + 账本切换胶囊
                         Text(
                           AppLocalizations.of(context).homeAppTitle,
                           style:
@@ -927,6 +922,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   emptyWidget: AppEmpty(
                     text: AppLocalizations.of(context).homeNoRecords,
                     subtext: AppLocalizations.of(context).homeNoRecordsSubtext,
+                    icon: Icons.receipt_long,
                   ),
                 );
               },

@@ -6,9 +6,7 @@ import '../../widgets/ui/ui.dart';
 import '../../widgets/biz/biz.dart';
 import '../../styles/tokens.dart';
 import './personalize_page.dart';
-import './font_settings_page.dart';
 import './language_settings_page.dart';
-import './widget_management_page.dart';
 import '../../l10n/app_localizations.dart';
 
 /// 外观设置二级页面
@@ -148,33 +146,6 @@ class AppearanceSettingsPage extends ConsumerWidget {
                   margin: EdgeInsets.zero,
                   child: Column(
                     children: [
-                      // 桌面小组件
-                      AppListTile(
-                        leading: Icons.widgets_outlined,
-                        title: l10n.widgetManagement,
-                        subtitle: l10n.widgetManagementDesc,
-                        trailing: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: const Text(
-                            'NEW',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const WidgetManagementPage()),
-                          );
-                        },
-                      ),
-                      BeeTokens.cardDivider(context),
                       // 个性化
                       AppListTile(
                         leading: Icons.brush_outlined,
@@ -182,18 +153,6 @@ class AppearanceSettingsPage extends ConsumerWidget {
                         onTap: () async {
                           await Navigator.of(context).push(
                             MaterialPageRoute(builder: (_) => const PersonalizePage()),
-                          );
-                        },
-                      ),
-                      BeeTokens.cardDivider(context),
-                      // 显示缩放
-                      AppListTile(
-                        leading: Icons.zoom_out_map_outlined,
-                        title: l10n.mineDisplayScale,
-                        subtitle: l10n.mineDisplayScaleSubtitle,
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const FontSettingsPage()),
                           );
                         },
                       ),

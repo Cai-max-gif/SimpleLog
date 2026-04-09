@@ -147,14 +147,14 @@ android {
     }
 }
 
-// 自定义 Release APK 命名：app-<flavor>-release-v<versionName>(<versionCode>).apk
+// 自定义 Release APK 命名：app-<flavor>-release-v<versionName>-<versionCode>.apk
 android.applicationVariants.all { variant ->
     if (variant.buildType.name == 'release') {
         variant.outputs.all { output ->
             def flavor = variant.flavorName ?: ""
             def vName = variant.versionName
             def vCode = variant.versionCode
-            def baseName = "app-${flavor}-release-v${vName}(${vCode}).apk"
+            def baseName = "app-${flavor}-release-v${vName}-${vCode}.apk"
             try {
                 output.outputFileName = baseName
             } catch (ignored) {
