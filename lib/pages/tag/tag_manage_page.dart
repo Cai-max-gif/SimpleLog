@@ -72,7 +72,7 @@ class _TagManagePageState extends ConsumerState<TagManagePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.label,
+            Icons.label_outline,
             size: 64,
             color: BeeTokens.textTertiary(context),
           ),

@@ -47,7 +47,7 @@ class RecurringTransactionPage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.repeat_on,
+                          Icons.repeat,
                           size: 64,
                           color: BeeTokens.textTertiary(context),
                         ),
