@@ -67,6 +67,7 @@ class _TagManagePageState extends ConsumerState<TagManagePage> {
   }
 
   Widget _buildEmptyState(AppLocalizations l10n) {
+    final primaryColor = ref.watch(primaryColorProvider);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -74,7 +75,7 @@ class _TagManagePageState extends ConsumerState<TagManagePage> {
           Icon(
             Icons.label_outline,
             size: 64,
-            color: BeeTokens.textTertiary(context),
+            color: primaryColor,
           ),
           const SizedBox(height: 16),
           Text(

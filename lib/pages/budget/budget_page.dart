@@ -84,14 +84,15 @@ class BudgetPage extends ConsumerWidget {
 
   Widget _buildEmptyState(
       BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+    final primaryColor = ref.watch(primaryColorProvider);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.account_balance_wallet,
+            Icons.pie_chart,
             size: 64,
-            color: BeeTokens.textTertiary(context),
+            color: primaryColor,
           ),
           const SizedBox(height: 16),
           Text(

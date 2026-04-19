@@ -42,6 +42,7 @@ class RecurringTransactionPage extends ConsumerWidget {
               ),
               data: (recurringTransactions) {
                 if (recurringTransactions.isEmpty) {
+                  final primaryColor = ref.watch(primaryColorProvider);
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -49,7 +50,7 @@ class RecurringTransactionPage extends ConsumerWidget {
                         Icon(
                           Icons.repeat,
                           size: 64,
-                          color: BeeTokens.textTertiary(context),
+                          color: primaryColor,
                         ),
                         const SizedBox(height: 16),
                         Text(
