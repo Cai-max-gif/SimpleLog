@@ -1,6 +1,6 @@
-import 'package:beecount/utils/ui_scale_extensions.dart';
-import 'package:beecount/widgets/biz/section_card.dart';
-import 'package:beecount/widgets/ui/ui.dart';
+import 'package:simplelog/utils/ui_scale_extensions.dart';
+import 'package:simplelog/widgets/biz/section_card.dart';
+import 'package:simplelog/widgets/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +15,8 @@ class AIModelSelectionPage extends ConsumerStatefulWidget {
   const AIModelSelectionPage({super.key});
 
   @override
-  ConsumerState<AIModelSelectionPage> createState() => _AIModelSelectionPageState();
+  ConsumerState<AIModelSelectionPage> createState() =>
+      _AIModelSelectionPageState();
 }
 
 class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
@@ -34,11 +35,11 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
 
     setState(() {
       _glmModel = prefs.getString(AIConstants.keyGlmModel) ?? _glmModel;
-      _glmVisionModel = prefs.getString(AIConstants.keyGlmVisionModel) ?? _glmVisionModel;
+      _glmVisionModel =
+          prefs.getString(AIConstants.keyGlmVisionModel) ?? _glmVisionModel;
       _loading = false;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -88,8 +89,6 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
       ),
     );
   }
-
-
 
   /// 获取文本模型的显示名称
   String _getModelDisplayName(String modelId, AppLocalizations l10n) {
@@ -236,9 +235,8 @@ class _AIModelSelectionPageState extends ConsumerState<AIModelSelectionPage> {
           color: BeeTokens.textSecondary(context),
         ),
       ),
-      trailing: isSelected
-          ? Icon(Icons.check_circle, color: primaryColor)
-          : null,
+      trailing:
+          isSelected ? Icon(Icons.check_circle, color: primaryColor) : null,
       onTap: () async {
         Navigator.pop(dialogContext);
 

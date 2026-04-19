@@ -5827,6 +5827,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get tabAssets => '資產';
 
   @override
+  String get tabRecord => '記帳';
+
+  @override
   String get tabMine => '我的';
 
   @override
@@ -11366,6 +11369,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudSyncGuideLimitItem4 => '不含附件：交易的圖片附件不參與同步，需透過資料管理單獨匯出';
 
   @override
+  String get mineMultiDeviceSyncTitle => '多設備同步';
+
+  @override
+  String get mineMultiDeviceSyncSubtitle => '進入頁面時自動檢查雲端變更';
+
+  @override
   String get appLockTitle => '應用鎖';
 
   @override
@@ -11511,6 +11520,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accountNoMoreData => '沒有更多資料了';
 
   @override
+  String get totalAssets => '總資產';
+
+  @override
+  String get totalLiabilities => '總負債';
+
+  @override
+  String get assetAccounts => '資產帳戶';
+
+  @override
+  String get liabilityAccounts => '負債帳戶';
+
+  @override
+  String get assetComposition => '資產構成';
+
+  @override
   String get accountTypeInvestment => '投資理財';
 
   @override
@@ -11559,6 +11583,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get accountGroupValuation => '資產/負債';
+
+  @override
+  String get adjustmentTransaction => '估值調整';
 
   @override
   String creditCardBillingInfo(int billingDay, int paymentDueDay) {
