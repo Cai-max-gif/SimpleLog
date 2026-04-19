@@ -82,7 +82,6 @@ class BudgetPage extends ConsumerWidget {
     );
   }
 
-
   Widget _buildEmptyState(
       BuildContext context, WidgetRef ref, AppLocalizations l10n) {
     return Center(
@@ -90,7 +89,7 @@ class BudgetPage extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.account_balance_wallet_outlined,
+            Icons.account_balance_wallet,
             size: 64,
             color: BeeTokens.textTertiary(context),
           ),
@@ -105,8 +104,7 @@ class BudgetPage extends ConsumerWidget {
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: () => _addBudget(context),
-            icon: Icon(Icons.add,
-                color: BeeTokens.buttonPrimaryText(context)),
+            icon: Icon(Icons.add, color: BeeTokens.buttonPrimaryText(context)),
             label: Text(l10n.budgetAddTotal),
             style: ElevatedButton.styleFrom(
               backgroundColor: BeeTokens.buttonPrimary(context),

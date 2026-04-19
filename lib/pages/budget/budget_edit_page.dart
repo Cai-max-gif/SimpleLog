@@ -136,7 +136,7 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
                                 context,
                                 l10n.budgetTypeTotalLabel,
                                 'total',
-                                Icons.account_balance_wallet_outlined,
+                                Icons.account_balance_wallet,
                                 disabled: _hasTotalBudget, // 已有总预算时禁用
                               ),
                             ),
@@ -193,9 +193,11 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
                       SizedBox(height: 12.0.scaled(context, ref)),
                       TextField(
                         controller: _amountController,
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
                         inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d+\.?\d{0,2}')),
                         ],
                         style: TextStyle(
                           fontSize: 24,
@@ -263,7 +265,8 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
                 : BeeTokens.surface(context),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isSelected && !disabled ? primary : BeeTokens.border(context),
+              color:
+                  isSelected && !disabled ? primary : BeeTokens.border(context),
               width: isSelected && !disabled ? 2 : 1,
             ),
           ),
@@ -272,15 +275,21 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
               Icon(
                 icon,
                 size: 32.0.scaled(context, ref),
-                color: isSelected && !disabled ? primary : BeeTokens.iconSecondary(context),
+                color: isSelected && !disabled
+                    ? primary
+                    : BeeTokens.iconSecondary(context),
               ),
               SizedBox(height: 8.0.scaled(context, ref)),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: 14,
-                  fontWeight: isSelected && !disabled ? FontWeight.w600 : FontWeight.w400,
-                  color: isSelected && !disabled ? primary : BeeTokens.textSecondary(context),
+                  fontWeight: isSelected && !disabled
+                      ? FontWeight.w600
+                      : FontWeight.w400,
+                  color: isSelected && !disabled
+                      ? primary
+                      : BeeTokens.textSecondary(context),
                 ),
               ),
             ],
@@ -308,7 +317,10 @@ class _BudgetEditPageState extends ConsumerState<BudgetEditPage> {
                 width: 36.0.scaled(context, ref),
                 height: 36.0.scaled(context, ref),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(

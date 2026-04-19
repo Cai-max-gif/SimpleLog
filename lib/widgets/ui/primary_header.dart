@@ -278,7 +278,7 @@ class _IconTilingPattern extends StatelessWidget {
               top: 10,
               left: 100,
               child: Icon(
-                Icons.account_balance_wallet_outlined,
+                Icons.account_balance_wallet,
                 size: 50,
                 color: color,
               ),

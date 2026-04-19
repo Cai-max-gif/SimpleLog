@@ -3584,7 +3584,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updateCorruptedFileMessage => '检测到之前下载的安装包不完整或已损坏，是否删除并重新下载？';
 
   @override
-  String get welcomeTitle => '欢迎使用 SimpleLog';
+  String get welcomeTitle => '欢迎使用简单记账';
 
   @override
   String get welcomeDescription => '一个真正尊重您隐私的记账应用';
@@ -9390,7 +9390,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get updateCorruptedFileMessage => '檢測到之前下載的安裝包不完整或已損壞，是否刪除並重新下載？';
 
   @override
-  String get welcomeTitle => '欢迎使用 SimpleLog';
+  String get welcomeTitle => '歡迎使用簡單記帳';
 
   @override
   String get welcomeDescription => '一个真正尊重您隐私的记帳應用';
