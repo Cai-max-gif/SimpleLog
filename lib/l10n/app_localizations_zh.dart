@@ -120,7 +120,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get voiceRecordingPermissionDeniedMessage =>
-      '语音记账功能需要使用麦克风权限。请在系统设置中允许蜜蜂记账访问麦克风。';
+      '语音记账功能需要使用麦克风权限。请在系统设置中允许简单记账访问麦克风。';
 
   @override
   String voiceRecordingStartFailed(String error) {
@@ -1089,7 +1089,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get shareGuidanceCopyText =>
-      '用简单记账记录生活，开源免费无广告！🐝 下载地址：https://github.com/TNT-Likely/BeeCount';
+      '用简单记账记录生活，开源免费无广告！🐝 下载地址：https://github.com/Cai-max-gif/SimpleLog';
 
   @override
   String get shareGuidanceCopied => '文案已复制';
@@ -1631,7 +1631,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get categoryShareSubject => 'BeeCount 分类配置';
+  String get categoryShareSubject => 'SimpleLog 分类配置';
 
   @override
   String get categoryShareFailed => '分享失败';
@@ -2157,11 +2157,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reminderIOSInstructions =>
-      '🍎 iOS通知设置：\n• 设置 > 通知 > 蜜蜂记账\n• 开启\"允许通知\"\n• 设置通知样式：横幅或提醒\n• 开启声音和震动\n\n⚠️ 重要提示：\n• iOS本地通知依赖应用进程\n• 请勿在任务管理器中划掉应用\n• 应用在后台或前台时通知正常\n• 完全关闭应用会导致通知失效\n\n💡 使用建议：\n• 日常使用后直接按Home键退出\n• iOS会自动管理后台应用\n• 保持应用在后台即可收到提醒';
+      '🍎 iOS通知设置：\n• 设置 > 通知 > 简单记账\n• 开启\"允许通知\"\n• 设置通知样式：横幅或提醒\n• 开启声音和震动\n\n⚠️ 重要提示：\n• iOS本地通知依赖应用进程\n• 请勿在任务管理器中划掉应用\n• 应用在后台或前台时通知正常\n• 完全关闭应用会导致通知失效\n\n💡 使用建议：\n• 日常使用后直接按Home键退出\n• iOS会自动管理后台应用\n• 保持应用在后台即可收到提醒';
 
   @override
   String get reminderAndroidInstructions =>
-      '如果通知无法正常工作，请检查：\n• 已允许应用发送通知\n• 关闭应用的电池优化/省电模式\n• 允许应用在后台运行和自启动\n• Android 12+需要精确闹钟权限\n\n📱 小米手机特殊设置：\n• 设置 > 应用管理 > 蜜蜂记账 > 通知管理\n• 点击\"记账提醒\"渠道\n• 设置重要性为\"紧急\"或\"高\"\n• 开启\"横幅通知\"、\"声音\"、\"震动\"\n• 安全中心 > 应用管理 > 权限 > 自启动\n\n🔒 锁定后台方法：\n• 最近任务中找到蜜蜂记账\n• 向下拉动应用卡片显示锁定图标\n• 点击锁定图标防止被清理';
+      '如果通知无法正常工作，请检查：\n• 已允许应用发送通知\n• 关闭应用的电池优化/省电模式\n• 允许应用在后台运行和自启动\n• Android 12+需要精确闹钟权限\n\n📱 小米手机特殊设置：\n• 设置 > 应用管理 > 简单记账 > 通知管理\n• 点击\"记账提醒\"渠道\n• 设置重要性为\"紧急\"或\"高\"\n• 开启\"横幅通知\"、\"声音\"、\"震动\"\n• 安全中心 > 应用管理 > 权限 > 自启动\n\n🔒 锁定后台方法：\n• 最近任务中找到简单记账\n• 向下拉动应用卡片显示锁定图标\n• 点击锁定图标防止被清理';
 
   @override
   String get categoryDetailLoadFailed => '加载失败';
@@ -2289,7 +2289,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudWebdavPasswordLabel => '密码';
 
   @override
-  String get cloudWebdavPathHint => '/BeeCount';
+  String get cloudWebdavPathHint => '/SimpleLog';
 
   @override
   String get cloudS3EndpointLabel => '端点地址';
@@ -2319,7 +2319,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudS3BucketLabel => '存储桶名称';
 
   @override
-  String get cloudS3BucketHint => 'beecount-data';
+  String get cloudS3BucketHint => 'SimpleLog-data';
 
   @override
   String get cloudS3UseSSLLabel => '使用 HTTPS';
@@ -2334,7 +2334,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cloudSupabaseBucketLabel => 'Storage Bucket 名称';
 
   @override
-  String get cloudSupabaseBucketHint => '留空使用默认值 beecount-backups';
+  String get cloudSupabaseBucketHint => '留空使用默认值 SimpleLog-backups';
 
   @override
   String get authRememberAccount => '记住账号密码';
@@ -2496,7 +2496,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportCsvHeaderAttachments => '附件';
 
   @override
-  String get exportShareText => 'BeeCount 导出文件';
+  String get exportShareText => 'SimpleLog 导出文件';
 
   @override
   String get exportSuccessTitle => '导出成功';
@@ -2729,7 +2729,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get updateManualVisit =>
-      '请手动在浏览器中访问：\\nhttps://github.com/TNT-Likely/BeeCount/releases';
+      '请手动在浏览器中访问：\\nhttps://github.com/Cai-max-gif/SimpleLog/releases';
 
   @override
   String get updateNoLocalApkTitle => '未找到更新包';
@@ -2898,7 +2898,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updateNotificationGuideStep1 => '进入系统设置 > 应用管理';
 
   @override
-  String get updateNotificationGuideStep2 => '找到\\\"蜜蜂记账\\\"应用';
+  String get updateNotificationGuideStep2 => '找到\\\"简单记账\\\"应用';
 
   @override
   String get updateNotificationGuideStep3 => '开启通知权限';
@@ -3611,7 +3611,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeCloudSyncTitle => '可选的云同步';
 
   @override
-  String get welcomeCloudSyncDescription => 'BeeCount 支持多种同步方式，数据完全由你掌控';
+  String get welcomeCloudSyncDescription => 'SimpleLog 支持多种同步方式，数据完全由你掌控';
 
   @override
   String get welcomeCloudSyncFeature1 => '完全离线使用，无需云服务';
@@ -3644,7 +3644,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get iosWidgetStep2 => '点击左上角的\"+\"按钮';
 
   @override
-  String get iosWidgetStep3 => '搜索并选择\"蜜蜂记账\"';
+  String get iosWidgetStep3 => '搜索并选择\"简单记账\"';
 
   @override
   String get iosWidgetStep4 => '选择中型小组件，添加到主屏幕';
@@ -3656,7 +3656,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get androidWidgetStep2 => '选择\"小组件\"或\"Widgets\"';
 
   @override
-  String get androidWidgetStep3 => '找到并长按\"蜜蜂记账\"小组件';
+  String get androidWidgetStep3 => '找到并长按\"简单记账\"小组件';
 
   @override
   String get androidWidgetStep4 => '拖动到主屏幕合适位置';
@@ -3669,7 +3669,7 @@ class AppLocalizationsZh extends AppLocalizations {
       '小组件会自动同步显示今日和本月的收支数据，每30分钟自动刷新一次。打开应用后会立即更新数据。';
 
   @override
-  String get appName => '蜜蜂记账';
+  String get appName => '简单记账';
 
   @override
   String get monthSuffix => '月';
@@ -3757,10 +3757,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get iosAutoShortcutStep2 => '添加\"截屏\"操作';
 
   @override
-  String get iosAutoShortcutStep3 => '搜索并添加\"蜜蜂记账 - 截图自动记账\"操作';
+  String get iosAutoShortcutStep3 => '搜索并添加\"简单记账 - 截图自动记账\"操作';
 
   @override
-  String get iosAutoShortcutStep4 => '将\"蜜蜂记账\"的截图参数设置为上一步的\"截屏\"';
+  String get iosAutoShortcutStep4 => '将\"简单记账\"的截图参数设置为上一步的\"截屏\"';
 
   @override
   String get iosAutoShortcutStep5 => '（可选）在系统设置 > 辅助功能 > 触控 > 轻点背面中，绑定此快捷指令';
@@ -4053,7 +4053,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aboutDeveloperStory =>
-      '从 2015 年实习起，我坚持记账至今已超过十年。因为担心记账软件的广告、付费、隐私泄露和停运跑路，我决定自己做一个——最初只是给自己和家人用的小工具。\n\n2025 年 9 月，蜜蜂记账发布了第一个版本。说实话，那时候心里没什么底，不知道会不会有人用。但慢慢地，开始收到用户的反馈——有人说终于找到了一款干净的记账软件，有人提了很好的建议，也有人默默给了五星好评。每一条反馈都让我觉得，这件事值得继续做下去。\n\n蜜蜂记账没有广告、没有会员、完全免费开源。你的每一笔数据都只存在你自己的手机里，不会被上传到任何第三方服务器。但上架和维护一款 App 并非零成本——开发者账号、服务器等开支目前靠社区捐赠勉强支撑，每一次适配新系统、修复 Bug、开发新功能，也都是工作之余一点点完成的。\n\n如果你觉得蜜蜂记账对你有帮助，一个好评、一次分享或一笔捐赠，都能让这个小项目走得更远。谢谢你的信任。';
+      '从 2015 年实习起，我坚持记账至今已超过十年。因为担心记账软件的广告、付费、隐私泄露和停运跑路，我决定自己做一个——最初只是给自己和家人用的小工具。\n\n2025 年 9 月，简单记账发布了第一个版本。说实话，那时候心里没什么底，不知道会不会有人用。但慢慢地，开始收到用户的反馈——有人说终于找到了一款干净的记账软件，有人提了很好的建议，也有人默默给了五星好评。每一条反馈都让我觉得，这件事值得继续做下去。\n\n简单记账没有广告、没有会员、完全免费开源。你的每一笔数据都只存在你自己的手机里，不会被上传到任何第三方服务器。但上架和维护一款 App 并非零成本——开发者账号、服务器等开支目前靠社区捐赠勉强支撑，每一次适配新系统、修复 Bug、开发新功能，也都是工作之余一点点完成的。\n\n如果你觉得简单记账对你有帮助，一个好评、一次分享或一笔捐赠，都能让这个小项目走得更远。谢谢你的信任。';
 
   @override
   String get aboutRelatedProducts => '更多产品';
@@ -4129,7 +4129,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get configExportSubtitle => '将当前配置导出为YAML文件';
 
   @override
-  String get configExportShareSubject => 'BeeCount 配置文件';
+  String get configExportShareSubject => 'SimpleLog 配置文件';
 
   @override
   String get configExportSuccess => '配置导出成功';
@@ -4575,7 +4575,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get donationDescriptionDetail =>
-      '感谢您使用蜜蜂记账！如果这个应用对您有帮助，欢迎请开发者喝杯咖啡作为鼓励。您的支持是我持续改进的动力。';
+      '感谢您使用简单记账！如果这个应用对您有帮助，欢迎请开发者喝杯咖啡作为鼓励。您的支持是我持续改进的动力。';
 
   @override
   String get donationNoFeatures => '注: 打赏不会解锁任何功能，所有功能继续完全免费。';
@@ -4588,7 +4588,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String donationThankYouMessage(String productName) {
-    return '感谢您购买 $productName！您的支持对我意义重大，我会继续努力改进蜜蜂记账，让它变得更好用！';
+    return '感谢您购买 $productName！您的支持对我意义重大，我会继续努力改进简单记账，让它变得更好用！';
   }
 
   @override
@@ -4964,7 +4964,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get tagShareSubject => 'BeeCount 标签配置';
+  String get tagShareSubject => 'SimpleLog 标签配置';
 
   @override
   String get tagShareFailed => '分享失败';
@@ -5248,7 +5248,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get iosShortcutStep3 => '添加「打开 URL」操作';
 
   @override
-  String get iosShortcutStep4 => '粘贴上方复制的链接（如 beecount://voice）';
+  String get iosShortcutStep4 => '粘贴上方复制的链接（如 SimpleLog://voice）';
 
   @override
   String get iosShortcutStep5 => '保存后，可添加到桌面使用';
@@ -5260,7 +5260,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get androidShortcutStep2 => '选择「URL 快捷方式」';
 
   @override
-  String get androidShortcutStep3 => '粘贴上方复制的链接（如 beecount://voice）';
+  String get androidShortcutStep3 => '粘贴上方复制的链接（如 SimpleLog://voice）';
 
   @override
   String get androidShortcutStep4 => '设置图标和名称后添加到桌面';
@@ -5614,7 +5614,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appLockBiometricDesc => '使用Face ID或指纹快速解锁';
 
   @override
-  String get appLockBiometricReason => '请验证身份以解锁蜜蜂记账';
+  String get appLockBiometricReason => '请验证身份以解锁简单记账';
 
   @override
   String get appLockTimeout => '自动锁定时间';
@@ -6895,7 +6895,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get shareGuidanceCopyText =>
-      '用簡單記帳記錄生活，開源免費無廣告！🐝 下載地址：https://github.com/TNT-Likely/BeeCount';
+      '用簡單記帳記錄生活，開源免費無廣告！🐝 下載地址：https://github.com/Cai-max-gif/SimpleLog';
 
   @override
   String get shareGuidanceCopied => '文案已複製';
@@ -7437,7 +7437,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get categoryShareSubject => 'BeeCount 分類配置';
+  String get categoryShareSubject => 'SimpleLog 分類配置';
 
   @override
   String get categoryShareFailed => '分享失敗';
@@ -8095,7 +8095,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudWebdavPasswordLabel => '密碼';
 
   @override
-  String get cloudWebdavPathHint => '/BeeCount';
+  String get cloudWebdavPathHint => '/SimpleLog';
 
   @override
   String get cloudS3EndpointLabel => '端點地址';
@@ -8125,7 +8125,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudS3BucketLabel => '儲存桶名稱';
 
   @override
-  String get cloudS3BucketHint => 'beecount-data';
+  String get cloudS3BucketHint => 'SimpleLog-data';
 
   @override
   String get cloudS3UseSSLLabel => '使用 HTTPS';
@@ -8140,7 +8140,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cloudSupabaseBucketLabel => 'Storage Bucket 名稱';
 
   @override
-  String get cloudSupabaseBucketHint => '留空使用預設值 beecount-backups';
+  String get cloudSupabaseBucketHint => '留空使用預設值 SimpleLog-backups';
 
   @override
   String get authRememberAccount => '記住帳號密碼';
@@ -8302,7 +8302,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get exportCsvHeaderAttachments => '附件';
 
   @override
-  String get exportShareText => 'BeeCount 匯出檔案';
+  String get exportShareText => 'SimpleLog 匯出檔案';
 
   @override
   String get exportSuccessTitle => '匯出成功';
@@ -8535,7 +8535,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get updateManualVisit =>
-      '請手動在瀏覽器中存取：\\nhttps://github.com/TNT-Likely/BeeCount/releases';
+      '請手動在瀏覽器中存取：\\nhttps://github.com/Cai-max-gif/SimpleLog/releases';
 
   @override
   String get updateNoLocalApkTitle => '未找到更新包';
@@ -9417,7 +9417,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get welcomeCloudSyncTitle => '可選的雲端同步';
 
   @override
-  String get welcomeCloudSyncDescription => 'BeeCount 支援多種同步方式，資料完全由你掌控';
+  String get welcomeCloudSyncDescription => 'SimpleLog 支援多種同步方式，資料完全由你掌控';
 
   @override
   String get welcomeCloudSyncFeature1 => '完全離線使用，無需雲端服務';
@@ -9935,7 +9935,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get configExportSubtitle => '將目前配置匯出為YAML檔案';
 
   @override
-  String get configExportShareSubject => 'BeeCount 配置檔案';
+  String get configExportShareSubject => 'SimpleLog 配置檔案';
 
   @override
   String get configExportSuccess => '配置匯出成功';
@@ -10770,7 +10770,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get tagShareSubject => 'BeeCount 標籤配置';
+  String get tagShareSubject => 'SimpleLog 標籤配置';
 
   @override
   String get tagShareFailed => '分享失敗';
@@ -11054,7 +11054,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get iosShortcutStep3 => '加入「開啟 URL」動作';
 
   @override
-  String get iosShortcutStep4 => '貼上上方複製的連結（如 beecount://voice）';
+  String get iosShortcutStep4 => '貼上上方複製的連結（如 SimpleLog://voice）';
 
   @override
   String get iosShortcutStep5 => '儲存後，可加入桌面使用';
@@ -11066,7 +11066,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get androidShortcutStep2 => '選擇「URL 捷徑」';
 
   @override
-  String get androidShortcutStep3 => '貼上上方複製的連結（如 beecount://voice）';
+  String get androidShortcutStep3 => '貼上上方複製的連結（如 SimpleLog://voice）';
 
   @override
   String get androidShortcutStep4 => '設定圖示和名稱後加入桌面';

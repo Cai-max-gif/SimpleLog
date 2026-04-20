@@ -92,7 +92,7 @@ class UpdateService {
       final uri = Uri.parse(downloadUrl);
       final originalFileName = uri.pathSegments.last;
       String? version;
-      final versionMatch = RegExp(r'beecount-([0-9]+\.[0-9]+\.[0-9]+)\.apk')
+      final versionMatch = RegExp(r'SimpleLog-([0-9]+\.[0-9]+\.[0-9]+)\.apk')
           .firstMatch(originalFileName);
       if (versionMatch != null) {
         version = versionMatch.group(1);
@@ -164,7 +164,7 @@ class UpdateService {
       }
 
       // 使用版本号作为文件名，如果没有提取到版本号则使用默认名称
-      final fileName = version != null ? 'v$version' : 'BeeCount_Update';
+      final fileName = version != null ? 'v$version' : 'SimpleLog_Update';
       final downloadResult = await UpdateDownloader.downloadApk(
         context,
         downloadUrl,

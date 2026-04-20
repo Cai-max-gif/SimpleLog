@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:drift/drift.dart' as d;
 import '../../data/db.dart';
 import '../../providers.dart';
 import '../../providers/budget_providers.dart';

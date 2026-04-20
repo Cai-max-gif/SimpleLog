@@ -145,7 +145,7 @@ class LoggerService {
     _setupNativeBridge();
   }
 
-  static const _channel = MethodChannel('com.beecount.logger');
+  static const _channel = MethodChannel('com.simplelog.logger');
   static const _storageKey = 'app_logs';
   static const _maxStorageHours = 48; // 保留48小时
 
@@ -332,7 +332,7 @@ class LoggerService {
   /// 导出所有日志为文本
   String exportAsText() {
     final buffer = StringBuffer();
-    buffer.writeln('=== BeeCount 日志导出 ===');
+    buffer.writeln('=== SimpleLog 日志导出 ===');
     buffer.writeln('导出时间: ${DateTime.now()}');
     buffer.writeln('日志数量: ${_logs.length}');
     buffer.writeln('=' * 50);

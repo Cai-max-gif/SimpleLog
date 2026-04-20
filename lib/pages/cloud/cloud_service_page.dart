@@ -17,8 +17,8 @@ import '../../styles/tokens.dart';
 import '../../l10n/app_localizations.dart';
 
 // GitHub配置教程链接
-const _kSupabaseGuideUrl = 'https://github.com/TNT-Likely/BeeCount/wiki/Supabase-%E4%BA%91%E5%90%8C%E6%AD%A5%E9%85%8D%E7%BD%AE';
-const _kWebdavGuideUrl = 'https://github.com/TNT-Likely/BeeCount/wiki/WebDAV-%E4%BA%91%E5%90%8C%E6%AD%A5%E9%85%8D%E7%BD%AE';
+const _kSupabaseGuideUrl = 'https://github.com/Cai-max-gif/SimpleLog/wiki/Supabase-%E4%BA%91%E5%90%8C%E6%AD%A5%E9%85%8D%E7%BD%AE';
+const _kWebdavGuideUrl = 'https://github.com/Cai-max-gif/SimpleLog/wiki/WebDAV-%E4%BA%91%E5%90%8C%E6%AD%A5%E9%85%8D%E7%BD%AE';
 
 class CloudServicePage extends ConsumerStatefulWidget {
   const CloudServicePage({super.key});
@@ -1343,7 +1343,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
         name: AppLocalizations.of(context).cloudCustomSupabaseTitle,
         supabaseUrl: url,
         supabaseAnonKey: key,
-        supabaseBucket: bucket.isEmpty ? 'beecount-backups' : bucket,  // 业务层提供默认值
+        supabaseBucket: bucket.isEmpty ? 'simplelog-backups' : bucket,  // 业务层提供默认值
       );
 
       if (!cfg.valid) {
@@ -1527,7 +1527,7 @@ class _CloudServicePageState extends ConsumerState<CloudServicePage> {
           case CloudBackendType.supabase:
             // Supabase 连接测试 - 查询不存在的表验证 URL 和 anon key
             // 200 或 404 表示连接正常且 key 有效，401/403 表示 key 无效
-            final testUrl = Uri.parse('${config.supabaseUrl}/rest/v1/_beecount_health_check?select=id&limit=1');
+            final testUrl = Uri.parse('${config.supabaseUrl}/rest/v1/_simplelog_health_check?select=id&limit=1');
             final response = await http.get(
               testUrl,
               headers: {

@@ -35,8 +35,8 @@ class _ConfigImportExportPageState
   /// 获取配置导出目录
   Future<Directory> _getExportDirectory() async {
     if (Platform.isAndroid) {
-      // Android: 保存到公共 Download/BeeCount 目录
-      final downloadPath = '/storage/emulated/0/Download/BeeCount';
+      // Android: 保存到公共 Download/SimpleLog 目录
+      final downloadPath = '/storage/emulated/0/Download/SimpleLog';
       final dir = Directory(downloadPath);
       if (!await dir.exists()) {
         await dir.create(recursive: true);
@@ -89,10 +89,10 @@ class _ConfigImportExportPageState
 
       // Step 4: 执行导出
       final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
-      final fileName = 'beecount_config_$timestamp.yml';
+      final fileName = 'simplelog_config_$timestamp.yml';
 
       if (Platform.isAndroid) {
-        // Android: 直接保存到 Download/BeeCount 目录
+        // Android: 直接保存到 Download/SimpleLog 目录
         final exportDir = await _getExportDirectory();
         final filePath = '${exportDir.path}/$fileName';
 

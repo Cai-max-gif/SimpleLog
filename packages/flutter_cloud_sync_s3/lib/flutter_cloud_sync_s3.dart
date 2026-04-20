@@ -20,7 +20,7 @@
 ///   'region': 'auto',
 ///   'accessKey': 'your-access-key',
 ///   'secretKey': 'your-secret-key',
-///   'bucket': 'beecount-data',
+///   'bucket': 'simplelog-data',
 ///   'useSSL': true,
 /// });
 /// ```

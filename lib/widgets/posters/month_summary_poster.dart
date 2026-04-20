@@ -28,8 +28,6 @@ class MonthSummaryPoster extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
     // 创建渐变背景色 - 月度用更清新的配色
     final lightPrimary = Color.lerp(primaryColor, Colors.white, 0.7)!;
     final gradient = LinearGradient(
@@ -205,7 +203,7 @@ class MonthSummaryPoster extends StatelessWidget {
               ],
             ),
             child: QrImageView(
-              data: 'https://github.com/TNT-Likely/BeeCount',
+              data: 'https://github.com/Cai-max-gif/SimpleLog',
               version: QrVersions.auto,
               size: 84,
               backgroundColor: Colors.white,

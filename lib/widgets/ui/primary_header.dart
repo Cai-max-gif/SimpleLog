@@ -5,7 +5,6 @@ import 'dart:math' as Math;
 import '../../providers.dart';
 import '../../providers/theme_providers.dart';
 import '../../styles/tokens.dart';
-import '../../theme.dart'; // ⭐ 导入 BeeTheme
 
 class PrimaryHeader extends ConsumerWidget {
   final String title;

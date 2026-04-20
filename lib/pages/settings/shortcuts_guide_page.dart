@@ -294,7 +294,7 @@ class ShortcutsGuidePage extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   SelectableText(
-                    'beecount://add?amount=100&type=expense&category=餐饮&note=午餐',
+                    'simplelog://add?amount=100&type=expense&category=餐饮&note=午餐',
                     style: theme.textTheme.bodySmall?.copyWith(
                       fontFamily: 'monospace',
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.8),

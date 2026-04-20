@@ -11,6 +11,8 @@ import 'package:path/path.dart' as p;
 
 part 'db.g.dart';
 
+typedef BeeDatabase = SimpleLogDatabase;
+
 // --- Tables ---
 
 class Ledgers extends Table {
@@ -200,8 +202,8 @@ class Budgets extends Table {
   Budgets,
   TransactionAttachments,
 ])
-class BeeDatabase extends _$BeeDatabase {
-  BeeDatabase() : super(_openConnection());
+class SimpleLogDatabase extends _$SimpleLogDatabase {
+  SimpleLogDatabase() : super(_openConnection());
 
   @override
   int get schemaVersion => 18; // v18: 账户添加元信息字段
@@ -636,12 +638,12 @@ class BeeDatabase extends _$BeeDatabase {
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dir = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dir.path, 'beecount.sqlite'));
+    final file = File(p.join(dir.path, 'SimpleLog.sqlite'));
 
     // 开发环境：如果检测到锁文件，尝试删除（仅用于调试）
     try {
-      final shmFile = File(p.join(dir.path, 'beecount.sqlite-shm'));
-      final walFile = File(p.join(dir.path, 'beecount.sqlite-wal'));
+      final shmFile = File(p.join(dir.path, 'SimpleLog.sqlite-shm'));
+      final walFile = File(p.join(dir.path, 'SimpleLog.sqlite-wal'));
 
       if (shmFile.existsSync() || walFile.existsSync()) {
         logger.warning('db', '检测到 SQLite 临时文件，可能存在锁定');
@@ -659,8 +661,8 @@ LazyDatabase _openConnection() {
 Future<void> clearDatabaseLockFiles() async {
   try {
     final dir = await getApplicationDocumentsDirectory();
-    final shmFile = File(p.join(dir.path, 'beecount.sqlite-shm'));
-    final walFile = File(p.join(dir.path, 'beecount.sqlite-wal'));
+    final shmFile = File(p.join(dir.path, 'SimpleLog.sqlite-shm'));
+    final walFile = File(p.join(dir.path, 'SimpleLog.sqlite-wal'));
 
     if (shmFile.existsSync()) {
       await shmFile.delete();

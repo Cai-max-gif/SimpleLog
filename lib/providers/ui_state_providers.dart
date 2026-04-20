@@ -6,8 +6,6 @@ import 'statistics_providers.dart';
 import 'budget_providers.dart';
 import 'font_scale_provider.dart';
 import 'update_providers.dart';
-import 'cloud_mode_providers.dart';
-import 'supabase_providers.dart';
 import 'smart_billing_providers.dart';
 import '../data/db.dart';
 import '../services/data/recurring_transaction_service.dart';

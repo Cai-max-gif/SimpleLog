@@ -301,7 +301,6 @@ class _TagDetailPageState extends ConsumerState<TagDetailPage> {
             ...dayTransactions.map((transaction) {
               final category = _categoryCache[transaction.categoryId];
               final categoryName = CategoryUtils.getDisplayName(category?.name, context);
-              final isTransfer = transaction.type == 'transfer';
 
               // 和首页保持一致：有备注显示备注，无备注显示分类名称
               final hasNote = transaction.note?.isNotEmpty == true;

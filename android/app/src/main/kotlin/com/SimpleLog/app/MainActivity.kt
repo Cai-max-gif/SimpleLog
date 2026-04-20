@@ -20,10 +20,10 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity: FlutterFragmentActivity() {
     private val CHANNEL = "notification_channel"
-    private val INSTALL_CHANNEL = "com.tntlikely.beecount/install"
-    private val SCREENSHOT_CHANNEL = "com.tntlikely.beecount/screenshot"
-    private val LOGGER_CHANNEL = "com.beecount.logger"
-    private val SHARE_CHANNEL = "com.tntlikely.beecount/share"
+    private val INSTALL_CHANNEL = "com.tntlikely.simplelog/install"
+    private val SCREENSHOT_CHANNEL = "com.tntlikely.simplelog/screenshot"
+    private val LOGGER_CHANNEL = "com.simplelog.logger"
+    private val SHARE_CHANNEL = "com.tntlikely.simplelog/share"
 
     private var screenshotObserver: ScreenshotObserver? = null
 

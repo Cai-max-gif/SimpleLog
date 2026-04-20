@@ -5,7 +5,7 @@ import UIKit
 #if canImport(AppIntents)
 import AppIntents
 
-/// 蜜蜂记账 - 截图自动记账 AppIntent
+/// 简单记账 - 截图自动记账 AppIntent
 /// 通过iOS快捷指令触发，实现截图后自动识别并记账
 /// 仅iOS 16+可用，但App可在iOS 15+运行
 @available(iOS 16.0, *)
@@ -85,7 +85,7 @@ struct AutoBillingAppIntent: AppIntent {
 }
 
 /// Siri快捷语音指令配置（可选）
-/// 用户可以对Siri说："在蜜蜂记账中截图记账"来触发
+/// 用户可以对Siri说："在简单记账中截图记账"来触发
 @available(iOS 16.0, *)
 struct AutoBillingShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {

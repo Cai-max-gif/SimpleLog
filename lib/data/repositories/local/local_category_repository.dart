@@ -358,7 +358,7 @@ class LocalCategoryRepository implements CategoryRepository {
 
             if (existingSub != null) {
               // 合并到已有的同名子分类
-              final count = await (db.update(db.transactions)
+              final int count = await (db.update(db.transactions)
                     ..where((t) => t.categoryId.equals(sub.id)))
                   .write(TransactionsCompanion(
                 categoryId: d.Value(existingSub.id),
@@ -379,7 +379,7 @@ class LocalCategoryRepository implements CategoryRepository {
         }
 
         // 迁移一级分类自身的交易
-        final directCount = await (db.update(db.transactions)
+        final int directCount = await (db.update(db.transactions)
               ..where((t) => t.categoryId.equals(fromCategoryId)))
             .write(TransactionsCompanion(
           categoryId: d.Value(toCategoryId),

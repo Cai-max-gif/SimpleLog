@@ -108,7 +108,7 @@ class SharePosterService {
     try {
       // 获取临时目录
       final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/beecount_share_${DateTime.now().millisecondsSinceEpoch}.png');
+      final file = File('${tempDir.path}/simplelog_share_${DateTime.now().millisecondsSinceEpoch}.png');
 
       // 写入文件
       await file.writeAsBytes(imageBytes);
@@ -116,7 +116,7 @@ class SharePosterService {
       // 分享文件
       await Share.shareXFiles(
         [XFile(file.path)],
-        text: 'BeeCount - 蜜蜂记账',
+        text: 'SimpleLog - 简单记账',
       );
     } catch (e) {
       // 忽略错误

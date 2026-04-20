@@ -22,7 +22,7 @@ class WidgetManager {
     int ledgerId,
     Color themeColor, {
     bool redForIncome = true,
-    String appName = '蜜蜂记账',
+    String appName = '简单记账',
     String monthSuffix = '月',
     String todayExpenseLabel = '今日支出',
     String todayIncomeLabel = '今日收入',
@@ -122,8 +122,8 @@ class WidgetManager {
       // Update the widget
       print('📲 触发小组件更新...');
       await HomeWidget.updateWidget(
-        qualifiedAndroidName: 'com.tntlikely.beecount.BeeCountWidgetProvider',
-        iOSName: 'BeeCountWidget',
+        qualifiedAndroidName: 'com.tntlikely.simplelog.SimpleLogWidgetProvider',
+        iOSName: 'SimpleLogWidget',
       );
       print('✅ 小组件更新命令已发送');
     } catch (e) {

@@ -67,7 +67,7 @@ class _WheelPickerState<T> extends State<WheelPicker<T>> {
                 TextButton(
                   onPressed: () => Navigator.pop(context, selected),
                   child: Text(
-                    AppLocalizations.of(context)!.commonOk,
+                    AppLocalizations.of(context).commonOk,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).primaryColor),
                   ),
                 ),

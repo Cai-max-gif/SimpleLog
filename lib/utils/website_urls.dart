@@ -8,7 +8,7 @@ class WebsiteUrls {
 
   /// 官网基础域名
   /// 未来换域名时只需修改这里
-  static const String baseUrl = 'https://beecount.youths.cc';
+  static const String baseUrl = 'https://simplelog.youths.cc';
 
   /// 获取语言前缀
   /// 中文不需要前缀，英文需要 /en 前缀

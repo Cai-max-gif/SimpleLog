@@ -7,7 +7,7 @@ import '../automation/auto_billing_service.dart';
 /// 截图监听服务（Android专用）
 /// 监听系统截图事件，并调用通用的AutoBillingService进行OCR识别和记账
 class ScreenshotMonitorService {
-  static const _channel = MethodChannel('com.tntlikely.beecount/screenshot');
+  static const _channel = MethodChannel('com.tntlikely.simplelog/screenshot');
   static const _enabledKey = 'screenshot_monitor_enabled';
 
   final ProviderContainer _container;

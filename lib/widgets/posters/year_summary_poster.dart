@@ -24,8 +24,6 @@ class YearSummaryPoster extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
     // 创建渐变背景色
     final gradient = LinearGradient(
       begin: Alignment.topLeft,
@@ -232,7 +230,7 @@ class YearSummaryPoster extends StatelessWidget {
               ],
             ),
             child: QrImageView(
-              data: 'https://github.com/TNT-Likely/BeeCount',
+              data: 'https://github.com/Cai-max-gif/SimpleLog',
               version: QrVersions.auto,
               size: 98,
               backgroundColor: Colors.white,

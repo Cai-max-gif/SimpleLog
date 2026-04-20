@@ -1,5 +1,5 @@
 // App display name and bundle id for release
 APP_DISPLAY_NAME=简单记账
-PRODUCT_BUNDLE_IDENTIFIER=com.tntlikely.beecount
+PRODUCT_BUNDLE_IDENTIFIER=com.tntlikely.simplelog
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
 #include "Generated.xcconfig"

@@ -122,14 +122,14 @@
         </receiver>
 
         <!-- 桌面小组件 -->
-        <receiver android:name="com.SimpleLog.app.BeeCountWidgetProvider"
+        <receiver android:name="com.SimpleLog.app.SimpleLogWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/beecount_widget_info" />
+                android:resource="@xml/simplelog_widget_info" />
         </receiver>
 
     </application>

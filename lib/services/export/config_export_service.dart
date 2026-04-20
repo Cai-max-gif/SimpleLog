@@ -1593,7 +1593,7 @@ class ConfigExportService {
 
     // 手动构建YAML字符串以保持良好格式
     final buffer = StringBuffer();
-    buffer.writeln('# BeeCount 应用配置');
+    buffer.writeln('# SimpleLog 应用配置');
     buffer.writeln('# 导出时间: ${DateTime.now().toIso8601String()}');
     buffer.writeln();
 
@@ -1603,7 +1603,7 @@ class ConfigExportService {
       buffer.writeln('  url: "${sb['url']}"');
       buffer.writeln('  anon_key: "${sb['anon_key']}"');
       if (sb.containsKey('bucket')) {
-        buffer.writeln('  # Storage bucket 名称，留空则使用默认值 beecount-backups');
+        buffer.writeln('  # Storage bucket 名称，留空则使用默认值 simplelog-backups');
         buffer.writeln('  bucket: "${sb['bucket']}"');
       }
       if (sb.containsKey('email') || sb.containsKey('password')) {
@@ -2037,7 +2037,7 @@ class ConfigExportService {
         name: 'Supabase',
         supabaseUrl: config.supabase!.url,
         supabaseAnonKey: config.supabase!.anonKey,
-        supabaseBucket: config.supabase!.bucket ?? 'beecount-backups',  // 导入时也提供默认值
+        supabaseBucket: config.supabase!.bucket ?? 'simplelog-backups',  // 导入时也提供默认值
         supabaseEmail: config.supabase!.email,
         supabasePassword: config.supabase!.password,
       );

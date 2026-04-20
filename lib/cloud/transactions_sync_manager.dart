@@ -15,7 +15,7 @@ import 'transactions_json.dart';
 
 /// 账本交易的云同步管理器
 ///
-/// 使用 flutter_cloud_sync 包实现云同步，保留 BeeCount 特定的业务逻辑
+/// 使用 flutter_cloud_sync 包实现云同步，保留 SimpleLog 特定的业务逻辑
 class TransactionsSyncManager implements SyncService {
   final fcs.CloudServiceConfig config;
   final BeeDatabase db;
@@ -354,7 +354,7 @@ class TransactionsSyncManager implements SyncService {
           localUpdatedAt: _getLocalUpdatedAt(ledgerId),
           forceRefresh: true);
 
-      // 转换包的 SyncStatus 为 BeeCount 的 SyncStatus
+      // 转换包的 SyncStatus 为 SimpleLog 的 SyncStatus
       final status = _convertSyncStatus(fcsStatus);
 
       _statusCache[ledgerId] = status;
@@ -382,7 +382,7 @@ class TransactionsSyncManager implements SyncService {
     }
   }
 
-  /// 转换包的 SyncStatus 为 BeeCount 的 SyncStatus
+  /// 转换包的 SyncStatus 为 SimpleLog 的 SyncStatus
   SyncStatus _convertSyncStatus(fcs.SyncStatus fcsStatus) {
     SyncDiff diff;
 

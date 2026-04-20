@@ -318,7 +318,7 @@ abstract class AppLocalizations {
   /// No description provided for @voiceRecordingPermissionDeniedMessage.
   ///
   /// In en, this message translates to:
-  /// **'Voice billing requires microphone permission. Please allow BeeCount to access the microphone in System Settings.'**
+  /// **'Voice billing requires microphone permission. Please allow SimpleLog to access the microphone in System Settings.'**
   String get voiceRecordingPermissionDeniedMessage;
 
   /// No description provided for @voiceRecordingStartFailed.
@@ -2071,7 +2071,7 @@ abstract class AppLocalizations {
   /// No description provided for @shareGuidanceCopyText.
   ///
   /// In en, this message translates to:
-  /// **'Track my expenses with SimpleLog - open source, free & ad-free! 🐝 Download: https://github.com/TNT-Likely/BeeCount'**
+  /// **'Track my expenses with SimpleLog - open source, free & ad-free! 🐝 Download: https://github.com/Cai-max-gif/SimpleLog'**
   String get shareGuidanceCopyText;
 
   /// No description provided for @shareGuidanceCopied.
@@ -3080,7 +3080,7 @@ abstract class AppLocalizations {
   /// No description provided for @categoryShareSubject.
   ///
   /// In en, this message translates to:
-  /// **'BeeCount Category Configuration'**
+  /// **'SimpleLog Category Configuration'**
   String get categoryShareSubject;
 
   /// No description provided for @categoryShareFailed.
@@ -4312,7 +4312,7 @@ abstract class AppLocalizations {
   /// No description provided for @cloudWebdavPathHint.
   ///
   /// In en, this message translates to:
-  /// **'/BeeCount'**
+  /// **'/SimpleLog'**
   String get cloudWebdavPathHint;
 
   /// No description provided for @cloudS3EndpointLabel.
@@ -4372,7 +4372,7 @@ abstract class AppLocalizations {
   /// No description provided for @cloudS3BucketHint.
   ///
   /// In en, this message translates to:
-  /// **'beecount-data'**
+  /// **'simplelog-data'**
   String get cloudS3BucketHint;
 
   /// No description provided for @cloudS3UseSSLLabel.
@@ -4402,7 +4402,7 @@ abstract class AppLocalizations {
   /// No description provided for @cloudSupabaseBucketHint.
   ///
   /// In en, this message translates to:
-  /// **'Leave blank for default: beecount-backups'**
+  /// **'Leave blank for default: simplelog-backups'**
   String get cloudSupabaseBucketHint;
 
   /// No description provided for @authRememberAccount.
@@ -4708,7 +4708,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportShareText.
   ///
   /// In en, this message translates to:
-  /// **'BeeCount Export File'**
+  /// **'SimpleLog Export File'**
   String get exportShareText;
 
   /// No description provided for @exportSuccessTitle.
@@ -5140,7 +5140,7 @@ abstract class AppLocalizations {
   /// No description provided for @updateManualVisit.
   ///
   /// In en, this message translates to:
-  /// **'Please manually visit in browser:\\nhttps://github.com/TNT-Likely/BeeCount/releases'**
+  /// **'Please manually visit in browser:\nhttps://github.com/Cai-max-gif/SimpleLog/releases'**
   String get updateManualVisit;
 
   /// No description provided for @updateNoLocalApkTitle.
@@ -5435,7 +5435,7 @@ abstract class AppLocalizations {
   /// No description provided for @updateNotificationGuideStep2.
   ///
   /// In en, this message translates to:
-  /// **'Find \\\"BeeCount\\\" app'**
+  /// **'Find \"SimpleLog\" app'**
   String get updateNotificationGuideStep2;
 
   /// No description provided for @updateNotificationGuideStep3.
@@ -6821,7 +6821,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeCloudSyncDescription.
   ///
   /// In en, this message translates to:
-  /// **'BeeCount supports multiple sync methods - your data, your control'**
+  /// **'SimpleLog supports multiple sync methods - your data, your control'**
   String get welcomeCloudSyncDescription;
 
   /// No description provided for @welcomeCloudSyncFeature1.
@@ -6887,7 +6887,7 @@ abstract class AppLocalizations {
   /// No description provided for @iosWidgetStep3.
   ///
   /// In en, this message translates to:
-  /// **'Search and select \"BeeCount\"'**
+  /// **'Search and select \"SimpleLog\"'**
   String get iosWidgetStep3;
 
   /// No description provided for @iosWidgetStep4.
@@ -6911,7 +6911,7 @@ abstract class AppLocalizations {
   /// No description provided for @androidWidgetStep3.
   ///
   /// In en, this message translates to:
-  /// **'Find and long press \"BeeCount\" widget'**
+  /// **'Find and long press \"SimpleLog\" widget'**
   String get androidWidgetStep3;
 
   /// No description provided for @androidWidgetStep4.
@@ -6935,7 +6935,7 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In en, this message translates to:
-  /// **'BeeCount'**
+  /// **'SimpleLog'**
   String get appName;
 
   /// No description provided for @monthSuffix.
@@ -7103,13 +7103,13 @@ abstract class AppLocalizations {
   /// No description provided for @iosAutoShortcutStep3.
   ///
   /// In en, this message translates to:
-  /// **'Search and add \"BeeCount - Auto Billing\" action'**
+  /// **'Search and add \"SimpleLog - Auto Billing\" action'**
   String get iosAutoShortcutStep3;
 
   /// No description provided for @iosAutoShortcutStep4.
   ///
   /// In en, this message translates to:
-  /// **'Set the screenshot parameter of \"BeeCount\" to the previous \"Screenshot\"'**
+  /// **'Set the screenshot parameter of \"SimpleLog\" to the previous \"Screenshot\"'**
   String get iosAutoShortcutStep4;
 
   /// No description provided for @iosAutoShortcutStep5.
@@ -7667,7 +7667,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutDeveloperStory.
   ///
   /// In en, this message translates to:
-  /// **'I started tracking my expenses in 2015 as an intern, and I\'ve kept the habit for over a decade. Concerned about ads, paywalls, privacy risks, and apps shutting down, I decided to build my own — first as a small tool for myself and my family.\n\nIn September 2025, BeeCount launched its first version. Honestly, I had no idea if anyone would use it. But gradually, feedback started coming in — someone said they finally found a clean budgeting app, others offered great suggestions, and some quietly left five-star reviews. Every single message reminded me this was worth continuing.\n\nBeeCount is ad-free, subscription-free, and fully open source. All your data stays on your device and is never uploaded to any third-party server. But publishing and maintaining an app isn\'t free — developer accounts, servers, and other costs are currently covered by community donations, and every system update, bug fix, and new feature is built outside of my day job.\n\nIf BeeCount has been helpful to you, a rating, a share, or a donation would help this little project go further. Thank you for your trust.'**
+  /// **'I started tracking my expenses in 2015 as an intern, and I\'ve kept the habit for over a decade. Concerned about ads, paywalls, privacy risks, and apps shutting down, I decided to build my own — first as a small tool for myself and my family.\n\nIn September 2025, SimpleLog launched its first version. Honestly, I had no idea if anyone would use it. But gradually, feedback started coming in — someone said they finally found a clean budgeting app, others offered great suggestions, and some quietly left five-star reviews. Every single message reminded me this was worth continuing.\n\nSimpleLog is ad-free, subscription-free, and fully open source. All your data stays on your device and is never uploaded to any third-party server. But publishing and maintaining an app isn\'t free — developer accounts, servers, and other costs are currently covered by community donations, and every system update, bug fix, and new feature is built outside of my day job.\n\nIf SimpleLog has been helpful to you, a rating, a share, or a donation would help this little project go further. Thank you for your trust.'**
   String get aboutDeveloperStory;
 
   /// No description provided for @aboutRelatedProducts.
@@ -7817,7 +7817,7 @@ abstract class AppLocalizations {
   /// No description provided for @configExportShareSubject.
   ///
   /// In en, this message translates to:
-  /// **'BeeCount Config File'**
+  /// **'SimpleLog Config File'**
   String get configExportShareSubject;
 
   /// No description provided for @configExportSuccess.
@@ -8657,7 +8657,7 @@ abstract class AppLocalizations {
   /// No description provided for @donationDescriptionDetail.
   ///
   /// In en, this message translates to:
-  /// **'Thank you for using BeeCount! If this app helps you, feel free to buy the developer a coffee as encouragement. Your support is my motivation to keep improving.'**
+  /// **'Thank you for using SimpleLog! If this app helps you, feel free to buy the developer a coffee as encouragement. Your support is my motivation to keep improving.'**
   String get donationDescriptionDetail;
 
   /// No description provided for @donationNoFeatures.
@@ -8681,7 +8681,7 @@ abstract class AppLocalizations {
   /// No description provided for @donationThankYouMessage.
   ///
   /// In en, this message translates to:
-  /// **'Thank you for purchasing {productName}! Your support means a lot to me. I will continue to improve BeeCount to make it even better!'**
+  /// **'Thank you for purchasing {productName}! Your support means a lot to me. I will continue to improve SimpleLog to make it even better!'**
   String donationThankYouMessage(String productName);
 
   /// No description provided for @aiQuickCommandFinancialHealthTitle.
@@ -9401,7 +9401,7 @@ abstract class AppLocalizations {
   /// No description provided for @tagShareSubject.
   ///
   /// In en, this message translates to:
-  /// **'BeeCount Tags Configuration'**
+  /// **'SimpleLog Tags Configuration'**
   String get tagShareSubject;
 
   /// No description provided for @tagShareFailed.
@@ -9919,7 +9919,7 @@ abstract class AppLocalizations {
   /// No description provided for @iosShortcutStep4.
   ///
   /// In en, this message translates to:
-  /// **'Paste the copied URL (e.g., beecount://voice)'**
+  /// **'Paste the copied URL (e.g., SimpleLog://voice)'**
   String get iosShortcutStep4;
 
   /// No description provided for @iosShortcutStep5.
@@ -9943,7 +9943,7 @@ abstract class AppLocalizations {
   /// No description provided for @androidShortcutStep3.
   ///
   /// In en, this message translates to:
-  /// **'Paste the copied URL (e.g., beecount://voice)'**
+  /// **'Paste the copied URL (e.g., SimpleLog://voice)'**
   String get androidShortcutStep3;
 
   /// No description provided for @androidShortcutStep4.

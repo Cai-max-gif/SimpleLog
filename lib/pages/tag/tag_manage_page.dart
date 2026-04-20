@@ -267,10 +267,10 @@ class _TagManagePageState extends ConsumerState<TagManagePage> {
           .replaceAll(':', '-')
           .split('.')
           .first;
-      final fileName = 'beecount_tags_$timestamp.yml';
+      final fileName = 'simplelog_tags_$timestamp.yml';
 
       if (Platform.isAndroid) {
-        final downloadPath = '/storage/emulated/0/Download/BeeCount';
+        final downloadPath = '/storage/emulated/0/Download/SimpleLog';
         final dir = Directory(downloadPath);
         if (!await dir.exists()) {
           await dir.create(recursive: true);

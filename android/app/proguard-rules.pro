@@ -1,13 +1,13 @@
 # Keep notification receiver classes
--keep class com.tntlikely.beecount.NotificationReceiver { *; }
--keep class com.tntlikely.beecount.NotificationClickReceiver { *; }
--keep class com.tntlikely.beecount.MainActivity { *; }
+-keep class com.tntlikely.simplelog.NotificationReceiver { *; }
+-keep class com.tntlikely.simplelog.NotificationClickReceiver { *; }
+-keep class com.tntlikely.simplelog.MainActivity { *; }
 
 # Keep all BroadcastReceiver subclasses
 -keep public class * extends android.content.BroadcastReceiver
 
 # Keep notification-related methods
--keepclassmembers class com.tntlikely.beecount.** {
+-keepclassmembers class com.tntlikely.simplelog.** {
     public void onReceive(android.content.Context, android.content.Intent);
 }
 

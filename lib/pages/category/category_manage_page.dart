@@ -207,11 +207,11 @@ class _CategoryManagePageState extends ConsumerState<CategoryManagePage> with Ti
 
       // 生成文件名
       final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-').split('.').first;
-      final fileName = 'beecount_categories_$timestamp.zip';
+      final fileName = 'simplelog_categories_$timestamp.zip';
 
       String outputPath;
       if (Platform.isAndroid) {
-        final downloadPath = '/storage/emulated/0/Download/BeeCount';
+        final downloadPath = '/storage/emulated/0/Download/SimpleLog';
         final dir = Directory(downloadPath);
         if (!await dir.exists()) {
           await dir.create(recursive: true);

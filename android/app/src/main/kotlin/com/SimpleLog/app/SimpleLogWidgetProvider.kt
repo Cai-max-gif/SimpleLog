@@ -12,9 +12,9 @@ import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetProvider
 import java.io.File
 
-class BeeCountWidgetProvider : HomeWidgetProvider() {
+class SimpleLogWidgetProvider : HomeWidgetProvider() {
     companion object {
-        private const val TAG = "BeeCountWidget"
+        private const val TAG = "SimpleLogWidget"
     }
 
     override fun onUpdate(
@@ -27,7 +27,7 @@ class BeeCountWidgetProvider : HomeWidgetProvider() {
         appWidgetIds.forEach { widgetId ->
             Log.d(TAG, "Updating widget $widgetId")
 
-            val views = RemoteViews(context.packageName, R.layout.beecount_widget).apply {
+            val views = RemoteViews(context.packageName, R.layout.simplelog_widget).apply {
                 // Load the rendered widget image
                 val imagePath = widgetData.getString("widgetImage", null)
                 Log.d(TAG, "Image path from SharedPreferences: $imagePath")

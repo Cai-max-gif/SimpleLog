@@ -121,7 +121,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voiceRecordingPermissionDeniedMessage =>
-      'Voice billing requires microphone permission. Please allow BeeCount to access the microphone in System Settings.';
+      'Voice billing requires microphone permission. Please allow SimpleLog to access the microphone in System Settings.';
 
   @override
   String voiceRecordingStartFailed(String error) {
@@ -1104,7 +1104,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareGuidanceCopyText =>
-      'Track my expenses with SimpleLog - open source, free & ad-free! 🐝 Download: https://github.com/TNT-Likely/BeeCount';
+      'Track my expenses with SimpleLog - open source, free & ad-free! 🐝 Download: https://github.com/Cai-max-gif/SimpleLog';
 
   @override
   String get shareGuidanceCopied => 'Text copied';
@@ -1656,7 +1656,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get categoryShareSubject => 'BeeCount Category Configuration';
+  String get categoryShareSubject => 'SimpleLog Category Configuration';
 
   @override
   String get categoryShareFailed => 'Share failed';
@@ -2362,7 +2362,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudWebdavPasswordLabel => 'Password';
 
   @override
-  String get cloudWebdavPathHint => '/BeeCount';
+  String get cloudWebdavPathHint => '/SimpleLog';
 
   @override
   String get cloudS3EndpointLabel => 'Endpoint';
@@ -2392,7 +2392,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cloudS3BucketLabel => 'Bucket Name';
 
   @override
-  String get cloudS3BucketHint => 'beecount-data';
+  String get cloudS3BucketHint => 'simplelog-data';
 
   @override
   String get cloudS3UseSSLLabel => 'Use HTTPS';
@@ -2408,7 +2408,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cloudSupabaseBucketHint =>
-      'Leave blank for default: beecount-backups';
+      'Leave blank for default: simplelog-backups';
 
   @override
   String get authRememberAccount => 'Remember account';
@@ -2582,7 +2582,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportCsvHeaderAttachments => 'Attachments';
 
   @override
-  String get exportShareText => 'BeeCount Export File';
+  String get exportShareText => 'SimpleLog Export File';
 
   @override
   String get exportSuccessTitle => 'Export Successful';
@@ -2817,7 +2817,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateManualVisit =>
-      'Please manually visit in browser:\\nhttps://github.com/TNT-Likely/BeeCount/releases';
+      'Please manually visit in browser:\nhttps://github.com/Cai-max-gif/SimpleLog/releases';
 
   @override
   String get updateNoLocalApkTitle => 'No Update Package Found';
@@ -2993,7 +2993,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Go to System Settings > App Management';
 
   @override
-  String get updateNotificationGuideStep2 => 'Find \\\"BeeCount\\\" app';
+  String get updateNotificationGuideStep2 => 'Find \"SimpleLog\" app';
 
   @override
   String get updateNotificationGuideStep3 => 'Enable notification permissions';
@@ -3749,7 +3749,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeCloudSyncDescription =>
-      'BeeCount supports multiple sync methods - your data, your control';
+      'SimpleLog supports multiple sync methods - your data, your control';
 
   @override
   String get welcomeCloudSyncFeature1 =>
@@ -3788,7 +3788,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get iosWidgetStep2 => 'Tap the \"+\" button in upper left corner';
 
   @override
-  String get iosWidgetStep3 => 'Search and select \"BeeCount\"';
+  String get iosWidgetStep3 => 'Search and select \"SimpleLog\"';
 
   @override
   String get iosWidgetStep4 => 'Select medium widget and add to home screen';
@@ -3800,7 +3800,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get androidWidgetStep2 => 'Select \"Widgets\"';
 
   @override
-  String get androidWidgetStep3 => 'Find and long press \"BeeCount\" widget';
+  String get androidWidgetStep3 => 'Find and long press \"SimpleLog\" widget';
 
   @override
   String get androidWidgetStep4 => 'Drag to suitable position on home screen';
@@ -3813,7 +3813,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Widget automatically syncs to display today\'s and this month\'s income and expense data, refreshing every 30 minutes. Data updates immediately when app is opened.';
 
   @override
-  String get appName => 'BeeCount';
+  String get appName => 'SimpleLog';
 
   @override
   String get monthSuffix => '';
@@ -3905,11 +3905,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get iosAutoShortcutStep3 =>
-      'Search and add \"BeeCount - Auto Billing\" action';
+      'Search and add \"SimpleLog - Auto Billing\" action';
 
   @override
   String get iosAutoShortcutStep4 =>
-      'Set the screenshot parameter of \"BeeCount\" to the previous \"Screenshot\"';
+      'Set the screenshot parameter of \"SimpleLog\" to the previous \"Screenshot\"';
 
   @override
   String get iosAutoShortcutStep5 =>
@@ -4222,7 +4222,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutDeveloperStory =>
-      'I started tracking my expenses in 2015 as an intern, and I\'ve kept the habit for over a decade. Concerned about ads, paywalls, privacy risks, and apps shutting down, I decided to build my own — first as a small tool for myself and my family.\n\nIn September 2025, BeeCount launched its first version. Honestly, I had no idea if anyone would use it. But gradually, feedback started coming in — someone said they finally found a clean budgeting app, others offered great suggestions, and some quietly left five-star reviews. Every single message reminded me this was worth continuing.\n\nBeeCount is ad-free, subscription-free, and fully open source. All your data stays on your device and is never uploaded to any third-party server. But publishing and maintaining an app isn\'t free — developer accounts, servers, and other costs are currently covered by community donations, and every system update, bug fix, and new feature is built outside of my day job.\n\nIf BeeCount has been helpful to you, a rating, a share, or a donation would help this little project go further. Thank you for your trust.';
+      'I started tracking my expenses in 2015 as an intern, and I\'ve kept the habit for over a decade. Concerned about ads, paywalls, privacy risks, and apps shutting down, I decided to build my own — first as a small tool for myself and my family.\n\nIn September 2025, SimpleLog launched its first version. Honestly, I had no idea if anyone would use it. But gradually, feedback started coming in — someone said they finally found a clean budgeting app, others offered great suggestions, and some quietly left five-star reviews. Every single message reminded me this was worth continuing.\n\nSimpleLog is ad-free, subscription-free, and fully open source. All your data stays on your device and is never uploaded to any third-party server. But publishing and maintaining an app isn\'t free — developer accounts, servers, and other costs are currently covered by community donations, and every system update, bug fix, and new feature is built outside of my day job.\n\nIf SimpleLog has been helpful to you, a rating, a share, or a donation would help this little project go further. Thank you for your trust.';
 
   @override
   String get aboutRelatedProducts => 'More Products';
@@ -4300,7 +4300,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get configExportSubtitle => 'Export current config to YAML file';
 
   @override
-  String get configExportShareSubject => 'BeeCount Config File';
+  String get configExportShareSubject => 'SimpleLog Config File';
 
   @override
   String get configExportSuccess => 'Config exported successfully';
@@ -4767,7 +4767,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get donationDescriptionDetail =>
-      'Thank you for using BeeCount! If this app helps you, feel free to buy the developer a coffee as encouragement. Your support is my motivation to keep improving.';
+      'Thank you for using SimpleLog! If this app helps you, feel free to buy the developer a coffee as encouragement. Your support is my motivation to keep improving.';
 
   @override
   String get donationNoFeatures =>
@@ -4781,7 +4781,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String donationThankYouMessage(String productName) {
-    return 'Thank you for purchasing $productName! Your support means a lot to me. I will continue to improve BeeCount to make it even better!';
+    return 'Thank you for purchasing $productName! Your support means a lot to me. I will continue to improve SimpleLog to make it even better!';
   }
 
   @override
@@ -5172,7 +5172,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get tagShareSubject => 'BeeCount Tags Configuration';
+  String get tagShareSubject => 'SimpleLog Tags Configuration';
 
   @override
   String get tagShareFailed => 'Share failed';
@@ -5463,7 +5463,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get iosShortcutStep4 =>
-      'Paste the copied URL (e.g., beecount://voice)';
+      'Paste the copied URL (e.g., SimpleLog://voice)';
 
   @override
   String get iosShortcutStep5 => 'Save and add to home screen';
@@ -5477,7 +5477,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get androidShortcutStep3 =>
-      'Paste the copied URL (e.g., beecount://voice)';
+      'Paste the copied URL (e.g., SimpleLog://voice)';
 
   @override
   String get androidShortcutStep4 =>

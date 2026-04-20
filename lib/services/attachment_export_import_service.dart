@@ -169,7 +169,7 @@ class AttachmentExportImportService {
       // 保存到临时目录
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final exportDir = await _getExportDirectory();
-      final exportPath = '${exportDir.path}/beecount_attachments_$timestamp.tar.gz';
+      final exportPath = '${exportDir.path}/SimpleLog_attachments_$timestamp.tar.gz';
 
       final exportFile = File(exportPath);
       await exportFile.writeAsBytes(gzData);
@@ -684,7 +684,7 @@ class AttachmentExportImportService {
   Future<Directory> _getExportDirectory() async {
     if (Platform.isAndroid) {
       // Android: 使用公共下载目录
-      final dir = Directory('/storage/emulated/0/Download/BeeCount');
+      final dir = Directory('/storage/emulated/0/Download/SimpleLog');
       if (!await dir.exists()) {
         await dir.create(recursive: true);
       }

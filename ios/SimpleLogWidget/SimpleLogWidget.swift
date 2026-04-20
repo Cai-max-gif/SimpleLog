@@ -1,6 +1,6 @@
 //
-//  BeeCountWidget.swift
-//  BeeCountWidget
+//  SimpleLogWidget.swift
+//  SimpleLogWidget
 //
 //  Created by matrix on 2025/11/5.
 //
@@ -8,30 +8,30 @@
 import WidgetKit
 import SwiftUI
 
-struct BeeCountEntry: TimelineEntry {
+struct SimpleLogEntry: TimelineEntry {
     let date: Date
     let widgetImagePath: String
 }
 
-struct BeeCountProvider: TimelineProvider {
-    func placeholder(in context: Context) -> BeeCountEntry {
-        BeeCountEntry(
+struct SimpleLogProvider: TimelineProvider {
+    func placeholder(in context: Context) -> SimpleLogEntry {
+        SimpleLogEntry(
             date: Date(),
             widgetImagePath: ""
         )
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (BeeCountEntry) -> ()) {
-        let userDefaults = UserDefaults(suiteName: "group.com.tntlikely.beecount")
+    func getSnapshot(in context: Context, completion: @escaping (SimpleLogEntry) -> ()) {
+        let userDefaults = UserDefaults(suiteName: "group.com.tntlikely.simplelog")
         let imagePath = userDefaults?.string(forKey: "widgetImage") ?? ""
-        let entry = BeeCountEntry(date: Date(), widgetImagePath: imagePath)
+        let entry = SimpleLogEntry(date: Date(), widgetImagePath: imagePath)
         completion(entry)
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        let userDefaults = UserDefaults(suiteName: "group.com.tntlikely.beecount")
+        let userDefaults = UserDefaults(suiteName: "group.com.tntlikely.simplelog")
         let imagePath = userDefaults?.string(forKey: "widgetImage") ?? ""
-        let entry = BeeCountEntry(date: Date(), widgetImagePath: imagePath)
+        let entry = SimpleLogEntry(date: Date(), widgetImagePath: imagePath)
 
         // 设置30分钟后刷新
         let nextUpdate = Calendar.current.date(byAdding: .minute, value: 30, to: Date())!
@@ -40,8 +40,8 @@ struct BeeCountProvider: TimelineProvider {
     }
 }
 
-struct BeeCountWidgetEntryView : View {
-    var entry: BeeCountProvider.Entry
+struct SimpleLogWidgetEntryView : View {
+    var entry: SimpleLogProvider.Entry
     @Environment(\.widgetFamily) var widgetFamily
 
     var body: some View {
@@ -66,7 +66,7 @@ struct BeeCountWidgetEntryView : View {
                         Image(systemName: "chart.bar.fill")
                             .font(.system(size: 32))
                             .foregroundColor(.white)
-                        Text("蜜蜂记账")
+                        Text("简单记账")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.white)
                     }
@@ -76,21 +76,21 @@ struct BeeCountWidgetEntryView : View {
     }
 }
 
-struct BeeCountWidget: Widget {
-    let kind: String = "BeeCountWidget"
+struct SimpleLogWidget: Widget {
+    let kind: String = "SimpleLogWidget"
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: BeeCountProvider()) { entry in
+        StaticConfiguration(kind: kind, provider: SimpleLogProvider()) { entry in
             if #available(iOS 17.0, *) {
-                BeeCountWidgetEntryView(entry: entry)
+                SimpleLogWidgetEntryView(entry: entry)
                     .containerBackground(for: .widget) {
                         Color.clear
                     }
             } else {
-                BeeCountWidgetEntryView(entry: entry)
+                SimpleLogWidgetEntryView(entry: entry)
             }
         }
-        .configurationDisplayName("蜜蜂记账")
+        .configurationDisplayName("简单记账")
         .description("显示今日和本月的收支情况")
         .supportedFamilies([.systemMedium])
         .contentMarginsDisabled()  // Remove default padding/margins in iOS 17+

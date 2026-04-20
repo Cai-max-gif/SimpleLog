@@ -155,10 +155,10 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                       AppListTile(
                         leading: Icons.code_outlined,
                         title: AppLocalizations.of(context).aboutGitHubRepo,
-                        subtitle: 'github.com/TNT-Likely/BeeCount',
+                        subtitle: 'github.com/Cai-max-gif/SimpleLog',
                         onTap: () async {
                           final url = Uri.parse(
-                              'https://github.com/TNT-Likely/BeeCount');
+                              'https://github.com/Cai-max-gif/SimpleLog');
                           await _tryOpenUrl(url);
                         },
                       ),
@@ -207,8 +207,8 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                           final locale =
                               Localizations.localeOf(context).languageCode;
                           final docUrl = locale == 'zh'
-                              ? 'https://github.com/TNT-Likely/BeeCount/blob/main/docs/donate/README_ZH.md'
-                              : 'https://github.com/TNT-Likely/BeeCount/blob/main/docs/donate/README_EN.md';
+                              ? 'https://github.com/Cai-max-gif/SimpleLog/blob/main/docs/donate/README_ZH.md'
+                              : 'https://github.com/Cai-max-gif/SimpleLog/blob/main/docs/donate/README_EN.md';
                           final url = Uri.parse(docUrl);
                           await _tryOpenUrl(url);
                         },
@@ -221,7 +221,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                             AppLocalizations.of(context).mineFeedbackSubtitle,
                         onTap: () async {
                           final url = Uri.parse(
-                              'https://github.com/TNT-Likely/BeeCount/issues');
+                              'https://github.com/Cai-max-gif/SimpleLog/issues');
                           await _tryOpenUrl(url);
                         },
                       ),
