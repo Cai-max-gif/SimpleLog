@@ -16,17 +16,13 @@ import 'pages/auth/app_lock_screen.dart';
 import 'providers/security_providers.dart';
 import 'services/system/reminder_monitor_service.dart';
 import 'providers/credit_card_reminder_providers.dart';
-import 'services/platform/screenshot_monitor_service.dart';
-import 'services/platform/image_share_handler_service.dart';
-import 'services/platform/app_link_service.dart';
+
 import 'services/system/logger_service.dart';
 import 'l10n/app_localizations.dart';
 import 'widget/widget_manager.dart';
 import 'package:home_widget/home_widget.dart';
-import 'package:app_links/app_links.dart';
 import 'dart:io';
 import 'dart:ui';
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -101,17 +97,6 @@ Future<void> main() async {
     print('⚠️  小组件回调注册失败（可能在不支持的平台上运行）: $e');
   }
 
-  // 恢复截图自动识别设置（Android专属），传入container
-  await _restoreScreenshotMonitor(container);
-
-  // 初始化图片分享处理服务（Android专属）
-  if (Platform.isAndroid) {
-    _setupImageShareHandler(container);
-  }
-
-  // 启动 URL 监听（用于快捷指令/AppLink 自动记账）
-  _setupUrlListener(container);
-
   runApp(ProviderScope(
     parent: container,
     observers: const [_WidgetUpdateObserver()],
@@ -176,7 +161,8 @@ Future<void> _restoreUserReminder() async {
     if (isEnabled) {
       final hour = prefs.getInt('reminder_hour') ?? 21;
       final minute = prefs.getInt('reminder_minute') ?? 0;
-      print('✅ 发现用户已启用记账提醒: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}');
+      print(
+          '✅ 发现用户已启用记账提醒: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}');
       print('🔔 正在重新设置提醒任务...');
 
       try {
@@ -197,37 +183,6 @@ Future<void> _restoreUserReminder() async {
     }
   } catch (e) {
     print('❌ 恢复记账提醒失败: $e');
-    // 不抛出异常，避免影响应用启动
-  }
-}
-
-/// 恢复截图自动识别设置（仅Android）
-///
-/// 问题场景：
-/// - 应用重启后，截图监听服务会丢失
-/// - 需要自动恢复用户之前的设置
-///
-/// 解决方案：
-/// - 在应用启动时检查用户是否开启了截图监听
-/// - 如果开启了，重新启动监听服务
-Future<void> _restoreScreenshotMonitor(ProviderContainer container) async {
-  if (!Platform.isAndroid) return;
-
-  try {
-    print('📸 检查并恢复截图自动识别...');
-    final screenshotMonitor = ScreenshotMonitorService(container);
-    final isEnabled = await screenshotMonitor.isEnabled();
-
-    if (isEnabled) {
-      print('✅ 发现用户已启用截图自动识别');
-      print('🔄 正在重新启动监听服务...');
-      await screenshotMonitor.enable();
-      print('✅ 截图监听服务已成功恢复');
-    } else {
-      print('ℹ️  用户未启用截图自动识别，跳过恢复');
-    }
-  } catch (e) {
-    print('❌ 恢复截图监听失败: $e');
     // 不抛出异常，避免影响应用启动
   }
 }
@@ -254,67 +209,6 @@ Future<void> _initializeAppMode(ProviderContainer container) async {
   } catch (e, stackTrace) {
     print('⚠️  应用模式初始化失败: $e');
     logger.error('Main', '应用模式初始化失败', e, stackTrace);
-  }
-}
-
-
-/// 设置图片分享处理（Android专属）
-///
-/// 初始化 ImageShareHandlerService 以接收从相册或其他应用分享的图片
-/// 分享的图片会自动触发记账流程
-void _setupImageShareHandler(ProviderContainer container) {
-  try {
-    logger.info('App', '🖼️  [Android] 初始化图片分享处理服务...');
-
-    // 初始化服务（会自动设置MethodChannel监听器）
-    ImageShareHandlerService(container);
-
-    logger.info('App', '✅ [Android] 图片分享处理服务已启动');
-  } catch (e) {
-    logger.error('App', '❌ [Android] 图片分享处理服务初始化失败', e);
-    // 不抛出异常，避免影响应用启动
-  }
-}
-
-/// 设置 URL 监听（用于 AppLink）
-///
-/// 监听 simplelog:// URL Scheme 调用
-/// 支持的URL格式:
-/// - simplelog://voice - 语音记账
-/// - simplelog://image - 图片记账（从相册）
-/// - simplelog://camera - 拍照记账
-/// - simplelog://ai-chat - AI 小助手
-/// - simplelog://add?amount=100&type=expense - 自动记账
-/// - simplelog://auto-billing?text=... - 文本自动记账（兼容旧版）
-/// - simplelog://quick-billing - 快速记账（兼容旧版）
-void _setupUrlListener(ProviderContainer container) {
-  try {
-    logger.info('AppLink', '初始化URL监听...');
-
-    final appLinks = AppLinks();
-    final appLinkService = AppLinkService(container);
-
-    // 设置导航回调
-    appLinkService.onNavigate = (action, {params}) {
-      logger.info('AppLink', '触发导航: $action');
-      container.read(pendingAppLinkActionProvider.notifier).state = action;
-    };
-
-    // 监听URL（应用在后台时）
-    appLinks.uriLinkStream.listen((uri) {
-      logger.info('AppLink', '收到URL: $uri');
-      appLinkService.handleUrl(uri);
-    }, onError: (err) {
-      logger.error('AppLink', 'URL监听错误', err);
-    });
-
-    // 注意：不使用 getInitialLink/getLatestLink，因为它们会缓存旧链接
-    // 只依赖 uriLinkStream，它会在应用通过 URL 启动时立即触发
-
-    logger.info('AppLink', 'URL监听已启动');
-  } catch (e) {
-    logger.error('AppLink', 'URL监听初始化失败', e);
-    // 不抛出异常，避免影响应用启动
   }
 }
 
@@ -441,10 +335,12 @@ class MainApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         theme: theme,
         darkTheme: BeeTheme.darkTheme(platform: platform).copyWith(
-          colorScheme: BeeTheme.darkTheme(platform: platform).colorScheme.copyWith(primary: primary),
+          colorScheme: BeeTheme.darkTheme(platform: platform)
+              .colorScheme
+              .copyWith(primary: primary),
           primaryColor: primary,
-        ),                                                // ⭐ 暗黑主题（使用动态主题色）
-        themeMode: ref.watch(themeModeProvider),         // ⭐ 使用 provider 支持手动切换
+        ), // ⭐ 暗黑主题（使用动态主题色）
+        themeMode: ref.watch(themeModeProvider), // ⭐ 使用 provider 支持手动切换
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

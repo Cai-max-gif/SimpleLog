@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,8 +7,6 @@ import '../../styles/tokens.dart';
 import '../../providers/smart_billing_providers.dart';
 import '../../providers/theme_providers.dart';
 import '../ai/ai_settings_page.dart';
-import '../automation/auto_billing_settings_page.dart';
-import 'shortcuts_guide_page.dart';
 import '../../l10n/app_localizations.dart';
 
 /// 智能记账二级页面
@@ -31,7 +28,8 @@ class SmartBillingPage extends ConsumerWidget {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.info_outline, color: Theme.of(context).colorScheme.primary),
+            Icon(Icons.info_outline,
+                color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: 8),
             Text(title),
           ],
@@ -70,7 +68,8 @@ class SmartBillingPage extends ConsumerWidget {
                       aiRequirement,
                       style: TextStyle(
                         fontSize: 13,
-                        color: requiresAI ? Colors.orange[900] : Colors.blue[900],
+                        color:
+                            requiresAI ? Colors.orange[900] : Colors.blue[900],
                       ),
                     ),
                   ),
@@ -146,7 +145,8 @@ class SmartBillingPage extends ConsumerWidget {
                         subtitle: l10n.aiSettingsSubtitle,
                         onTap: () async {
                           await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const AISettingsPage()),
+                            MaterialPageRoute(
+                                builder: (_) => const AISettingsPage()),
                           );
                         },
                       ),
@@ -216,41 +216,6 @@ class SmartBillingPage extends ConsumerWidget {
 
                 const SizedBox(height: 16),
 
-                // 截图自动记账
-                SectionCard(
-                  margin: EdgeInsets.zero,
-                  child: Column(
-                    children: [
-                      AppListTile(
-                        leading: Icons.auto_fix_high,
-                        title: l10n.autoScreenshotBilling,
-                        subtitle: Platform.isAndroid
-                            ? l10n.autoScreenshotBillingDesc
-                            : l10n.autoScreenshotBillingIosDesc,
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const AutoBillingSettingsPage()),
-                          );
-                        },
-                      ),
-                      BeeTokens.cardDivider(context),
-                      // 快捷指令
-                      AppListTile(
-                        leading: Icons.app_shortcut,
-                        title: l10n.shortcutsGuide,
-                        subtitle: l10n.shortcutsGuideDesc,
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const ShortcutsGuidePage()),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
                 // 智能记账通用设置
                 SectionCard(
                   margin: EdgeInsets.zero,
@@ -265,7 +230,9 @@ class SmartBillingPage extends ConsumerWidget {
                           value: ref.watch(smartBillingAutoTagsProvider),
                           activeColor: ref.watch(primaryColorProvider),
                           onChanged: (value) {
-                            ref.read(smartBillingAutoTagsProvider.notifier).state = value;
+                            ref
+                                .read(smartBillingAutoTagsProvider.notifier)
+                                .state = value;
                           },
                         ),
                       ),
@@ -279,7 +246,10 @@ class SmartBillingPage extends ConsumerWidget {
                           value: ref.watch(smartBillingAutoAttachmentProvider),
                           activeColor: ref.watch(primaryColorProvider),
                           onChanged: (value) {
-                            ref.read(smartBillingAutoAttachmentProvider.notifier).state = value;
+                            ref
+                                .read(
+                                    smartBillingAutoAttachmentProvider.notifier)
+                                .state = value;
                           },
                         ),
                       ),

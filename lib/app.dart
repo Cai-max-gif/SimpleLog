@@ -19,11 +19,7 @@ import 'widgets/ui/speed_dial_fab.dart';
 import 'cloud/transactions_sync_manager.dart';
 import 'utils/voice_billing_helper.dart';
 import 'utils/image_billing_helper.dart';
-import 'services/ai/ai_constants.dart';
-import 'pages/ai/ai_chat_page.dart';
-import 'services/platform/app_link_service.dart';
-import 'services/platform/quick_actions_service.dart';
-import 'services/system/logger_service.dart';
+
 import 'services/security/app_lock_service.dart';
 import 'providers/security_providers.dart';
 import 'styles/tokens.dart';
@@ -52,16 +48,6 @@ class _BeeAppState extends ConsumerState<BeeApp>
   // 双击返回退出：记录最后一次返回键按下时间
   DateTime? _lastBackPressTime;
 
-  // AppLink 监听订阅
-  ProviderSubscription<AppLinkAction?>? _appLinkSubscription;
-
-  // 快捷操作服务
-  final QuickActionsService _quickActionsService = QuickActionsService();
-
-  // 防止 AppLink 动作重复执行（使用静态变量，跨实例共享）
-  static bool _isHandlingAppLink = false;
-  static DateTime? _lastAppLinkHandleTime;
-
   // 记账按钮相关状态
   late AnimationController _expandController;
   late Animation<double> _expandAnimation;
@@ -86,46 +72,6 @@ class _BeeAppState extends ConsumerState<BeeApp>
 
     // 后台刷新账本同步状态
     _refreshLedgersStatusInBackground();
-    // 延迟监听 AppLink，确保 context 可用
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _setupAppLinkListener();
-      _setupQuickActions();
-    });
-  }
-
-  /// 设置快捷操作
-  void _setupQuickActions() {
-    logger.info('QuickActions', 'BeeApp: 设置快捷操作服务...');
-    _quickActionsService.onNavigate = (action) {
-      if (mounted) {
-        logger.info('QuickActions', 'BeeApp: 执行快捷操作 $action');
-        _handleAppLinkAction(context, action);
-      }
-    };
-    _quickActionsService.initialize();
-    // 处理可能在初始化前就触发的快捷操作
-    _quickActionsService.processPendingAction();
-    logger.info('QuickActions', 'BeeApp: 快捷操作服务已设置');
-  }
-
-  /// 设置 AppLink 监听
-  void _setupAppLinkListener() {
-    logger.info('AppLink', 'BeeApp: 设置 AppLink 监听...');
-    _appLinkSubscription = ref.listenManual<AppLinkAction?>(
-      pendingAppLinkActionProvider,
-      (previous, next) {
-        logger.info('AppLink',
-            'BeeApp: 监听触发 previous=$previous, next=$next, mounted=$mounted');
-        if (next != null && mounted) {
-          logger.info('AppLink', 'BeeApp: 执行动作 $next');
-          _handleAppLinkAction(context, next);
-          // 清除待处理动作
-          ref.read(pendingAppLinkActionProvider.notifier).state = null;
-        }
-      },
-      fireImmediately: true,
-    );
-    logger.info('AppLink', 'BeeApp: AppLink 监听已设置');
   }
 
   /// 后台刷新账本同步状态
@@ -144,66 +90,8 @@ class _BeeAppState extends ConsumerState<BeeApp>
     });
   }
 
-  /// 处理 AppLink 动作
-  void _handleAppLinkAction(BuildContext context, AppLinkAction action) {
-    // 防止重复执行（使用时间戳和标志双重检查）
-    final now = DateTime.now();
-    if (_isHandlingAppLink ||
-        (_lastAppLinkHandleTime != null &&
-            now.difference(_lastAppLinkHandleTime!) <
-                const Duration(seconds: 1))) {
-      logger.info('AppLink', 'BeeApp: 忽略重复的动作 $action');
-      return;
-    }
-    _isHandlingAppLink = true;
-    _lastAppLinkHandleTime = now;
-
-    // 延迟重置标志，允许下一次动作
-    Future.delayed(const Duration(seconds: 1), () {
-      _isHandlingAppLink = false;
-    });
-
-    switch (action) {
-      case AppLinkAction.voice:
-        // 打开语音记账
-        VoiceBillingHelper.startVoiceBilling(context, ref);
-        break;
-      case AppLinkAction.image:
-        // 打开图片记账（从相册）
-        ImageBillingHelper.pickImageForBilling(context, ref);
-        break;
-      case AppLinkAction.camera:
-        // 打开拍照记账
-        ImageBillingHelper.openCameraForBilling(context, ref);
-        break;
-      case AppLinkAction.aiChat:
-        // 打开 AI 小助手
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const AIChatPage()),
-        );
-        break;
-      default:
-        // 其他动作在 AppLinkService 中已处理
-        break;
-    }
-  }
-
-  /// 检查语音识别是否可用（需要开启AI智能识别并配置GLM API Key）
-  Future<bool> _checkGlmApiKeyConfigured() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final aiEnabled =
-          prefs.getBool(AIConstants.keyAiBillExtractionEnabled) ?? false;
-      final apiKey = prefs.getString(AIConstants.keyGlmApiKey) ?? '';
-      return aiEnabled && apiKey.isNotEmpty;
-    } catch (e) {
-      return false;
-    }
-  }
-
   @override
   void dispose() {
-    _appLinkSubscription?.close();
     _removeOverlay();
     _expandController.dispose();
     WidgetsBinding.instance.removeObserver(this);

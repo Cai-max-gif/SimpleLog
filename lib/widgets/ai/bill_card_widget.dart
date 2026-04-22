@@ -34,7 +34,8 @@ class BillCardWidget extends ConsumerWidget {
     final ledger = billInfo.ledgerId != null
         ? ref.watch(ledgerByIdProvider(billInfo.ledgerId!)).asData?.value
         : null;
-    final ledgerName = ledger?.name ?? AppLocalizations.of(context).billCardUnknownLedger;
+    final ledgerName =
+        ledger?.name ?? AppLocalizations.of(context).billCardUnknownLedger;
 
     return Padding(
       padding: EdgeInsets.symmetric(
