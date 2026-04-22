@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quick_actions/quick_actions.dart';
 
 import 'app.dart';
 import 'theme.dart';
@@ -102,6 +103,51 @@ Future<void> main() async {
     observers: const [_WidgetUpdateObserver()],
     child: const MainApp(),
   ));
+
+  // 初始化 Quick Actions (在 runApp 之后)
+  try {
+    final quickActions = QuickActions();
+
+    // 获取当前语言环境
+    final locale = WidgetsBinding.instance.platformDispatcher.locale;
+    // 加载本地化资源
+    final l10n = await AppLocalizations.delegate.load(locale);
+
+    // 设置快捷方式
+    await quickActions.setShortcutItems([
+      ShortcutItem(
+        type: 'action_album',
+        localizedTitle: l10n.quickActionImage,
+        icon: Platform.isAndroid ? 'ic_quick_image' : 'ic_quick_image',
+      ),
+      ShortcutItem(
+        type: 'action_camera',
+        localizedTitle: l10n.quickActionCamera,
+        icon: Platform.isAndroid ? 'ic_quick_camera' : 'ic_quick_camera',
+      ),
+      ShortcutItem(
+        type: 'action_voice',
+        localizedTitle: l10n.quickActionVoice,
+        icon: Platform.isAndroid ? 'ic_quick_voice' : 'ic_quick_voice',
+      ),
+      ShortcutItem(
+        type: 'action_ai',
+        localizedTitle: l10n.quickActionAI,
+        icon: Platform.isAndroid ? 'ic_quick_ai' : 'ic_quick_ai',
+      ),
+    ]);
+
+    // 处理快捷方式点击事件
+    quickActions.initialize((type) {
+      print('🔄 快捷方式点击: $type');
+      // 将事件传递给 provider
+      container.read(quickActionProvider.notifier).setAction(type);
+    });
+
+    print('✅ Quick Actions 已初始化');
+  } catch (e) {
+    print('⚠️  Quick Actions 初始化失败（可能在不支持的平台上运行）: $e');
+  }
 }
 
 /// Provider observer to update widget on app start

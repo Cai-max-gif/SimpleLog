@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="quick_action_image">Image Billing</string>
+    <string name="quick_action_camera">Camera Billing</string>
+    <string name="quick_action_voice">Voice Billing</string>
+    <string name="quick_action_ai">AI Assistant</string>
+</resources>

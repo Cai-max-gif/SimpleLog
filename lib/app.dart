@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quick_actions/quick_actions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pages/main/home_page.dart';
@@ -11,6 +12,7 @@ import 'pages/main/analytics_page.dart';
 import 'pages/account/accounts_page.dart';
 import 'pages/main/mine_page.dart';
 import 'pages/transaction/transaction_editor_page.dart';
+import 'pages/ai/ai_chat_page.dart';
 import 'providers.dart';
 import 'l10n/app_localizations.dart';
 import 'widget/widget_manager.dart';
@@ -72,6 +74,54 @@ class _BeeAppState extends ConsumerState<BeeApp>
 
     // 后台刷新账本同步状态
     _refreshLedgersStatusInBackground();
+
+    // 监听语言变化，更新快捷方式
+    ref.listen(languageProvider, (_, __) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updateQuickActions();
+      });
+    });
+
+    // 设置快捷方式
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateQuickActions();
+    });
+  }
+
+  /// 更新快捷方式
+  Future<void> _updateQuickActions() async {
+    try {
+      final quickActions = QuickActions();
+      final l10n = AppLocalizations.of(context);
+
+      // 设置快捷方式
+      await quickActions.setShortcutItems([
+        ShortcutItem(
+          type: 'action_album',
+          localizedTitle: l10n.quickActionImage,
+          icon: Platform.isAndroid ? 'ic_quick_image' : 'ic_quick_image',
+        ),
+        ShortcutItem(
+          type: 'action_camera',
+          localizedTitle: l10n.quickActionCamera,
+          icon: Platform.isAndroid ? 'ic_quick_camera' : 'ic_quick_camera',
+        ),
+        ShortcutItem(
+          type: 'action_voice',
+          localizedTitle: l10n.quickActionVoice,
+          icon: Platform.isAndroid ? 'ic_quick_voice' : 'ic_quick_voice',
+        ),
+        ShortcutItem(
+          type: 'action_ai',
+          localizedTitle: l10n.quickActionAI,
+          icon: Platform.isAndroid ? 'ic_quick_ai' : 'ic_quick_ai',
+        ),
+      ]);
+
+      print('✅ 快捷方式已更新');
+    } catch (e) {
+      print('⚠️  快捷方式更新失败（可能在不支持的平台上运行）: $e');
+    }
   }
 
   /// 后台刷新账本同步状态
@@ -307,6 +357,35 @@ class _BeeAppState extends ConsumerState<BeeApp>
     }
   }
 
+  /// 处理快捷方式事件
+  void _handleQuickAction(QuickActionType type) {
+    switch (type) {
+      case QuickActionType.album:
+        // 图片记账（从相册获取图片）
+        ImageBillingHelper.pickImageForBilling(context, ref);
+        break;
+      case QuickActionType.camera:
+        // 拍照记账
+        ImageBillingHelper.openCameraForBilling(context, ref);
+        break;
+      case QuickActionType.voice:
+        // 语音记账
+        VoiceBillingHelper.startVoiceBilling(context, ref);
+        break;
+      case QuickActionType.ai:
+        // AI 助手
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const AIChatPage(),
+          ),
+        );
+        break;
+      case QuickActionType.none:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final idx = ref.watch(bottomTabIndexProvider);
@@ -315,6 +394,15 @@ class _BeeAppState extends ConsumerState<BeeApp>
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bottomPadding = MediaQuery.of(context).padding.bottom;
     final avatarPath = ref.watch(avatarPathProvider).asData?.value;
+
+    // 监听快捷方式事件
+    final quickActionState = ref.watch(quickActionProvider);
+    if (!quickActionState.isHandled) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _handleQuickAction(quickActionState.type);
+        ref.read(quickActionProvider.notifier).markAsHandled();
+      });
+    }
 
     return PopScope(
       canPop: false,

@@ -5320,6 +5320,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get quickActionAiChat => 'AI 小助手';
 
   @override
+  String get quickActionAI => 'AI 小助手';
+
+  @override
   String get calendarTitle => '日历';
 
   @override
@@ -11124,6 +11127,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get quickActionAiChat => 'AI 小助手';
+
+  @override
+  String get quickActionAI => 'AI小助手';
 
   @override
   String get calendarTitle => '日曆';

@@ -2313,6 +2313,7 @@
   "quickActionCamera": "拍照记账",
   "quickActionVoice": "语音记账",
   "quickActionAiChat": "AI 小助手",
+  "quickActionAI": "AI 小助手",
   "calendarTitle": "日历",
   "calendarToday": "今天",
   "calendarNoTransactions": "当天无交易",

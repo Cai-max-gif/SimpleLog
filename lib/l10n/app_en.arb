@@ -2354,6 +2354,7 @@
   "quickActionCamera": "Camera Billing",
   "quickActionVoice": "Voice Billing",
   "quickActionAiChat": "AI Assistant",
+  "quickActionAI": "AI Assistant",
   "calendarTitle": "Calendar",
   "calendarToday": "Today",
   "calendarNoTransactions": "No transactions",

@@ -10060,6 +10060,12 @@ abstract class AppLocalizations {
   /// **'AI Assistant'**
   String get quickActionAiChat;
 
+  /// No description provided for @quickActionAI.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Assistant'**
+  String get quickActionAI;
+
   /// No description provided for @calendarTitle.
   ///
   /// In en, this message translates to:

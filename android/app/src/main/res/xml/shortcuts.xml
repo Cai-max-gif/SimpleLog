@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_quick_image"
+        android:shortcutId="action_album"
+        android:shortcutShortLabel="@string/quick_action_image">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass=".MainActivity" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_quick_camera"
+        android:shortcutId="action_camera"
+        android:shortcutShortLabel="@string/quick_action_camera">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass=".MainActivity" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_quick_voice"
+        android:shortcutId="action_voice"
+        android:shortcutShortLabel="@string/quick_action_voice">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass=".MainActivity" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_quick_ai"
+        android:shortcutId="action_ai"
+        android:shortcutShortLabel="@string/quick_action_ai">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass=".MainActivity" />
+    </shortcut>
+</shortcuts>

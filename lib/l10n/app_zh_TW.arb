@@ -1473,6 +1473,7 @@
   "photosPermissionRequired": "需要相片權限才能監聽截圖",
   "privacyOpenSourceUrlError": "無法打開鏈接",
   "quickActionAiChat": "AI 小助手",
+  "quickActionAI": "AI小助手",
   "quickActionCamera": "拍照記帳",
   "quickActionImage": "圖片記帳",
   "quickActionVoice": "語音記帳",

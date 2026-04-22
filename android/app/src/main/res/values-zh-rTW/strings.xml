@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="quick_action_image">圖片記帳</string>
+    <string name="quick_action_camera">拍照記帳</string>
+    <string name="quick_action_voice">語音記帳</string>
+    <string name="quick_action_ai">AI小助手</string>
+</resources>

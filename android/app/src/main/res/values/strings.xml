@@ -4,6 +4,12 @@
     <string name="app_name">简单记账</string>
     <string name="widget_description">查看今日和本月的收支情况</string>
 
+    <!-- 快捷方式相关字符串 -->
+    <string name="quick_action_image">图片记账</string>
+    <string name="quick_action_camera">拍照记账</string>
+    <string name="quick_action_voice">语音记账</string>
+    <string name="quick_action_ai">AI小助手</string>
+
     <!-- 无障碍服务相关字符串由 flavor 特定的 strings.xml 定义 -->
     <!-- dev: android/app/src/dev/res/values/strings.xml -->
     <!-- prod: android/app/src/prod/res/values/strings.xml -->

@@ -74,6 +74,12 @@
                 <data android:scheme="simplelog"/>
             </intent-filter>
         </activity>
+        
+        <!-- Android 12+ 应用快捷方式支持 -->
+        <meta-data
+            android:name="android.app.shortcuts"
+            android:resource="@xml/shortcuts" />
+        
 
         <!-- Image cropper activity -->
         <activity

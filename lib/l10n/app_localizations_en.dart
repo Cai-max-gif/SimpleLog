@@ -5542,6 +5542,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quickActionAiChat => 'AI Assistant';
 
   @override
+  String get quickActionAI => 'AI Assistant';
+
+  @override
   String get calendarTitle => 'Calendar';
 
   @override
